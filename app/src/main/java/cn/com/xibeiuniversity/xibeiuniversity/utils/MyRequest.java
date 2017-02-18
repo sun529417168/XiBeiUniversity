@@ -21,10 +21,12 @@ import java.util.Map;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.MainActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.PersonBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.UserBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskBean;
 import cn.com.xibeiuniversity.xibeiuniversity.config.UrlConfig;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.LoginInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.PersonInfoInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemListInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.TaskListInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.OkHttpUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.callback.GenericsCallback;
@@ -301,4 +303,49 @@ public class MyRequest {
         });
     }
 
+
+    /**
+     * 方法名：problemListRequest
+     * 功    能：问题列表
+     * 参    数：Context activity, TaskListInterface myTaskListInterface, Object... strings
+     * 返回值：无
+     */
+    public static void problemListRequest(final Context activity, ProblemListInterface mProblemListInterface, Object... strings) {
+        final ProblemListInterface problemListInterface = mProblemListInterface;
+        final Dialog progDialog = DialogUtils.showWaitDialog(activity);
+        Map<String, Object> params = new HashMap<>();
+        try {
+            params.put("pageindex", strings[0]);
+            params.put("SearchState", strings[1]);
+            params.put("SearchProblemType", strings[2]);
+            params.put("SearchDate", strings[3]);
+            params.put("pagesize", "3");//每页条数
+            params.put("PersonID", SharedUtil.getString(activity, "PersonID"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        OkHttpUtils.post().url(UrlConfig.URL_GETPROBLEMREPORTINFO).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
+            @Override
+            public void onResponse(String response, int id) {
+                response = response.replace(":null,", ":\"\",");
+                Log.i("problemList", response);
+                ProblemBean problemBean = JSON.parseObject(response, ProblemBean.class);
+                problemListInterface.showTaskList(problemBean);
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                Log.i("problemListError", e.getMessage().toString());
+                if ("timeout".equals(e.getMessage().toString())) {
+                    ToastUtil.show(activity, "连接超时，请稍后再试");
+                }
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+        });
+    }
 }

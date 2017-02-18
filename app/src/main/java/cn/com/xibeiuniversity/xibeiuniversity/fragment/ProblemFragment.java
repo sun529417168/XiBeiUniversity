@@ -23,12 +23,16 @@ import java.util.List;
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.problem.AddProblemActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.problem.ProblemAdapter;
+import cn.com.xibeiuniversity.xibeiuniversity.adapter.task.TaskAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.base.BaseFragment;
-import cn.com.xibeiuniversity.xibeiuniversity.bean.ProblemBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskBean;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemListInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.PopWindowUtils;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
 
 /**
  * 文件名：ProblemFragment
@@ -38,13 +42,13 @@ import cn.com.xibeiuniversity.xibeiuniversity.utils.PopWindowUtils;
  * 版    本：V1.0.0
  */
 
-public class ProblemFragment extends BaseFragment implements View.OnClickListener, ProblemTypeInterface {
+public class ProblemFragment extends BaseFragment implements View.OnClickListener, ProblemTypeInterface, ProblemListInterface {
     private Context context;
     private TextView titleName;//标题名称
     private TextView[] textviews;
     //刷新控件
     private PullToRefreshListView mPullRefreshListView;
-    private ArrayList<ProblemBean> problemList = new ArrayList<>();
+    private ProblemBean problemBean = new ProblemBean();
     private ProblemAdapter problemAdapter;
     private LinearLayout addProblem;
     /**
@@ -53,6 +57,10 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
     private LinearLayout typeLayout, timeLayout, stateLayout;
     private TextView typeText, timeText, stateText;
     private PopupWindow popupWindow;
+    private int state = 0;//状态
+    private int pageindex = 1;//页码数
+    private List<ProblemBean.RowsBean> rowsBeanList = new ArrayList();
+
 
     @Override
     protected View setView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,9 +73,11 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
     protected void setDate() {
 
     }
+
     private void requestData(int pageindex, int state) {
-//        MyRequest.tasIssuedListRequest(context, this, pageindex, "2", state);
+        MyRequest.problemListRequest(context, this, pageindex, "2", state);
     }
+
     @Override
     protected void init(View rootView) {
         titleName = (TextView) rootView.findViewById(R.id.title_name);
@@ -77,9 +87,6 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
         addProblem = (LinearLayout) rootView.findViewById(R.id.problem_addInfo);
         addProblem.setVisibility(View.VISIBLE);
         addProblem.setOnClickListener(this);
-        problemList = (ArrayList<ProblemBean>) JSON.parseArray(MyUtils.getFromAssets(context, "problemList.txt"), ProblemBean.class);
-        problemAdapter = new ProblemAdapter(context, problemList);
-        mPullRefreshListView.setAdapter(problemAdapter);
 
         typeLayout = (LinearLayout) rootView.findViewById(R.id.problem_layout_type);
         timeLayout = (LinearLayout) rootView.findViewById(R.id.problem_layout_time);
@@ -173,6 +180,21 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
         }
         if (popupWindow.isShowing()) {
             popupWindow.dismiss();
+        }
+    }
+
+    @Override
+    public void showTaskList(ProblemBean problemBean) {
+        if (pageindex == 1) {
+            rowsBeanList = problemBean.getRows();
+            problemAdapter = new ProblemAdapter(context, problemBean.getRows());
+            mPullRefreshListView.setAdapter(problemAdapter);
+        } else if (pageindex > 1 && problemBean.getRows().size() != 0) {
+            rowsBeanList.addAll(problemBean.getRows());
+            problemAdapter = new ProblemAdapter(context, problemBean.getRows());
+            mPullRefreshListView.setAdapter(problemAdapter);
+        } else if (pageindex > 1 && problemBean.getRows().size() == 0) {
+            ToastUtil.show(context, "没有更多数据了");
         }
     }
 }

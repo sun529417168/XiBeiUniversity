@@ -8,14 +8,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.problem.ProblemDetailActivity;
-import cn.com.xibeiuniversity.xibeiuniversity.activity.task.TaskDetailActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.base.MyBaseAdapter;
-import cn.com.xibeiuniversity.xibeiuniversity.bean.ProblemBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskBean;
 
 /**
  * 文件名：ProblemAdapter
@@ -26,10 +28,10 @@ import cn.com.xibeiuniversity.xibeiuniversity.bean.ProblemBean;
  */
 
 public class ProblemAdapter extends MyBaseAdapter {
-    private ArrayList<ProblemBean> list = new ArrayList<>();
+    private ArrayList<ProblemBean.RowsBean> list = new ArrayList<>();
     public ProblemAdapter(Context context, List list) {
         super(context, list);
-        this.list = (ArrayList<ProblemBean>) list;
+        this.list = (ArrayList<ProblemBean.RowsBean>) list;
     }
 
     @Override
@@ -48,30 +50,36 @@ public class ProblemAdapter extends MyBaseAdapter {
         TextView info = get(view, R.id.item_problem_info);  // 具体内容
         TextView executor = get(view, R.id.item_problem_executor);  // 处理人
         TextView[] views = {number, date, name, sender, info,executor};
-
+        ProblemBean.RowsBean rowsBean = list.get(position);
         /**
          * 赋值
          */
-        number.setText(list.get(position).getNumber());
-        if ("1".equals(list.get(position).getState())) {
+        number.setText(rowsBean.getProblemSno());
+        if ("已上报".equals(rowsBean.getStateName())) {
             state.setText("已上报");
             state.setTextColor(ContextCompat.getColor(context, R.color.white));
             state.setBackgroundResource(R.color.blue);
         }
-        if ("2".equals(list.get(position).getState())) {
+        if ("已回复".equals(rowsBean.getStateName())) {
             state.setText("已回复");
             state.setTextColor(ContextCompat.getColor(context, R.color.white));
             state.setBackgroundResource(R.color.green);
-//            executor.setText("孙英媒");
         }
-        imageView.setImageResource(R.mipmap.timg);
-        date.setText(list.get(position).getDate());
-        name.setText(list.get(position).getName());
-        sender.setText(list.get(position).getSender());
-        info.setText(list.get(position).getInfo());
-        if ("1".equals(list.get(position).getIsRead())){
-            setTextColor(views);
+        for (ProblemBean.RowsBean.ReportAttachmentListBean imageBean : rowsBean.getReportAttachmentList()) {
+            if (imageBean.getAttachmentType() == 1) {
+                ImageLoader.getInstance().displayImage(imageBean.getFileUrl(), imageView);
+            }
         }
+        if (rowsBean.getReportAttachmentList().size()==0){
+            imageView.setImageResource(R.mipmap.login_logo);
+        }
+        date.setText(rowsBean.getFindDateApi());
+//        name.setText(list.get(position).getName());
+//        sender.setText(list.get(position).getSender());
+//        info.setText(list.get(position).getInfo());
+//        if ("1".equals(list.get(position).getIsRead())){
+//            setTextColor(views);
+//        }
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

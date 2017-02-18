@@ -39,4 +39,8 @@ public class UrlConfig {
      * 任务反馈信息
      */
     public static final String URL_TASKASSIGNEDINFO = BaseUrl + "/API/ApiTasIssued/ImgUpload";
+    /**
+     * 问题列表
+     */
+    public static final String URL_GETPROBLEMREPORTINFO = BaseUrl + "/API/ApiProblemReport/GetProblemReportInfo";
 }

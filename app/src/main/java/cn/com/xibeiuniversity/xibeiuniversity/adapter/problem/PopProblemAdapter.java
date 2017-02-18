@@ -9,7 +9,6 @@ import java.util.List;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.base.MyBaseAdapter;
-import cn.com.xibeiuniversity.xibeiuniversity.bean.ProblemBean;
 
 /**
  * 文件名：PopProblemAdapter
