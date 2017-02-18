@@ -41,12 +41,12 @@ public class ProblemDetailActivity extends TakePhotoActivity implements View.OnC
     private ArrayList<Bitmap> list = new ArrayList<Bitmap>();
     private GridView gridView;
     private TaskDetalPhotoAdapter taskDetalPhotoAdapter;
-    private ProblemBean problemBean;
+    private ProblemBean.RowsBean problemBean;
     /**
      * 编号，问题名称，状态，上报人，上报时间，处理人，处理时间
      */
     private TextView numberText, nameText, stateText, senderText, sendTimeText;
-    private TextView infoEdit;
+    private TextView infoEdit,describeText;
 
     @Override
     protected void setView() {
@@ -55,7 +55,7 @@ public class ProblemDetailActivity extends TakePhotoActivity implements View.OnC
 
     @Override
     protected void setDate(Bundle savedInstanceState) {
-        problemBean = (ProblemBean) getIntent().getSerializableExtra("problemBean");
+        problemBean = (ProblemBean.RowsBean) getIntent().getSerializableExtra("problemBean");
         if (savedInstanceState != null) {
             list = savedInstanceState.getParcelableArrayList("listBitmap");
         }
@@ -80,18 +80,20 @@ public class ProblemDetailActivity extends TakePhotoActivity implements View.OnC
         senderText = (TextView) findViewById(R.id.problem_detail_sender);
         sendTimeText = (TextView) findViewById(R.id.problem_detail_sendTime);
         infoEdit = (TextView) findViewById(R.id.problem_detail_infoEdit);
+        describeText = (TextView) findViewById(R.id.problem_detail_describe);
 
-        numberText.setText(problemBean.getNumber());
-        nameText.setText(problemBean.getName());
-        if ("1".equals(problemBean.getState())) {
+        numberText.setText(problemBean.getProblemSno());
+        nameText.setText(problemBean.getProblemTypeName());
+        if ("已上报".equals(problemBean.getStateName())) {
             stateText.setText("已上报");
         }
-        if ("2".equals(problemBean.getState())) {
+        if ("已收到".equals(problemBean.getStateName())) {
             stateText.setText("已收到");
         }
-        senderText.setText(problemBean.getSender());
-        sendTimeText.setText(problemBean.getSendTime());
-        infoEdit.setText(problemBean.getInfo());
+        senderText.setText(problemBean.getReportPersonName());
+        sendTimeText.setText(problemBean.getFindDateApi());
+        infoEdit.setText(problemBean.getProblemDes());
+        describeText.setText(problemBean.getDescribe());
 
 
         takePhoto = (ImageView) findViewById(R.id.problem_detail_takePhoto);

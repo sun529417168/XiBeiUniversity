@@ -3,7 +3,6 @@ package cn.com.xibeiuniversity.xibeiuniversity.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -23,14 +21,11 @@ import java.util.List;
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.problem.AddProblemActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.problem.ProblemAdapter;
-import cn.com.xibeiuniversity.xibeiuniversity.adapter.task.TaskAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.base.BaseFragment;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
-import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskBean;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemListInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
-import cn.com.xibeiuniversity.xibeiuniversity.utils.MyUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.PopWindowUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
 
@@ -59,6 +54,9 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
     private PopupWindow popupWindow;
     private int state = 0;//状态
     private int pageindex = 1;//页码数
+    private String searchState="";//状态
+    private String searchProblemType="";//类型
+    private String searchDate="";//时间
     private List<ProblemBean.RowsBean> rowsBeanList = new ArrayList();
 
 
@@ -71,11 +69,11 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
 
     @Override
     protected void setDate() {
-
+        requestData(pageindex, searchState, searchProblemType, searchDate);
     }
 
-    private void requestData(int pageindex, int state) {
-        MyRequest.problemListRequest(context, this, pageindex, "2", state);
+    private void requestData(int pageindex, String searchState, String searchProblemType, String searchDate) {
+        MyRequest.problemListRequest(context, this, pageindex, searchState, searchProblemType, searchDate);
     }
 
     @Override
@@ -104,6 +102,8 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
                     PullToRefreshBase<ListView> refreshView) {
                 Log.e("TAG", "onPullDownToRefresh");
                 // 这里写下拉刷新的任务
+                pageindex = 1;
+                requestData(pageindex, searchState, searchProblemType, searchDate);
                 problemAdapter.notifyDataSetChanged();
                 mPullRefreshListView.onRefreshComplete();
             }
@@ -113,23 +113,12 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
                     PullToRefreshBase<ListView> refreshView) {
                 Log.e("TAG", "onPullUpToRefresh");
                 // 这里写上拉加载更多的任务
+                pageindex++;
+                requestData(pageindex, searchState, searchProblemType, searchDate);
                 problemAdapter.notifyDataSetChanged();
                 mPullRefreshListView.onRefreshComplete();
             }
         });
-    }
-
-
-    private void setTextBack(TextView view) {
-        for (int i = 0; i < textviews.length; i++) {
-            if (view.getId() == textviews[i].getId()) {
-                textviews[i].setTextColor(ContextCompat.getColor(context, R.color.blue));
-                textviews[i].setBackgroundResource(R.color.gray_3);
-            } else {
-                textviews[i].setTextColor(ContextCompat.getColor(context, R.color.black));
-                textviews[i].setBackgroundResource(R.color.white);
-            }
-        }
     }
 
     @Override

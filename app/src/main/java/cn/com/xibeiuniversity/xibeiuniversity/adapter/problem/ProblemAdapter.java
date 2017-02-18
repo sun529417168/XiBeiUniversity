@@ -17,7 +17,6 @@ import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.problem.ProblemDetailActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.base.MyBaseAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
-import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskBean;
 
 /**
  * 文件名：ProblemAdapter
@@ -74,12 +73,9 @@ public class ProblemAdapter extends MyBaseAdapter {
             imageView.setImageResource(R.mipmap.login_logo);
         }
         date.setText(rowsBean.getFindDateApi());
-//        name.setText(list.get(position).getName());
-//        sender.setText(list.get(position).getSender());
-//        info.setText(list.get(position).getInfo());
-//        if ("1".equals(list.get(position).getIsRead())){
-//            setTextColor(views);
-//        }
+        name.setText(rowsBean.getProblemTypeName());
+        sender.setText(rowsBean.getReportPersonName());
+        info.setText(rowsBean.getProblemDes());
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
