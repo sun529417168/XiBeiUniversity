@@ -163,4 +163,45 @@ public class PopWindowUtils {
         lp.alpha = bgAlpha; //0.0-1.0
         activity.getWindow().setAttributes(lp);
     }
+
+
+    /**
+     * 方法名：showAddProblemTypePop
+     * 功    能：弹出添加问题，问题类型的pop
+     * 参    数：Activity activity,View btnPopup
+     * 返回值：无
+     */
+    public static PopupWindow showAddProblemTypePop(final Activity activity, View btnPopup) {
+        final SearchTypePopInterface searchType = (SearchTypePopInterface) activity;
+        // TODO: 2016/5/17 构建一个popupwindow的布局
+        final View popupView = activity.getLayoutInflater().inflate(R.layout.pop_addproblem_type, null);
+
+        final TextView event = (TextView) popupView.findViewById(R.id.pop_addProblem_event);
+        final TextView parts = (TextView) popupView.findViewById(R.id.pop_addProblem_parts);
+        event.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchType.searchType(event.getText().toString());
+            }
+        });
+        parts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchType.searchType(parts.getText().toString());
+            }
+        });
+        // TODO: 2016/5/17 创建PopupWindow对象，指定宽度和高度
+        PopupWindow window = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, 300);
+        // TODO: 2016/5/17 设置背景颜色
+//        window.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
+        // TODO: 2016/5/17 设置可以获取焦点
+        window.setFocusable(true);
+        // TODO: 2016/5/17 设置可以触摸弹出框以外的区域
+        window.setOutsideTouchable(true);
+        // TODO：更新popupwindow的状态
+        window.update();
+        // TODO: 2016/5/17 以下拉的方式显示，并且可以设置显示的位置
+        window.showAsDropDown(btnPopup, 0, 20);
+        return window;
+    }
 }

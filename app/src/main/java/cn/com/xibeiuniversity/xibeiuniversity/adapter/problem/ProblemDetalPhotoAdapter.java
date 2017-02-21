@@ -1,4 +1,4 @@
-package cn.com.xibeiuniversity.xibeiuniversity.adapter.task;
+package cn.com.xibeiuniversity.xibeiuniversity.adapter.problem;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,19 +15,19 @@ import cn.com.xibeiuniversity.xibeiuniversity.activity.DetailImageActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.base.MyBaseAdapter;
 
 /**
- * 文件名：TaskDetalPhotoAdapter
- * 描    述：任务详情图片的适配器
+ * 文件名：ProblemDetalPhotoAdapter
+ * 描    述：问题详情图片的适配器
  * 作    者：stt
  * 时    间：2017.1.9
  * 版    本：V1.0.0
  */
 
-public class TaskDetalDescribePhotoAdapter extends MyBaseAdapter {
-    private ArrayList list = new ArrayList<>();
+public class ProblemDetalPhotoAdapter extends MyBaseAdapter {
+    private ArrayList<String> list = new ArrayList<>();
 
-    public TaskDetalDescribePhotoAdapter(Context context, List list) {
+    public ProblemDetalPhotoAdapter(Context context, List list) {
         super(context, list);
-        this.list = (ArrayList) list;
+        this.list = (ArrayList<String>) list;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class TaskDetalDescribePhotoAdapter extends MyBaseAdapter {
     @Override
     public void onInitView(View view, int position) {
         ImageView imageView = get(view, R.id.item_grid_image);
-        ImageLoader.getInstance().displayImage((String) list.get(position), imageView);
+        ImageLoader.getInstance().displayImage( list.get(position), imageView);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

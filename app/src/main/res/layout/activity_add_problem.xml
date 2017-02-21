@@ -24,46 +24,63 @@
                     style="@style/add_problem_textView"
                     android:text="@string/add_problem_name" />
 
+                <EditText
+                    android:id="@+id/add_problem_detail_name"
+                    style="@style/add_problem_textView"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="13dp"
+                    android:background="@null"
+                    android:gravity="right|center_vertical"
+                    android:hint="@string/add_problem_inputPlease" />
+
+            </RelativeLayout>
+            <!--问题名称end-->
+
+
+            <!--问题类型start-->
+            <RelativeLayout
+                android:id="@+id/add_problem_typeLayout"
+                style="@style/add_problem_layout">
+
                 <TextView
-                    android:id="@+id/add_problem_detail_number"
+                    style="@style/add_problem_textView"
+                    android:text="@string/add_problem_type" />
+
+                <TextView
+                    android:id="@+id/add_problem_type"
                     style="@style/add_problem_textView"
                     android:layout_marginRight="5dp"
-                    android:layout_toLeftOf="@+id/add_problem_name_right"
-                    android:text="@string/add_problem_choose" />
+                    android:layout_toLeftOf="@+id/add_problem_type_right"
+                    android:hint="@string/add_problem_choose" />
 
                 <ImageView
-                    android:id="@+id/add_problem_name_right"
+                    android:id="@+id/add_problem_type_right"
                     android:layout_width="8dp"
                     android:layout_height="10dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:background="@mipmap/right" />
             </RelativeLayout>
-            <!--问题名称end-->
+            <!--问题类型end-->
 
-            <!--所在位置start-->
+            <!--所在区域start-->
             <RelativeLayout style="@style/add_problem_layout">
 
                 <TextView
                     style="@style/add_problem_textView"
                     android:text="@string/add_problem_address" />
 
-                <TextView
-                    android:id="@+id/add_problem_detail_address"
+                <EditText
+                    android:id="@+id/add_problem_address"
                     style="@style/add_problem_textView"
-                    android:layout_marginRight="5dp"
-                    android:layout_toLeftOf="@+id/add_problem_address_right"
-                    android:text="@string/add_problem_fill" />
-
-                <ImageView
-                    android:id="@+id/add_problem_address_right"
-                    android:layout_width="8dp"
-                    android:layout_height="10dp"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="@mipmap/right" />
+                    android:layout_marginRight="13dp"
+                    android:background="@null"
+                    android:gravity="right|center_vertical"
+                    android:hint="@string/add_problem_inputPlease" />
+
             </RelativeLayout>
-            <!--所在位置end-->
+            <!--所在区域end-->
 
             <!--上报人start-->
             <RelativeLayout style="@style/add_problem_layout">
@@ -73,13 +90,39 @@
                     android:text="@string/add_problem_sender" />
 
                 <TextView
-                    android:id="@+id/add_problem_detail_sender"
+                    android:id="@+id/add_problem_sender"
                     style="@style/add_problem_textView"
-                    android:text="张三"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="13dp" />
             </RelativeLayout>
             <!--上报人end-->
+
+            <!--发现时间start-->
+            <RelativeLayout
+                android:id="@+id/add_problem_findTimeLayout"
+                style="@style/add_problem_layout">
+
+                <TextView
+                    style="@style/add_problem_textView"
+                    android:text="@string/add_problem_findTime" />
+
+                <TextView
+                    android:id="@+id/add_problem_findTime"
+                    style="@style/add_problem_textView"
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@+id/add_problem_date_find_right"
+                    android:hint="@string/add_problem_choose" />
+
+                <ImageView
+                    android:id="@+id/add_problem_date_find_right"
+                    android:layout_width="8dp"
+                    android:layout_height="10dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@mipmap/right" />
+            </RelativeLayout>
+            <!--发现时间end-->
+
 
             <!--上报时间start-->
             <RelativeLayout style="@style/add_problem_layout">
@@ -89,19 +132,11 @@
                     android:text="@string/add_problem_sendTime" />
 
                 <TextView
-                    android:id="@+id/add_problem_detail_sendTime"
+                    android:id="@+id/add_problem_sendTime"
                     style="@style/add_problem_textView"
-                    android:layout_marginRight="5dp"
-                    android:layout_toLeftOf="@+id/add_problem_date_right"
-                    android:text="@string/add_problem_choose" />
-
-                <ImageView
-                    android:id="@+id/add_problem_date_right"
-                    android:layout_width="8dp"
-                    android:layout_height="10dp"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="@mipmap/right" />
+                    android:layout_marginRight="13dp" />
+
             </RelativeLayout>
             <!--上报时间end-->
 
@@ -146,14 +181,14 @@
             <!--图片end-->
             <!--内容区域start-->
             <EditText
+                android:id="@+id/add_problem_inputInfo"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
                 android:gravity="left|top"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:text="任务内容  教学楼三楼摁扣坏了请及时修复" />
+                android:paddingRight="20dp" />
             <!--内容区域end-->
             <View
                 android:layout_width="match_parent"

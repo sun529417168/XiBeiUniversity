@@ -20,30 +20,18 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.nostra13.universalimageloader.core.ImageLoader;
-
-import net.tsz.afinal.FinalHttp;
-import net.tsz.afinal.http.AjaxCallBack;
-import net.tsz.afinal.http.AjaxParams;
-
-import org.json.JSONException;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
+import cn.com.xibeiuniversity.xibeiuniversity.activity.DetailImageActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.task.TaskDetalDescribePhotoAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.task.TaskDetalPhotoAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskBean;
-import cn.com.xibeiuniversity.xibeiuniversity.config.UrlConfig;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.app.TakePhotoActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.compress.CompressConfig;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.SearchTypePopInterface;
@@ -168,8 +156,8 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
         feedbackTimeText.setText(df.format(new Date()));
         if ("未完成".equals(taskBean.getTaskStateName())) {
             stateTaskText.setText("未完成");
-            submitBtn.setVisibility(View.INVISIBLE);
-            takePhoto.setVisibility(View.INVISIBLE);
+//            submitBtn.setVisibility(View.INVISIBLE);
+//            takePhoto.setVisibility(View.INVISIBLE);
             infoEdit.setFocusable(false);
         }
         if ("处理中".equals(taskBean.getTaskStateName())) {
@@ -181,7 +169,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
         if ("已完成".equals(taskBean.getTaskStateName())) {
             stateTaskText.setText("已完成");
 //            submitBtn.setVisibility(View.INVISIBLE);
-            takePhoto.setVisibility(View.INVISIBLE);
+//            takePhoto.setVisibility(View.INVISIBLE);
             infoEdit.setFocusable(false);
         }
 
@@ -296,6 +284,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
     @Override
     public void takeSuccess(String imagePath) {
         super.takeSuccess(imagePath);
+        Log.i("imagePath",imagePath);
         listPath.add(imagePath);
         mCameraFile = new File(imagePath);
         listFile.add(mCameraFile);

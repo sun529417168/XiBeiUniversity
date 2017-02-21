@@ -1,4 +1,4 @@
-package cn.com.xibeiuniversity.xibeiuniversity.activity.task;
+package cn.com.xibeiuniversity.xibeiuniversity.activity;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

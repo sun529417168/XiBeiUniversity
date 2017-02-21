@@ -73,6 +73,8 @@ public class MyRequest {
                     SharedUtil.setString(activity, "userName", username);
                     SharedUtil.setString(activity, "passWord", password);
                     SharedUtil.setString(activity, "PersonID", userBean.getPersonId() + "");
+                    SharedUtil.setString(activity, "LoginName", userBean.getLoginName());
+                    SharedUtil.setString(activity, "personName", userBean.getPermissions().get(0).getUserName());
                     login.login(userBean);
                 }
                 if (progDialog.isShowing()) {
@@ -82,6 +84,7 @@ public class MyRequest {
 
             @Override
             public void onError(Call call, Exception e, int id) {
+                Log.i("userBeanErroe", e.getMessage().toString());
                 ToastUtil.show(activity, "服务器有错误，请稍候再试");
                 if (progDialog.isShowing()) {
                     progDialog.dismiss();
@@ -163,6 +166,7 @@ public class MyRequest {
             @Override
             public void onError(Call call, Exception e, int id) {
                 Log.i("addPersonInfoError", e.getMessage().toString());
+                ToastUtil.show(activity, "连接超时，请稍候再试");
             }
         });
     }
@@ -230,6 +234,9 @@ public class MyRequest {
 
             @Override
             public void onError(Call call, Exception e, int id) {
+                if ("timeout".equals(e.getMessage().toString())) {
+                    ToastUtil.show(activity, "连接超时，请稍后再试");
+                }
                 if (progDialog.isShowing()) {
                     progDialog.dismiss();
                 }
@@ -338,8 +345,7 @@ public class MyRequest {
 
             @Override
             public void onError(Call call, Exception e, int id) {
-                Log.i("problemListError", e.getMessage().toString());
-                if ("timeout".equals(e.getMessage().toString())) {
+                if ("timeout".equals(e.getMessage().toString()) || TextUtils.isEmpty(e.getMessage().toString())) {
                     ToastUtil.show(activity, "连接超时，请稍后再试");
                 }
                 if (progDialog.isShowing()) {
@@ -348,4 +354,84 @@ public class MyRequest {
             }
         });
     }
+
+    /**
+     * 方法名：addProblemRequest
+     * 功    能：上报问题+上传图片
+     * 参    数：Context activity, File file, Object... strings
+     * 返回值：无
+     */
+    public static void addProblemPicRequest(final Context activity, File file, Object... strings) {
+        final Dialog progDialog = DialogUtils.showWaitDialog(activity);
+        Map<String, Object> params = new HashMap<>();
+        params.put("ProblemTitle", strings[0]);
+        params.put("SearchProblemType", strings[1]);
+        params.put("Position", strings[2]);
+        params.put("GPS", strings[3]);
+        params.put("FindDate", strings[4]);
+        params.put("ProblemDes", strings[5]);
+        params.put("ReportPerson", SharedUtil.getString(activity, "personName"));
+        OkHttpUtils.post().addFile("mFile", file.getName(), file).url(UrlConfig.URL_IMGUPLOAD).params(params).build().execute(new StringCallback() {
+            @Override
+            public void onResponse(String response, int id) {
+                if ("true".equals(response)) {
+                    ToastUtil.show(activity, "上报成功");
+                } else {
+                    ToastUtil.show(activity, "上报失败，请稍候再试");
+                }
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                ToastUtil.show(activity, "服务器异常，请稍后再试");
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+        });
+    }
+
+    /**
+     * 方法名：addProblemRequest
+     * 功    能：上报问题没有图片
+     * 参    数：Context activity, File file, Object... strings
+     * 返回值：无
+     */
+    public static void addProblemRequest(final Context activity, Object... strings) {
+        final Dialog progDialog = DialogUtils.showWaitDialog(activity);
+        Map<String, Object> params = new HashMap<>();
+        params.put("ProblemTitle", strings[0]);
+        params.put("SearchProblemType", strings[1]);
+        params.put("Position", strings[2]);
+        params.put("GPS", strings[3]);
+        params.put("FindDate", strings[4]);
+        params.put("ProblemDes", strings[5]);
+        params.put("ReportPerson", SharedUtil.getString(activity, "personName"));
+        OkHttpUtils.post().url(UrlConfig.URL_ADDPROBLEMREPORTINFO).params(params).build().execute(new StringCallback() {
+            @Override
+            public void onResponse(String response, int id) {
+                if ("true".equals(response)) {
+                    ToastUtil.show(activity, "上报成功");
+                } else {
+                    ToastUtil.show(activity, "上报失败，请稍候再试");
+                }
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                ToastUtil.show(activity, "服务器异常，请稍后再试");
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+        });
+    }
+
+
 }

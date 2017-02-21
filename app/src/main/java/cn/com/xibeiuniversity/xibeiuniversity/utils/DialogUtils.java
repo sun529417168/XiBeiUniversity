@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.provider.Settings;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -126,6 +128,33 @@ public class DialogUtils {
         dialog.setContentView(view);
         dialog.setCancelable(false);
         return dialog;
+    }
+    /**
+     * 方法名：initGPS
+     * 功    能：是否打开的GPS
+     * 参    数：(final Activity activity)
+     * 返回值：无
+     */
+    public static void initGPS(final Activity activity) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(activity);
+        dialog.setTitle("提示信息");
+        dialog.setMessage("请开启手机GPS功能开关，点击[确定]按钮切换到GPS设置界面");
+        dialog.setPositiveButton("确定", new android.content.DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                // 转到手机设置界面，用户设置GPS
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                activity.startActivity(intent); // 设置完成后返回到原来的界面
+            }
+        });
+        dialog.setNeutralButton("取消",
+                new android.content.DialogInterface.OnClickListener() {
 
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        arg0.dismiss();
+                    }
+                });
+        dialog.show();
     }
 }

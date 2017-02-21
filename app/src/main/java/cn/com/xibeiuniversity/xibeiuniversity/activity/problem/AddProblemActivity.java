@@ -1,5 +1,6 @@
 package cn.com.xibeiuniversity.xibeiuniversity.activity.problem;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -7,22 +8,45 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.fastaccess.permission.base.PermissionHelper;
+import com.fastaccess.permission.base.callback.OnPermissionCallback;
+
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
-import cn.com.xibeiuniversity.xibeiuniversity.activity.task.DetailImageActivity;
+import cn.com.xibeiuniversity.xibeiuniversity.activity.DetailImageActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.task.TaskDetalPhotoAdapter;
-import cn.com.xibeiuniversity.xibeiuniversity.base.BaseActivity;
+import cn.com.xibeiuniversity.xibeiuniversity.function.gps.GPSLocationManager;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.app.TakePhotoActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.compress.CompressConfig;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.GetGPSInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.SearchTypePopInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.service.MyGPSListener;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.DateTimePickDialogUtil;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.DialogUtils;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.MyUtils;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.PopWindowUtils;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.SharedUtil;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
 
 /**
  * 文件名：AddProblemActivity
@@ -32,15 +56,31 @@ import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.compress.Compre
  * 版    本：V1.0.0
  */
 
-public class AddProblemActivity extends TakePhotoActivity implements View.OnClickListener,AdapterView.OnItemClickListener {
+public class AddProblemActivity extends TakePhotoActivity implements View.OnClickListener, AdapterView.OnItemClickListener, SearchTypePopInterface, OnPermissionCallback, GetGPSInterface {
     private Context context;
     private TextView titleName;
     private LinearLayout back;
     private ImageView takePhoto;
     private ArrayList<String> listPath = new ArrayList<String>();
     private ArrayList<Bitmap> list = new ArrayList<Bitmap>();
+    private List<File> listFile = new ArrayList<>();
+    private File mCameraFile;
     private GridView gridView;
     private TaskDetalPhotoAdapter taskDetalPhotoAdapter;
+    private EditText nameEdit, addressEdit, inputInfoEdit;
+    private RelativeLayout typeLayout, findTimeLayout;
+    private TextView typeText, senderText, findTimeText, sendTimeText;
+    private PopupWindow showProblemTypePop;
+    private Button sendInfoBtn;
+    private int problemType = 0;
+    private GPSLocationManager gpsLocationManager;
+    //权限类
+    private PermissionHelper mPermissionHelper;
+    private final static String[] MULTI_PERMISSIONS = new String[]{
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION};
+    private String gps;
+    private String problemTitle, address, findDate, problemDes;
 
     @Override
     protected void setView() {
@@ -49,15 +89,23 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
 
     @Override
     protected void setDate(Bundle savedInstanceState) {
+        if (!MyUtils.gpsIsOPen(this)) {
+            DialogUtils.initGPS(this);
+        }
+        mPermissionHelper = PermissionHelper.getInstance(AddProblemActivity.this);
+        mPermissionHelper.request(MULTI_PERMISSIONS);
+        gpsLocationManager = GPSLocationManager.getInstances(AddProblemActivity.this);
         if (savedInstanceState != null) {
             list = savedInstanceState.getParcelableArrayList("listBitmap");
         }
     }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("listBitmap", list);
     }
+
     @Override
     protected void init() {
         titleName = (TextView) findViewById(R.id.title_name);
@@ -65,6 +113,23 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
         back = (LinearLayout) findViewById(R.id.title_back);
         back.setVisibility(View.VISIBLE);
         back.setOnClickListener(this);
+        nameEdit = (EditText) findViewById(R.id.add_problem_detail_name);
+        typeLayout = (RelativeLayout) findViewById(R.id.add_problem_typeLayout);
+        typeLayout.setOnClickListener(this);
+        typeText = (TextView) findViewById(R.id.add_problem_type);
+        addressEdit = (EditText) findViewById(R.id.add_problem_address);
+        senderText = (TextView) findViewById(R.id.add_problem_sender);
+        senderText.setText(SharedUtil.getString(this, "personName"));
+        findTimeLayout = (RelativeLayout) findViewById(R.id.add_problem_findTimeLayout);
+        findTimeLayout.setOnClickListener(this);
+        findTimeText = (TextView) findViewById(R.id.add_problem_findTime);
+        sendTimeText = (TextView) findViewById(R.id.add_problem_sendTime);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");//设置日期格式
+        sendTimeText.setText(df.format(new Date()));
+        inputInfoEdit = (EditText) findViewById(R.id.add_problem_inputInfo);
+        sendInfoBtn = (Button) findViewById(R.id.add_problem_detail_button);
+        sendInfoBtn.setOnClickListener(this);
+
 
         takePhoto = (ImageView) findViewById(R.id.add_problem_detail_takePhoto);
         takePhoto.setOnClickListener(this);
@@ -81,13 +146,61 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
             case R.id.title_back:
                 XiBeiApp.finishTop();
                 break;
-            case R.id.add_problem_detail_takePhoto:
-                File file = new File(Environment.getExternalStorageDirectory(), "/sultan/" + "reported" + "pic" + System.currentTimeMillis() + ".jpg");
+            case R.id.add_problem_detail_takePhoto://点击拍照
+                File file = new File(Environment.getExternalStorageDirectory(), "/XiBeiProblem/" + System.currentTimeMillis() + ".jpg");
                 if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
                 Uri imageUri = Uri.fromFile(file);
-                CompressConfig compressConfig = new CompressConfig.Builder().setMaxSize(50 * 1024).setMaxPixel(800).create();//压缩方法实例化就是压缩图片，根据配置参数压缩
+                CompressConfig compressConfig = new CompressConfig.Builder().setMaxSize(50 * 1024).setMaxPixel(700).create();//压缩方法实例化就是压缩图片，根据配置参数压缩
                 getTakePhoto().onEnableCompress(compressConfig, true).onPickFromCapture(imageUri);//从相机拍取照片不裁剪
                 break;
+            case R.id.add_problem_typeLayout://问题类型
+                showProblemTypePop = PopWindowUtils.showAddProblemTypePop(this, typeLayout);
+                break;
+            case R.id.add_problem_findTimeLayout://发现时间
+                DateTimePickDialogUtil dateTimePicKDialog = new DateTimePickDialogUtil(AddProblemActivity.this, "");
+                dateTimePicKDialog.dateTimePicKDialog(findTimeText);
+                break;
+            case R.id.add_problem_detail_button://上传数据
+                if (!MyUtils.gpsIsOPen(this)) {
+                    DialogUtils.initGPS(this);
+                    return;
+                }
+                gpsLocationManager.start(new MyGPSListener(this));
+                problemTitle = nameEdit.getText().toString().trim();
+                address = addressEdit.getText().toString().trim();
+                findDate = findTimeText.getText().toString().trim();
+                problemDes = inputInfoEdit.getText().toString().trim();
+                if (isEmpty()) {
+                    if (listFile.size() == 0) {
+                        MyRequest.addProblemRequest(this, problemTitle, problemType, address, gps, findDate, problemDes);
+                    } else {
+                        for (File files : listFile) {
+                            MyRequest.addProblemPicRequest(this, files, problemTitle, problemType, address, gps, findDate, problemDes);
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    private boolean isEmpty() {
+        if (TextUtils.isEmpty(problemTitle)) {
+            ToastUtil.show(this, "请输入问题名称");
+            return false;
+        } else if (problemType == 0) {
+            ToastUtil.show(this, "请选择问题类型");
+            return false;
+        } else if (TextUtils.isEmpty(address)) {
+            ToastUtil.show(this, "请输入所在区域");
+            return false;
+        } else if (TextUtils.isEmpty(findDate)) {
+            ToastUtil.show(this, "请选择发现时间");
+            return false;
+        } else if (TextUtils.isEmpty(problemDes)) {
+            ToastUtil.show(this, "请输入问题描述");
+            return false;
+        } else {
+            return true;
         }
     }
 
@@ -104,7 +217,10 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
     @Override
     public void takeSuccess(String imagePath) {
         super.takeSuccess(imagePath);
+        Log.i("imagePaths",imagePath);
         listPath.add(imagePath);
+        mCameraFile = new File(imagePath);
+        listFile.add(mCameraFile);
         showImg(imagePath);
     }
 
@@ -124,5 +240,60 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
         Intent in = new Intent(this, DetailImageActivity.class);
         in.putStringArrayListExtra("listPath", listPath);
         startActivity(in);
+    }
+
+    @Override
+    public void searchType(String typeName) {
+        typeText.setText(typeName);
+        problemType = "部件类型".equals(typeName) ? 1 : "事件类型".equals(typeName) ? 2 : 0;
+        if (showProblemTypePop.isShowing()) {
+            showProblemTypePop.dismiss();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        mPermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mPermissionHelper.onActivityForResult(requestCode);
+    }
+
+    @Override
+    public void onPermissionGranted(@NonNull String[] permissionName) {
+
+    }
+
+    @Override
+    public void onPermissionDeclined(@NonNull String[] permissionName) {
+
+    }
+
+    @Override
+    public void onPermissionPreGranted(@NonNull String permissionsName) {
+
+    }
+
+    @Override
+    public void onPermissionNeedExplanation(@NonNull String permissionName) {
+
+    }
+
+    @Override
+    public void onPermissionReallyDeclined(@NonNull String permissionName) {
+
+    }
+
+    @Override
+    public void onNoPermissionNeeded() {
+
+    }
+
+    @Override
+    public void getGPS(String longitude, String latitude) {
+        gps = longitude + "," + latitude;
+        Log.i("gps",gps);
     }
 }

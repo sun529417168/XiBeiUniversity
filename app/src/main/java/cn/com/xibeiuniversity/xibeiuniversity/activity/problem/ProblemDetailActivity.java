@@ -1,14 +1,12 @@
 package cn.com.xibeiuniversity.xibeiuniversity.activity.problem;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,8 +16,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
-import cn.com.xibeiuniversity.xibeiuniversity.activity.task.DetailImageActivity;
-import cn.com.xibeiuniversity.xibeiuniversity.adapter.task.TaskDetalPhotoAdapter;
+import cn.com.xibeiuniversity.xibeiuniversity.adapter.problem.ProblemDetalPhotoAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.app.TakePhotoActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.compress.CompressConfig;
@@ -32,20 +29,23 @@ import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.compress.Compre
  * 版    本：V1.0.0
  */
 
-public class ProblemDetailActivity extends TakePhotoActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class ProblemDetailActivity extends TakePhotoActivity implements View.OnClickListener {
     private Context context;
     private TextView titleName;
     private LinearLayout back;
     private ImageView takePhoto;
     private ArrayList<String> listPath = new ArrayList<String>();
+    private ArrayList<String> describeList = new ArrayList<String>();
     private ArrayList<Bitmap> list = new ArrayList<Bitmap>();
     private GridView gridView;
-    private TaskDetalPhotoAdapter taskDetalPhotoAdapter;
+    private ProblemDetalPhotoAdapter problemDetalPhotoAdapter;
     private ProblemBean.RowsBean problemBean;
+
     /**
      * 编号，问题名称，状态，上报人，上报时间，处理人，处理时间
      */
     private TextView numberText, nameText, stateText, senderText, sendTimeText;
+    private TextView problemTypeText,addressText;
     private TextView infoEdit,describeText;
 
     @Override
@@ -77,33 +77,38 @@ public class ProblemDetailActivity extends TakePhotoActivity implements View.OnC
         numberText = (TextView) findViewById(R.id.problem_detail_number);
         nameText = (TextView) findViewById(R.id.problem_detail_name);
         stateText = (TextView) findViewById(R.id.problem_detail_state);
+        problemTypeText = (TextView) findViewById(R.id.problem_detail_type);
+        addressText = (TextView) findViewById(R.id.problem_detail_area);
         senderText = (TextView) findViewById(R.id.problem_detail_sender);
         sendTimeText = (TextView) findViewById(R.id.problem_detail_sendTime);
         infoEdit = (TextView) findViewById(R.id.problem_detail_infoEdit);
         describeText = (TextView) findViewById(R.id.problem_detail_describe);
 
         numberText.setText(problemBean.getProblemSno());
-        nameText.setText(problemBean.getProblemTypeName());
-        if ("已上报".equals(problemBean.getStateName())) {
+        nameText.setText(problemBean.getProblemTitle());
+        if (problemBean.getState()==1) {
             stateText.setText("已上报");
         }
-        if ("已收到".equals(problemBean.getStateName())) {
-            stateText.setText("已收到");
+        if (problemBean.getState()==2) {
+            stateText.setText("已回复");
         }
+        problemTypeText.setText(problemBean.getProblemTypeName());
+        addressText.setText(problemBean.getPosition());
         senderText.setText(problemBean.getReportPersonName());
         sendTimeText.setText(problemBean.getFindDateApi());
         infoEdit.setText(problemBean.getProblemDes());
         describeText.setText(problemBean.getDescribe());
-
-
         takePhoto = (ImageView) findViewById(R.id.problem_detail_takePhoto);
         takePhoto.setOnClickListener(this);
         takePhoto.setVisibility(View.INVISIBLE);
         gridView = (GridView) findViewById(R.id.problem_detail_gridView);
-        gridView.setOnItemClickListener(this);
-        taskDetalPhotoAdapter = new TaskDetalPhotoAdapter(this, list);
-        gridView.setAdapter(taskDetalPhotoAdapter);
-        taskDetalPhotoAdapter.setList(list);
+        for (ProblemBean.RowsBean.ReportAttachmentListBean imageBean : problemBean.getReportAttachmentList()) {
+            if (imageBean.getAttachmentType() == 1) {
+                describeList.add(imageBean.getFileUrl());
+            }
+        }
+        problemDetalPhotoAdapter = new ProblemDetalPhotoAdapter(this, describeList);
+        gridView.setAdapter(problemDetalPhotoAdapter);
     }
 
     @Override
@@ -144,16 +149,10 @@ public class ProblemDetailActivity extends TakePhotoActivity implements View.OnC
         option.inSampleSize = 2;
         Bitmap bitmap = BitmapFactory.decodeFile(imagePath, option);
         list.add(bitmap);
-        taskDetalPhotoAdapter.setList(list);
+        problemDetalPhotoAdapter.setList(list);
         if (list.size() == 4) {
             takePhoto.setVisibility(View.INVISIBLE);
         }
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent in = new Intent(this, DetailImageActivity.class);
-        in.putStringArrayListExtra("listPath", listPath);
-        startActivity(in);
-    }
 }

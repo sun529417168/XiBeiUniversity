@@ -43,4 +43,12 @@ public class UrlConfig {
      * 问题列表
      */
     public static final String URL_GETPROBLEMREPORTINFO = BaseUrl + "/API/ApiProblemReport/GetProblemReportInfo";
+    /**
+     * 新增问题返回信息+图片
+     */
+    public static final String URL_IMGUPLOAD = BaseUrl + "/API/ApiProblemReport/ImgUpload";
+    /**
+     * 新增问题返回信息没有图片
+     */
+    public static final String URL_ADDPROBLEMREPORTINFO = BaseUrl + "/API/ApiProblemReport/AddProblemReportInfo";
 }

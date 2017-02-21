@@ -30,6 +30,8 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <!--拨打电话-->
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"/>
 
     <application
         android:name=".application.MyApplication"
@@ -74,10 +76,11 @@
         <activity
             android:name=".activity.problem.AddProblemActivity"
             android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/Theme.picker"
             android:screenOrientation="portrait" />
         <!--查看图片详情界面-->
         <activity
-            android:name=".activity.task.DetailImageActivity"
+            android:name=".activity.DetailImageActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
         <!--任务搜索界面-->

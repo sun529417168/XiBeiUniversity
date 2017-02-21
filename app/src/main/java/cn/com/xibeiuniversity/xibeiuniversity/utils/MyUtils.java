@@ -1,6 +1,10 @@
 package cn.com.xibeiuniversity.xibeiuniversity.utils;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Environment;
 import android.widget.Toast;
 
@@ -10,6 +14,7 @@ import java.io.InputStreamReader;
 import java.util.Vector;
 
 import static android.R.attr.path;
+import static android.content.Context.LOCATION_SERVICE;
 
 /**
  * 文件名：MyUtils
@@ -66,5 +71,45 @@ public class MyUtils {
             }
         }
         return vecFile;
+    }
+
+    /**
+     * 方法名：gpsIsOPen
+     * 功    能：判断GPS是否打开
+     * 参    数：Context context
+     * 返回值：boolean
+     * 作    者：stt
+     * 时    间：2017.2.21
+     */
+    public static boolean gpsIsOPen(Context context) {
+        LocationManager locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+        // 通过GPS卫星定位，定位级别可以精确到街（通过24颗卫星定位，在室外和空旷的地方定位准确、速度快）
+        boolean gps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        // 通过WLAN或移动网络(3G/2G)确定的位置（也称作AGPS，辅助GPS定位。主要用于在室内或遮盖物（建筑群或茂密的深林等）密集的地方定位）
+        boolean network = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        if (gps) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 方法名：toggleGPS
+     * 功    能：自动打开GPS
+     * 参    数：Context context
+     * 返回值：
+     * 作    者：stt
+     * 时    间：2017.2.21
+     */
+    public static void toggleGPS(Context context) {
+        Intent gpsIntent = new Intent();
+        gpsIntent.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider");
+        gpsIntent.addCategory("android.intent.category.ALTERNATIVE");
+        gpsIntent.setData(Uri.parse("custom:3"));
+        try {
+            PendingIntent.getBroadcast(context, 0, gpsIntent, 0).send();
+        } catch (PendingIntent.CanceledException e) {
+            e.printStackTrace();
+        }
     }
 }
