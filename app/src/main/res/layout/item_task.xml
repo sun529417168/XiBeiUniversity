@@ -18,7 +18,6 @@
             android:id="@+id/item_task_number"
             style="@style/task_item"
             android:layout_marginLeft="4dp"
-            android:text="20170101233"
             android:textColor="@color/black" />
 
         <TextView
@@ -33,8 +32,7 @@
         <TextView
             android:id="@+id/item_task_date"
             style="@style/task_item"
-            android:layout_alignParentRight="true"
-            android:text="2017.01.03" />
+            android:layout_alignParentRight="true" />
 
     </RelativeLayout>
 
@@ -45,7 +43,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="10dp">
 
@@ -57,39 +55,38 @@
             <ImageView
                 android:id="@+id/item_task_image"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="100dp" />
         </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
-            android:layout_weight="7">
+            android:layout_weight="7"
+            android:orientation="vertical">
 
 
             <TextView
                 android:id="@+id/item_task_name"
                 style="@style/task_item"
-                android:layout_marginLeft="10dp"
-                android:text="部件问题" />
+                android:ellipsize="end"
+                android:lines="1"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/item_task_sender"
                 style="@style/task_item"
-                android:layout_alignParentRight="true"
-                android:text="张三丰" />
+                android:layout_marginTop="5dp" />
 
 
             <TextView
                 android:id="@+id/item_task_info"
                 style="@style/task_item"
-                android:layout_below="@+id/item_task_name"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:duplicateParentState="true"
                 android:ellipsize="end"
-                android:lines="2"
-                android:textSize="16sp" />
-        </RelativeLayout>
+                android:lines="1" />
+        </LinearLayout>
     </LinearLayout>
 
     <View

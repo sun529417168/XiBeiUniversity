@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -49,6 +50,7 @@ public class TaskFragment extends BaseFragment implements View.OnClickListener, 
     private LinearLayout searchLayout;
     //刷新控件
     private PullToRefreshListView mPullRefreshListView;
+    private RelativeLayout nothing;
     private TaskAdapter taskAdapter;
     private HorizontalListView horizontalListView;
     private TaskStateAdapter taskStateAdapter;
@@ -79,6 +81,7 @@ public class TaskFragment extends BaseFragment implements View.OnClickListener, 
         mPullRefreshListView = (PullToRefreshListView) rootView.findViewById(R.id.task_refresh_list);
         mPullRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
         horizontalListView = (HorizontalListView) rootView.findViewById(R.id.task_horizontalListView);
+        nothing = (RelativeLayout) rootView.findViewById(R.id.task_nothing);
         taskStateAdapter = new TaskStateAdapter(context, getTypeData());
         horizontalListView.setAdapter(taskStateAdapter);
         taskStateAdapter.setSelectIndex(0);
@@ -120,13 +123,13 @@ public class TaskFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void requestData(int pageindex, int state) {
-        MyRequest.tasIssuedListRequest(context, this, pageindex, "2", state);
+        MyRequest.tasIssuedListRequest(context, this, pageindex, "5", state);
     }
 
     private List<String> getTypeData() {
         List<String> data = new ArrayList<String>();
         data.add("全部");
-        data.add("未处理");
+        data.add("未查阅");
         data.add("处理中");
         data.add("已完成");
         data.add("未完成");
@@ -154,16 +157,29 @@ public class TaskFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void showTaskList(TaskBean taskBean) {
-        if (pageindex == 1) {
-            rowsBeanList = taskBean.getRows();
-            taskAdapter = new TaskAdapter(context, rowsBeanList);
-            mPullRefreshListView.setAdapter(taskAdapter);
-        } else if (pageindex > 1 && taskBean.getRows().size() != 0) {
-            rowsBeanList.addAll(taskBean.getRows());
-            taskAdapter = new TaskAdapter(context, rowsBeanList);
-            mPullRefreshListView.setAdapter(taskAdapter);
-        } else if (pageindex > 1 && taskBean.getRows().size() == 0) {
-            ToastUtil.show(context, "没有更多数据了");
+        if (pageindex == 1 && taskBean.getRows().size() == 0) {
+            mPullRefreshListView.setVisibility(View.GONE);
+            nothing.setVisibility(View.VISIBLE);
+        } else {
+            mPullRefreshListView.setVisibility(View.VISIBLE);
+            nothing.setVisibility(View.GONE);
+            if (pageindex == 1) {
+                rowsBeanList = taskBean.getRows();
+                taskAdapter = new TaskAdapter(context, rowsBeanList);
+                mPullRefreshListView.setAdapter(taskAdapter);
+            } else if (pageindex > 1 && taskBean.getRows().size() != 0) {
+                rowsBeanList.addAll(taskBean.getRows());
+                taskAdapter = new TaskAdapter(context, rowsBeanList);
+                mPullRefreshListView.setAdapter(taskAdapter);
+            } else if (pageindex > 1 && taskBean.getRows().size() == 0) {
+                ToastUtil.show(context, "没有更多数据了");
+            }
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        requestData(pageindex, state);
     }
 }

@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -22,11 +25,13 @@ import cn.com.xibeiuniversity.xibeiuniversity.activity.MainActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.PersonBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.UserBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskAssignedBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskBean;
 import cn.com.xibeiuniversity.xibeiuniversity.config.UrlConfig;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.LoginInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.PersonInfoInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemListInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.TaskAssignedInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.TaskListInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.OkHttpUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.callback.GenericsCallback;
@@ -63,7 +68,6 @@ public class MyRequest {
         OkHttpUtils.post().url(UrlConfig.URL_LOGIN).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
             @Override
             public void onResponse(String response, int id) {
-                Log.i("userBean", response);
                 if ("0".equals(response.replace("\"", ""))) {
                     ToastUtil.show(activity, "您输入的密码有误");
                 } else if ("-1".equals(response.replace("\"", ""))) {
@@ -84,7 +88,6 @@ public class MyRequest {
 
             @Override
             public void onError(Call call, Exception e, int id) {
-                Log.i("userBeanErroe", e.getMessage().toString());
                 ToastUtil.show(activity, "服务器有错误，请稍候再试");
                 if (progDialog.isShowing()) {
                     progDialog.dismiss();
@@ -99,9 +102,46 @@ public class MyRequest {
      * 参    数：Activity activity final String username, final String password
      * 返回值：无
      */
-    public static void personInfoRequest(final Activity activity, String personID) {
+    public static void personInfoRequest(final Context activity, String personID) {
         final Dialog progDialog = DialogUtils.showWaitDialog(activity);
         final PersonInfoInterface personInfoInterface = (PersonInfoInterface) activity;
+        Map<String, Object> params = new HashMap<>();
+        try {
+            params.put("PersonID", personID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        OkHttpUtils.post().url(UrlConfig.URL_GETPERSONINFO).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
+            @Override
+            public void onResponse(String response, int id) {
+                if (!TextUtils.isEmpty(response)) {
+                    PersonBean personBean = JSON.parseObject(response, PersonBean.class);
+                    personInfoInterface.getPersonInfo(personBean);
+                }
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                ToastUtil.show(activity, "服务器有错误，请稍候再试");
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+        });
+    }
+
+    /**
+     * 方法名：personInfoRequest
+     * 功    能：返回人员基本信息
+     * 参    数：Activity activity final String username, final String password
+     * 返回值：无
+     */
+    public static void personInfoRequest(final Context activity, PersonInfoInterface personInfoInterfaces, String personID) {
+        final Dialog progDialog = DialogUtils.showWaitDialog(activity);
+        final PersonInfoInterface personInfoInterface = personInfoInterfaces;
         Map<String, Object> params = new HashMap<>();
         try {
             params.put("PersonID", personID);
@@ -137,7 +177,7 @@ public class MyRequest {
      * 返回值：无
      */
     public static void uodatePersonInfoRequest(final Activity activity, String... strings) {
-
+        final Dialog progDialog = DialogUtils.showWaitDialog(activity);
         Map<String, Object> params = new HashMap<>();
         try {
             params.put("Name", strings[0]);
@@ -153,7 +193,6 @@ public class MyRequest {
         OkHttpUtils.post().url(UrlConfig.URL_EDITTEXTUSERINFO).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
             @Override
             public void onResponse(String response, int id) {
-                Log.i("addPersonInfo", response);
                 if ("true".equals(response)) {
                     Intent intent = new Intent(activity, MainActivity.class);
                     activity.startActivity(intent);
@@ -161,12 +200,17 @@ public class MyRequest {
                 } else if ("false".equals(response)) {
                     ToastUtil.show(activity, "修改信息失败");
                 }
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
             }
 
             @Override
             public void onError(Call call, Exception e, int id) {
-                Log.i("addPersonInfoError", e.getMessage().toString());
                 ToastUtil.show(activity, "连接超时，请稍候再试");
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
             }
         });
     }
@@ -191,12 +235,10 @@ public class MyRequest {
                 if ("false".equals(response)) {
                     ToastUtil.show(activity, "密码有误，请重新输入");
                 }
-                Log.i("isCheckPass", response);
             }
 
             @Override
             public void onError(Call call, Exception e, int id) {
-                Log.i("isCheckPassError", e.getMessage().toString());
             }
         });
     }
@@ -263,7 +305,6 @@ public class MyRequest {
         OkHttpUtils.post().url(UrlConfig.URL_TASKASSIGNEDINFO).params(params).build().execute(new StringCallback() {
             @Override
             public void onResponse(String response, int id) {
-                Log.i("addTaskAssignedInfo", response.toString());
                 if (progDialog.isShowing()) {
                     progDialog.dismiss();
                 }
@@ -271,7 +312,6 @@ public class MyRequest {
 
             @Override
             public void onError(Call call, Exception e, int id) {
-                Log.i("addTaskAssignedInfoError", e.getMessage().toString());
                 if (progDialog.isShowing()) {
                     progDialog.dismiss();
                 }
@@ -285,7 +325,7 @@ public class MyRequest {
      * 参    数：Context activity, Map<String, File> params
      * 返回值：无
      */
-    public static void filesRequest(final Context activity, File file, Object... strings) {
+    public static void filesRequest(final Activity activity, File file, Object... strings) {
         final Dialog progDialog = DialogUtils.showWaitDialog(activity);
         Map<String, Object> params = new HashMap<>();
         params.put("FeedBackContent", strings[0]);
@@ -294,7 +334,12 @@ public class MyRequest {
         OkHttpUtils.post().addFile("mFile", file.getName(), file).url(UrlConfig.URL_TASKASSIGNEDINFO).params(params).build().execute(new StringCallback() {
             @Override
             public void onResponse(String response, int id) {
-                Log.i("filesInfo", response.toString());
+                if ("true".equals(response)) {
+                    ToastUtil.show(activity, "反馈成功");
+                    activity.finish();
+                } else {
+                    ToastUtil.show(activity, "反馈失败，请稍候再试");
+                }
                 if (progDialog.isShowing()) {
                     progDialog.dismiss();
                 }
@@ -302,7 +347,7 @@ public class MyRequest {
 
             @Override
             public void onError(Call call, Exception e, int id) {
-                Log.i("filesInfoError", e.getMessage().toString());
+                ToastUtil.show(activity, "服务器异常，请稍后再试");
                 if (progDialog.isShowing()) {
                     progDialog.dismiss();
                 }
@@ -310,6 +355,43 @@ public class MyRequest {
         });
     }
 
+
+    /**
+     * 方法名：taskAssignedInfoRequest
+     * 功    能：获取任务反馈信息
+     * 参    数：Context activity, TaskListInterface myTaskListInterface, Object... strings
+     * 返回值：无
+     */
+    public static void taskAssignedInfoRequest(final Context activity, int taskAssignedID) {
+        final Dialog progDialog = DialogUtils.showWaitDialog(activity);
+        final TaskAssignedInterface taskAssignedInterface = (TaskAssignedInterface) activity;
+        Map<String, Object> params = new HashMap<>();
+        try {
+            params.put("TaskAssignedID", taskAssignedID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        OkHttpUtils.post().url(UrlConfig.URL_GETTASKASSIGNEDINFO).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
+            @Override
+            public void onResponse(String response, int id) {
+                response = response.replace(":null,", ":\"\",");
+                Log.i("taskAssignedInfo", response);
+                TaskAssignedBean taskAssignedBean = JSON.parseObject(response, TaskAssignedBean.class);
+                taskAssignedInterface.getTaskAssignedInfo(taskAssignedBean);
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                ToastUtil.show(activity, "连接超时，请稍后再试");
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+        });
+    }
 
     /**
      * 方法名：problemListRequest
@@ -326,7 +408,7 @@ public class MyRequest {
             params.put("SearchState", strings[1]);
             params.put("SearchProblemType", strings[2]);
             params.put("SearchDate", strings[3]);
-            params.put("pagesize", "3");//每页条数
+            params.put("pagesize", "5");//每页条数
             params.put("PersonID", SharedUtil.getString(activity, "PersonID"));
         } catch (Exception e) {
             e.printStackTrace();
@@ -335,7 +417,7 @@ public class MyRequest {
             @Override
             public void onResponse(String response, int id) {
                 response = response.replace(":null,", ":\"\",");
-                Log.i("problemList", response);
+                Log.i("liebiao", response);
                 ProblemBean problemBean = JSON.parseObject(response, ProblemBean.class);
                 problemListInterface.showTaskList(problemBean);
                 if (progDialog.isShowing()) {
@@ -345,9 +427,7 @@ public class MyRequest {
 
             @Override
             public void onError(Call call, Exception e, int id) {
-                if ("timeout".equals(e.getMessage().toString()) || TextUtils.isEmpty(e.getMessage().toString())) {
-                    ToastUtil.show(activity, "连接超时，请稍后再试");
-                }
+                ToastUtil.show(activity, "连接超时，请稍后再试");
                 if (progDialog.isShowing()) {
                     progDialog.dismiss();
                 }
@@ -370,7 +450,7 @@ public class MyRequest {
         params.put("GPS", strings[3]);
         params.put("FindDate", strings[4]);
         params.put("ProblemDes", strings[5]);
-        params.put("ReportPerson", SharedUtil.getString(activity, "personName"));
+        params.put("ReportPerson", SharedUtil.getString(activity, "PersonID"));
         OkHttpUtils.post().addFile("mFile", file.getName(), file).url(UrlConfig.URL_IMGUPLOAD).params(params).build().execute(new StringCallback() {
             @Override
             public void onResponse(String response, int id) {
@@ -409,8 +489,8 @@ public class MyRequest {
         params.put("GPS", strings[3]);
         params.put("FindDate", strings[4]);
         params.put("ProblemDes", strings[5]);
-        params.put("ReportPerson", SharedUtil.getString(activity, "personName"));
-        OkHttpUtils.post().url(UrlConfig.URL_ADDPROBLEMREPORTINFO).params(params).build().execute(new StringCallback() {
+        params.put("ReportPerson", SharedUtil.getString(activity, "PersonID"));
+        OkHttpUtils.post().url(UrlConfig.URL_IMGUPLOAD).params(params).build().execute(new StringCallback() {
             @Override
             public void onResponse(String response, int id) {
                 if ("true".equals(response)) {
@@ -433,5 +513,83 @@ public class MyRequest {
         });
     }
 
+    /**
+     * 方法名：addProblemRequestsb
+     * 功    能：上报问题最新方法不管有没有图片
+     * 参    数：Context activity, Map<String,File> fileMap, Object... strings
+     * 返回值：无
+     */
+    public static void addProblemRequestsb(final Activity activity, Map<String, File> fileMap, Object... strings) {
+        final Dialog progDialog = DialogUtils.showWaitDialog(activity);
+        Map<String, Object> params = new HashMap<>();
+        params.put("ProblemTitle", strings[0]);
+        params.put("SearchProblemType", strings[1]);
+        params.put("Position", strings[2]);
+        params.put("GPS", strings[3]);
+        params.put("FindDate", strings[4]);
+        params.put("ProblemDes", strings[5]);
+        params.put("ReportPerson", SharedUtil.getString(activity, "PersonID"));
+        OkHttpUtils.post().files("mFile", fileMap).url(UrlConfig.URL_IMGUPLOAD).params(params).build().execute(new StringCallback() {
+            @Override
+            public void onResponse(String response, int id) {
+                if ("true".equals(response)) {
+                    ToastUtil.show(activity, "上报成功");
+                    activity.finish();
+                } else {
+                    ToastUtil.show(activity, "上报失败，请稍候再试");
+                }
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
 
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                ToastUtil.show(activity, "服务器异常，请稍后再试");
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+        });
+    }
+
+    /**
+     * 方法名：updatePassWordRequest
+     * 功    能：修改密码
+     * 参    数：Activity activity final String username, final String password
+     * 返回值：无
+     */
+    public static void updatePassWordRequest(final Activity activity, String oldPassword, String newPassword) {
+        final Dialog progDialog = DialogUtils.showWaitDialog(activity);
+        Map<String, Object> params = new HashMap<>();
+        try {
+            params.put("PersonID", SharedUtil.getString(activity, "PersonID"));
+            params.put("OldPassWord", oldPassword);
+            params.put("NewPassWord", newPassword);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        OkHttpUtils.post().url(UrlConfig.URL_UPDATEPASSWORD).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
+            @Override
+            public void onResponse(String response, int id) {
+                if ("true".equals(response)) {
+                    ToastUtil.show(activity, "修改成功");
+                    activity.finish();
+                } else {
+                    ToastUtil.show(activity, "修改成功，请稍候再试");
+                }
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                ToastUtil.show(activity, "服务器有错误，请稍候再试");
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+        });
+    }
 }

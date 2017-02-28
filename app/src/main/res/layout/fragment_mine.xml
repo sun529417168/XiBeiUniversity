@@ -39,16 +39,15 @@
                     android:layout_below="@+id/mine_titleImage"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:text="admin"
                     android:textColor="@color/white" />
 
                 <TextView
+                    android:id="@+id/mine_titleWorkNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/mine_titleUsername"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:text="工号：10078"
                     android:textColor="@color/white" />
 
             </RelativeLayout>
@@ -134,6 +133,7 @@
             <!--修改密码end-->
             <!--清除缓存start-->
             <RelativeLayout
+                android:id="@+id/mine_cache_Layout"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginTop="10dp"
@@ -146,11 +146,10 @@
                     android:text="@string/mine_clear" />
 
                 <TextView
-                    android:id="@+id/mine_clear"
+                    android:id="@+id/mine_cacheSize"
                     style="@style/mine_userInfo"
                     android:layout_marginRight="2dp"
-                    android:layout_toLeftOf="@+id/mine_clear_right"
-                    android:text="200M" />
+                    android:layout_toLeftOf="@+id/mine_clear_right" />
 
                 <ImageView
                     android:id="@+id/mine_clear_right"
@@ -177,5 +176,6 @@
         android:background="@drawable/login_button"
         android:text="@string/cancellation"
         android:textColor="@color/white"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:visibility="invisible" />
 </RelativeLayout>

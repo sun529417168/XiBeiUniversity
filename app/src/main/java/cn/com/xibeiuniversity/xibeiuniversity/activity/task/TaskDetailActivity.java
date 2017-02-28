@@ -30,11 +30,14 @@ import java.util.List;
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.DetailImageActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.task.TaskDetalDescribePhotoAdapter;
+import cn.com.xibeiuniversity.xibeiuniversity.adapter.task.TaskDetalFeedbackPhotoAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.task.TaskDetalPhotoAdapter;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskAssignedBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskBean;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.app.TakePhotoActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.compress.CompressConfig;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.SearchTypePopInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.TaskAssignedInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.DownloadUtil;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyUtils;
@@ -49,7 +52,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
  * 版    本：V1.0.0
  */
 
-public class TaskDetailActivity extends TakePhotoActivity implements View.OnClickListener, AdapterView.OnItemClickListener, SearchTypePopInterface {
+public class TaskDetailActivity extends TakePhotoActivity implements View.OnClickListener, AdapterView.OnItemClickListener, SearchTypePopInterface, TaskAssignedInterface {
     private Context context;
     private TextView titleName;
     private LinearLayout back;
@@ -64,17 +67,20 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
     private ImageView takePhoto;
     private ArrayList<String> listPath = new ArrayList<String>();
     private ArrayList<Bitmap> list = new ArrayList<Bitmap>();
-    private GridView gridView, gridViewDescribe;
+    private GridView gridView, gridViewDescribe, gridViewFeedback;
     private TaskDetalPhotoAdapter taskDetalPhotoAdapter;
     private TaskDetalDescribePhotoAdapter taskDetalDescribePhotoAdapter;
+    private TaskDetalFeedbackPhotoAdapter taskDetalFeedbackPhotoAdapter;
     private Button submitBtn;
     private RelativeLayout stateReplyLayout;
     private ArrayList<String> describeList = new ArrayList<>();
+    private ArrayList<String> describeListFanKui = new ArrayList<>();
     private PopupWindow showReplyPop;
     private int feedbackState = -1;
     private List<File> listFile = new ArrayList<>();
     private File mCameraFile;
     private String path;
+    private TextView taskInfo;
 
     @Override
     protected void setView() {
@@ -88,6 +94,9 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
         Log.i("taskBean", taskBean.toString());
         if (savedInstanceState != null) {
             list = savedInstanceState.getParcelableArrayList("listBitmap");
+        }
+        if (taskBean.getTaskAssignedState() == 3 || taskBean.getTaskAssignedState() == 4) {
+            MyRequest.taskAssignedInfoRequest(this, taskBean.getTaskAssignedID());
         }
     }
 
@@ -117,6 +126,8 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
         fileName = (TextView) findViewById(R.id.task_detail_state_fileName);//文件名称
         filePath = (TextView) findViewById(R.id.task_detail_state_file);//文件路径
         filePath.setOnClickListener(this);
+        taskInfo = (TextView) findViewById(R.id.task_detail_describe);
+
 
         stateReplyText = (TextView) findViewById(R.id.task_detail_state_reply);//反馈状态
         stateReplyLayout = (RelativeLayout) findViewById(R.id.task_detail_state_reply_layout);//反馈状态的layout
@@ -146,33 +157,34 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
         founderText.setText(taskBean.getPersonName());
         priorityText.setText(taskBean.getTaskPriorityName());
         sendTimeText.setText(taskBean.getStartDateApi());
+
+        filePath.setText(isAttachment() ? "打开" : "下载");
         for (TaskBean.RowsBean.ImageListBean imageBean : taskBean.getImageList()) {
             if (imageBean.getAttachmentType() == 2) {
                 fileName.setText("文件(" + imageBean.getFileName() + ")");
             }
         }
+        if (TextUtils.isEmpty(fileName.getText().toString().trim())) {
+            findViewById(R.id.task_detail_state_fileLayout).setVisibility(View.GONE);
+        }
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");//设置日期格式
         feedbackTimeText.setText(df.format(new Date()));
-        if ("未完成".equals(taskBean.getTaskStateName())) {
-            stateTaskText.setText("未完成");
-//            submitBtn.setVisibility(View.INVISIBLE);
-//            takePhoto.setVisibility(View.INVISIBLE);
-            infoEdit.setFocusable(false);
+        if (taskBean.getTaskState() == 1) {
+            stateTaskText.setText("未查阅");
         }
-        if ("处理中".equals(taskBean.getTaskStateName())) {
+        if (taskBean.getTaskState() == 2) {
             stateTaskText.setText("处理中");
         }
-        if ("未处理".equals(taskBean.getTaskStateName())) {
-            stateTaskText.setText("未处理");
-        }
-        if ("已完成".equals(taskBean.getTaskStateName())) {
+        if (taskBean.getTaskState() == 3) {
             stateTaskText.setText("已完成");
-//            submitBtn.setVisibility(View.INVISIBLE);
-//            takePhoto.setVisibility(View.INVISIBLE);
-            infoEdit.setFocusable(false);
+        }
+        if (taskBean.getTaskState() == 4) {
+            stateTaskText.setText("未完成");
         }
 
+
+        taskInfo.setText(taskBean.getTaskDes());
     }
 
     @Override
@@ -214,47 +226,58 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
 
                 break;
             case R.id.task_detail_state_file://点击下载
-                int isHave = -1;
-                int isAttach = -1;
                 if (isEmpty()) {
-                    for (TaskBean.RowsBean.ImageListBean imageBean : taskBean.getImageList()) {
-                        if (imageBean.getAttachmentType() == 2) {
-                            isAttach = 1;
-                            if (MyUtils.getVideoFileName(path).size() > 0) {
-                                for (String fileUrl : MyUtils.getVideoFileName(path)) {
-                                    if (fileUrl.equals(imageBean.getFileName())) {
-                                        isHave = 1;
-                                        File files = new File(path + fileUrl);// 这里更改为你的名称
-                                        Log.i("fileName", fileUrl + "=======" + files.getPath());
-                                        Uri path = Uri.fromFile(files);
-                                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                                        intent.setDataAndType(path, "application/msword");
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        try {
-                                            startActivity(intent);
-                                        } catch (ActivityNotFoundException e) {
-                                            ToastUtil.show(context, "出现异常，请稍候再试");
+                    if (isAttachment()) {
+                        for (TaskBean.RowsBean.ImageListBean imageBean : taskBean.getImageList()) {
+                            if (imageBean.getAttachmentType() == 2) {
+                                if (MyUtils.getVideoFileName(path).size() > 0) {
+                                    for (String fileUrl : MyUtils.getVideoFileName(path)) {
+                                        if (fileUrl.equals(imageBean.getFileName())) {
+                                            File files = new File(path + fileUrl);// 这里更改为你的名称
+                                            Log.i("fileName", fileUrl + "=======" + files.getPath());
+                                            Uri path = Uri.fromFile(files);
+                                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                                            intent.setDataAndType(path, "application/msword");
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            try {
+                                                startActivity(intent);
+                                            } catch (ActivityNotFoundException e) {
+                                                ToastUtil.show(context, "出现异常，请稍候再试");
+                                            }
+                                            break;
                                         }
-                                        break;
                                     }
                                 }
-                                if (isHave == -1) {
-                                    DownloadUtil down = new DownloadUtil(TaskDetailActivity.this, imageBean.getFileName(), imageBean.getFileUrl());
-                                    down.showDownloadDialog();
-                                }
-                            } else {
-                                DownloadUtil down = new DownloadUtil(TaskDetailActivity.this, imageBean.getFileName(), imageBean.getFileUrl());
+                            }
+                        }
+                    } else {
+                        for (TaskBean.RowsBean.ImageListBean imageBean : taskBean.getImageList()) {
+                            if (imageBean.getAttachmentType() == 2) {
+                                DownloadUtil down = new DownloadUtil(TaskDetailActivity.this, imageBean.getFileName(), imageBean.getFileUrl(), filePath);
                                 down.showDownloadDialog();
                             }
                         }
                     }
-                    if (isAttach == -1) {
-                        ToastUtil.show(context, "没有可下载的文件");
-                    }
-
                 }
                 break;
         }
+    }
+
+    private boolean isAttachment() {
+        boolean isFlag = false;
+        path = Environment.getExternalStorageDirectory() + "/XiBeiDownload";
+        for (TaskBean.RowsBean.ImageListBean imageBean : taskBean.getImageList()) {
+            if (imageBean.getAttachmentType() == 2) {
+                if (MyUtils.getVideoFileName(path).size() > 0) {
+                    for (String fileUrl : MyUtils.getVideoFileName(path)) {
+                        if (fileUrl.equals(imageBean.getFileName())) {
+                            isFlag = true;
+                        }
+                    }
+                }
+            }
+        }
+        return isFlag;
     }
 
     private boolean isEmpty() {
@@ -284,7 +307,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
     @Override
     public void takeSuccess(String imagePath) {
         super.takeSuccess(imagePath);
-        Log.i("imagePath",imagePath);
+        Log.i("imagePath", imagePath);
         listPath.add(imagePath);
         mCameraFile = new File(imagePath);
         listFile.add(mCameraFile);
@@ -318,4 +341,29 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
         }
     }
 
+    @Override
+    public void getTaskAssignedInfo(TaskAssignedBean taskAssignedBean) {
+        if (taskAssignedBean.getFeedbackState() == 3) {
+            stateReplyText.setText("已完成");
+            submitBtn.setVisibility(View.INVISIBLE);
+            takePhoto.setVisibility(View.INVISIBLE);
+            infoEdit.setFocusable(false);
+            findViewById(R.id.task_detail_reply_image).setVisibility(View.INVISIBLE);
+        }
+        if (taskAssignedBean.getFeedbackState() == 4) {
+            stateReplyText.setText("未完成");
+            submitBtn.setVisibility(View.INVISIBLE);
+            takePhoto.setVisibility(View.INVISIBLE);
+            infoEdit.setFocusable(false);
+            findViewById(R.id.task_detail_reply_image).setVisibility(View.INVISIBLE);
+        }
+        infoEdit.setText(taskAssignedBean.getFeedBackContent());
+        for (TaskAssignedBean.ImageListBean imageBean : taskAssignedBean.getImageList()) {
+            if (imageBean.getAttachmentType() == 1) {
+                describeListFanKui.add(imageBean.getFileUrl());
+            }
+        }
+        taskDetalFeedbackPhotoAdapter = new TaskDetalFeedbackPhotoAdapter(this, describeListFanKui);
+        gridView.setAdapter(taskDetalFeedbackPhotoAdapter);
+    }
 }

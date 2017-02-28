@@ -94,8 +94,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void login(UserBean userBean) {
-        if (userBean.getPersonId()==0){
-            ToastUtil.show(this,"用户名或者密码不对，请重新输入");
+        if (userBean.getPersonId() == 0) {
+            ToastUtil.show(this, "用户名或者密码不对，请重新输入");
             return;
         }
         if (0 == userBean.getUserType()) {

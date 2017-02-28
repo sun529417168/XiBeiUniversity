@@ -87,6 +87,7 @@
     <string name="task_detail_titleName">"任务信息"</string>
     <string name="task_detail_bottomName">"反馈信息"</string>
     <string name="task_detail_feedbackTime">"反馈时间"</string>
+    <string name="task_detail_inputFeedbackInfo">"请输入反馈内容"</string>
     <!--任务详情end-->
 
     <!--个人信息start-->
@@ -145,6 +146,7 @@
     <string name="add_problem_fill">"(请填写)"</string>
     <string name="add_problem_button">"上报"</string>
     <string name="add_problem_inputPlease">"请输入"</string>
+    <string name="add_problem_inputProblemInfo">"请输入问题描述"</string>
     <!--上报问题end-->
 
     <!--任务搜索start-->

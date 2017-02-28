@@ -1,15 +1,24 @@
 package cn.com.xibeiuniversity.xibeiuniversity.fragment;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -20,6 +29,7 @@ import java.util.List;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.problem.AddProblemActivity;
+import cn.com.xibeiuniversity.xibeiuniversity.adapter.problem.PopProblemAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.problem.ProblemAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.base.BaseFragment;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
@@ -28,6 +38,8 @@ import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.PopWindowUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
+
+import static cn.com.xibeiuniversity.xibeiuniversity.R.id.textView;
 
 /**
  * 文件名：ProblemFragment
@@ -40,7 +52,6 @@ import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
 public class ProblemFragment extends BaseFragment implements View.OnClickListener, ProblemTypeInterface, ProblemListInterface {
     private Context context;
     private TextView titleName;//标题名称
-    private TextView[] textviews;
     //刷新控件
     private PullToRefreshListView mPullRefreshListView;
     private ProblemBean problemBean = new ProblemBean();
@@ -51,6 +62,7 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
      */
     private LinearLayout typeLayout, timeLayout, stateLayout;
     private TextView typeText, timeText, stateText;
+    private ImageView typeImage, timeImage, stateImage;
     private PopupWindow popupWindow;
     private int state = 0;//状态
     private int pageindex = 1;//页码数
@@ -58,6 +70,10 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
     private int searchProblemType = 0;//类型
     private int searchDate = 0;//时间
     private List<ProblemBean.RowsBean> rowsBeanList = new ArrayList();
+    private TextView[] textViewsTit;
+    private ImageView[] imageViewTit;
+    private RelativeLayout nothing;
+    private int ViewHight = 0;
 
 
     @Override
@@ -95,7 +111,12 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
         typeLayout.setOnClickListener(this);
         timeLayout.setOnClickListener(this);
         stateLayout.setOnClickListener(this);
-
+        textViewsTit = new TextView[]{typeText, timeText, stateText};
+        typeImage = (ImageView) rootView.findViewById(R.id.problem_layout_type_image);
+        timeImage = (ImageView) rootView.findViewById(R.id.problem_layout_time_image);
+        stateImage = (ImageView) rootView.findViewById(R.id.problem_layout_state_image);
+        nothing = (RelativeLayout) rootView.findViewById(R.id.problem_nothing);
+        imageViewTit = new ImageView[]{typeImage, timeImage, stateImage};
         mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(
@@ -119,6 +140,23 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
                 mPullRefreshListView.onRefreshComplete();
             }
         });
+        final RelativeLayout titleLayout = (RelativeLayout) rootView.findViewById(R.id.title_layout);
+        final LinearLayout problemTitleLayout = (LinearLayout) rootView.findViewById(R.id.problem_title_layout);
+        ViewTreeObserver titleLayoutVTO = titleLayout.getViewTreeObserver();
+        titleLayoutVTO.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                ViewHight = titleLayout.getHeight();
+                Log.i("ViewHight",ViewHight+"");
+            }
+        });
+        ViewTreeObserver problemTitleLayoutVTO = problemTitleLayout.getViewTreeObserver();
+        problemTitleLayoutVTO.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                ViewHight = problemTitleLayout.getHeight()*2 + ViewHight;
+            }
+        });
     }
 
     @Override
@@ -132,9 +170,10 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
             case R.id.problem_layout_type:
                 list = new ArrayList();
                 list.add("全部");
-                list.add("部件类型");
-                list.add("事件类型");
-                popupWindow = PopWindowUtils.showProblemPop(getActivity(), (ProblemTypeInterface) this, typeLayout, list, 0);
+                list.add("部件问题");
+                list.add("事件问题");
+                popupWindow = PopWindowUtils.showProblemPop(getActivity(), this, v, list, 0,ViewHight);
+                setTextViewColor(typeText);
                 break;
             case R.id.problem_layout_time:
                 list = new ArrayList();
@@ -142,15 +181,36 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
                 list.add("三天");
                 list.add("一周");
                 list.add("一个月");
-                popupWindow = PopWindowUtils.showProblemPop(getActivity(), (ProblemTypeInterface) this, typeLayout, list, 1);
+                popupWindow = PopWindowUtils.showProblemPop(getActivity(), this, v, list, 1,ViewHight);
+                setTextViewColor(timeText);
                 break;
             case R.id.problem_layout_state:
                 list = new ArrayList();
                 list.add("全部");
                 list.add("已上报");
                 list.add("已回复");
-                popupWindow = PopWindowUtils.showProblemPop(getActivity(), (ProblemTypeInterface) this, typeLayout, list, 2);
+                popupWindow = PopWindowUtils.showProblemPop(getActivity(), this, v, list, 2,ViewHight);
+                setTextViewColor(stateText);
                 break;
+        }
+    }
+
+    private void setTextViewColor(TextView textView) {
+        if (textView != null) {
+            for (int i = 0; i < textViewsTit.length; i++) {
+                if (textView.getId() == textViewsTit[i].getId()) {
+//                    imageViewTit[i].setImageResource(R.mipmap.search_top);
+                    textViewsTit[i].setTextColor(ContextCompat.getColor(context, R.color.blue));
+                } else {
+//                    imageViewTit[i].setImageResource(R.mipmap.search_bottom);
+                    textViewsTit[i].setTextColor(ContextCompat.getColor(context, R.color.black));
+                }
+            }
+        } else {
+            for (int i = 0; i < textViewsTit.length; i++) {
+//                imageViewTit[i].setImageResource(R.mipmap.search_bottom);
+                textViewsTit[i].setTextColor(ContextCompat.getColor(context, R.color.black));
+            }
         }
     }
 
@@ -160,14 +220,17 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
             case 0:
                 searchProblemType = "全部".equals(typeName) ? 0 : "部件类型".equals(typeName) ? 1 : "事件类型".equals(typeName) ? 2 : 0;
                 typeText.setText(typeName);
+                setTextViewColor(null);
                 break;
             case 1:
                 searchDate = "全部".equals(typeName) ? 0 : "三天".equals(typeName) ? 1 : "一周".equals(typeName) ? 2 : "一个月".equals(typeName) ? 3 : 0;
                 timeText.setText(typeName);
+                setTextViewColor(null);
                 break;
             case 2:
                 searchState = "全部".equals(typeName) ? 0 : "已上报".equals(typeName) ? 1 : "已回复".equals(typeName) ? 2 : 0;
                 stateText.setText(typeName);
+                setTextViewColor(null);
                 break;
         }
         pageindex = 1;
@@ -179,16 +242,30 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
 
     @Override
     public void showTaskList(ProblemBean problemBean) {
-        if (pageindex == 1) {
-            rowsBeanList = problemBean.getRows();
-            problemAdapter = new ProblemAdapter(context, rowsBeanList);
-            mPullRefreshListView.setAdapter(problemAdapter);
-        } else if (pageindex > 1 && problemBean.getRows().size() != 0) {
-            rowsBeanList.addAll(problemBean.getRows());
-            problemAdapter = new ProblemAdapter(context, rowsBeanList);
-            mPullRefreshListView.setAdapter(problemAdapter);
-        } else if (pageindex > 1 && problemBean.getRows().size() == 0) {
-            ToastUtil.show(context, "没有更多数据了");
+        if (pageindex == 1 && problemBean.getRows().size() == 0) {
+            mPullRefreshListView.setVisibility(View.GONE);
+            nothing.setVisibility(View.VISIBLE);
+        } else {
+            mPullRefreshListView.setVisibility(View.VISIBLE);
+            nothing.setVisibility(View.GONE);
+            if (pageindex == 1) {
+                rowsBeanList = problemBean.getRows();
+                problemAdapter = new ProblemAdapter(context, rowsBeanList);
+                mPullRefreshListView.setAdapter(problemAdapter);
+            } else if (pageindex > 1 && problemBean.getRows().size() != 0) {
+                rowsBeanList.addAll(problemBean.getRows());
+                problemAdapter = new ProblemAdapter(context, rowsBeanList);
+                mPullRefreshListView.setAdapter(problemAdapter);
+            } else if (pageindex > 1 && problemBean.getRows().size() == 0) {
+                ToastUtil.show(context, "没有更多数据了");
+            }
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        requestData(pageindex, searchState, searchProblemType, searchDate);
+    }
+
 }

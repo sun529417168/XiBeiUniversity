@@ -13,10 +13,9 @@ import java.util.List;
 
 public class TaskBean implements Serializable {
 
-
     /**
-     * total : 24
-     * rows : [{"TaskSno":"T201702151019476","TaskName":"文件保存测试","TaskType":1,"TaskTypeName":"巡逻","TaskAddr":"测试","TaskDes":"","PersonName":"刘新航","CreateDate":"/Date(-62135596800000)/","EndDate":"/Date(-62135596800000)/","TaskPriority":1,"TaskPriorityName":"高","TaskState":1,"TaskStateName":"未处理","IsImmediatelyName":"是","PersonID":14,"ID":21,"SearchSNO":"T201702151019476Issued21","StartDate":"/Date(-62135596800000)/","IsCheck":false,"ImageList":[{"FileName":"你的名字.jpg","FileUrl":"Content/FileStore/TasIssuedFile/2017/2/15/6/40127b3d-9d92-4618-8ab3-266fbd80fcd0.jpg","FileID":27,"AttachmentType":1,"SNO":"T201702151019476Issued21"},{"FileName":"数据库原理.xlsx","FileUrl":"Content/FileStore/TasIssuedFile/2017/2/15/6/06cd033f-5396-4de5-b459-991c44530bda.xlsx","FileID":28,"AttachmentType":2,"SNO":"T201702151019476Issued21"}],"TaskAssignedID":41,"CreateDateApi":"2017/2/15 10:19:47","StartDateApi":"2017/2/16 10:18:00","EndDateApi":"2017/2/17 10:18:00"},{"TaskSno":"T201702151019476","TaskName":"文件保存测试","TaskType":1,"TaskTypeName":"巡逻","TaskAddr":"测试","TaskDes":null,"PersonName":"刘新航","CreateDate":"/Date(-62135596800000)/","EndDate":"/Date(-62135596800000)/","TaskPriority":1,"TaskPriorityName":"高","TaskState":1,"TaskStateName":"未处理","IsImmediatelyName":"是","PersonID":14,"ID":21,"SearchSNO":"T201702151019476Issued21","StartDate":"/Date(-62135596800000)/","IsCheck":false,"ImageList":[{"FileName":"你的名字.jpg","FileUrl":"Content/FileStore/TasIssuedFile/2017/2/15/6/40127b3d-9d92-4618-8ab3-266fbd80fcd0.jpg","FileID":27,"AttachmentType":1,"SNO":"T201702151019476Issued21"},{"FileName":"数据库原理.xlsx","FileUrl":"Content/FileStore/TasIssuedFile/2017/2/15/6/06cd033f-5396-4de5-b459-991c44530bda.xlsx","FileID":28,"AttachmentType":2,"SNO":"T201702151019476Issued21"}],"TaskAssignedID":40,"CreateDateApi":"2017/2/15 10:19:47","StartDateApi":"2017/2/16 10:18:00","EndDateApi":"2017/2/17 10:18:00"},{"TaskSno":"T201701201626036","TaskName":"宿舍检查","TaskType":1,"TaskTypeName":"巡逻","TaskAddr":"1号宿舍楼","TaskDes":null,"PersonName":"刘新航","CreateDate":"/Date(-62135596800000)/","EndDate":"/Date(-62135596800000)/","TaskPriority":1,"TaskPriorityName":"高","TaskState":1,"TaskStateName":"未处理","IsImmediatelyName":"是","PersonID":14,"ID":20,"SearchSNO":"T201701201626036Issued20","StartDate":"/Date(-62135596800000)/","IsCheck":false,"ImageList":[{"FileName":"pic_logo_1082168b9.png","FileUrl":null,"FileID":25,"AttachmentType":1,"SNO":"T201701201626036Issued20"},{"FileName":"1.jpg","FileUrl":null,"FileID":26,"AttachmentType":1,"SNO":"T201701201626036Issued20"}],"TaskAssignedID":39,"CreateDateApi":"2017/1/20 16:26:03","StartDateApi":"2017/1/20 16:26:00","EndDateApi":"2017/1/22 16:26:00"},{"TaskSno":"T201701201626036","TaskName":"宿舍检查","TaskType":1,"TaskTypeName":"巡逻","TaskAddr":"1号宿舍楼","TaskDes":null,"PersonName":"刘新航","CreateDate":"/Date(-62135596800000)/","EndDate":"/Date(-62135596800000)/","TaskPriority":1,"TaskPriorityName":"高","TaskState":1,"TaskStateName":"未处理","IsImmediatelyName":"是","PersonID":14,"ID":20,"SearchSNO":"T201701201626036Issued20","StartDate":"/Date(-62135596800000)/","IsCheck":false,"ImageList":[{"FileName":"pic_logo_1082168b9.png","FileUrl":null,"FileID":25,"AttachmentType":1,"SNO":"T201701201626036Issued20"},{"FileName":"1.jpg","FileUrl":null,"FileID":26,"AttachmentType":1,"SNO":"T201701201626036Issued20"}],"TaskAssignedID":38,"CreateDateApi":"2017/1/20 16:26:03","StartDateApi":"2017/1/20 16:26:00","EndDateApi":"2017/1/22 16:26:00"},{"TaskSno":"T201701201051476","TaskName":"设备巡检","TaskType":2,"TaskTypeName":"巡检","TaskAddr":"崇德楼","TaskDes":"崇德楼设备巡检","PersonName":"刘新航","CreateDate":"/Date(-62135596800000)/","EndDate":"/Date(-62135596800000)/","TaskPriority":1,"TaskPriorityName":"高","TaskState":1,"TaskStateName":"未处理","IsImmediatelyName":"是","PersonID":14,"ID":19,"SearchSNO":"T201701201051476Issued19","StartDate":"/Date(-62135596800000)/","IsCheck":false,"ImageList":[{"FileName":"iPhone6 1.jpg","FileUrl":null,"FileID":20,"AttachmentType":1,"SNO":"T201701201051476Issued19"},{"FileName":"灭火器箱.jpg","FileUrl":null,"FileID":21,"AttachmentType":1,"SNO":"T201701201051476Issued19"},{"FileName":"记录日志页面总结.docx","FileUrl":null,"FileID":22,"AttachmentType":2,"SNO":"T201701201051476Issued19"}],"TaskAssignedID":37,"CreateDateApi":"2017/1/20 10:51:47","StartDateApi":"2017/1/21 10:50:00","EndDateApi":"2017/1/23 10:50:00"},{"TaskSno":"T201701201051476","TaskName":"设备巡检","TaskType":2,"TaskTypeName":"巡检","TaskAddr":"崇德楼","TaskDes":"崇德楼设备巡检","PersonName":"刘新航","CreateDate":"/Date(-62135596800000)/","EndDate":"/Date(-62135596800000)/","TaskPriority":1,"TaskPriorityName":"高","TaskState":1,"TaskStateName":"未处理","IsImmediatelyName":"是","PersonID":14,"ID":19,"SearchSNO":"T201701201051476Issued19","StartDate":"/Date(-62135596800000)/","IsCheck":false,"ImageList":[{"FileName":"iPhone6 1.jpg","FileUrl":null,"FileID":20,"AttachmentType":1,"SNO":"T201701201051476Issued19"},{"FileName":"灭火器箱.jpg","FileUrl":null,"FileID":21,"AttachmentType":1,"SNO":"T201701201051476Issued19"},{"FileName":"记录日志页面总结.docx","FileUrl":null,"FileID":22,"AttachmentType":2,"SNO":"T201701201051476Issued19"}],"TaskAssignedID":36,"CreateDateApi":"2017/1/20 10:51:47","StartDateApi":"2017/1/21 10:50:00","EndDateApi":"2017/1/23 10:50:00"},{"TaskSno":"T201701191706006","TaskName":"检查宿舍","TaskType":2,"TaskTypeName":"巡检","TaskAddr":"宿舍楼","TaskDes":null,"PersonName":"刘新航","CreateDate":"/Date(-62135596800000)/","EndDate":"/Date(-62135596800000)/","TaskPriority":1,"TaskPriorityName":"高","TaskState":1,"TaskStateName":"未处理","IsImmediatelyName":"是","PersonID":14,"ID":17,"SearchSNO":"T201701191706006Issued17","StartDate":"/Date(-62135596800000)/","IsCheck":false,"ImageList":[{"FileName":"1.jpg","FileUrl":null,"FileID":17,"AttachmentType":1,"SNO":"T201701191706006Issued17"},{"FileName":"pic_logo_1082168b9.png","FileUrl":null,"FileID":18,"AttachmentType":1,"SNO":"T201701191706006Issued17"}],"TaskAssignedID":31,"CreateDateApi":"2017/1/19 17:06:00","StartDateApi":"2017/1/20 17:04:00","EndDateApi":"2017/1/22 17:04:00"},{"TaskSno":"T201701191706006","TaskName":"检查宿舍","TaskType":2,"TaskTypeName":"巡检","TaskAddr":"宿舍楼","TaskDes":null,"PersonName":"刘新航","CreateDate":"/Date(-62135596800000)/","EndDate":"/Date(-62135596800000)/","TaskPriority":1,"TaskPriorityName":"高","TaskState":1,"TaskStateName":"未处理","IsImmediatelyName":"是","PersonID":14,"ID":17,"SearchSNO":"T201701191706006Issued17","StartDate":"/Date(-62135596800000)/","IsCheck":false,"ImageList":[{"FileName":"1.jpg","FileUrl":null,"FileID":17,"AttachmentType":1,"SNO":"T201701191706006Issued17"},{"FileName":"pic_logo_1082168b9.png","FileUrl":null,"FileID":18,"AttachmentType":1,"SNO":"T201701191706006Issued17"}],"TaskAssignedID":30,"CreateDateApi":"2017/1/19 17:06:00","StartDateApi":"2017/1/20 17:04:00","EndDateApi":"2017/1/22 17:04:00"},{"TaskSno":"T201701191546346","TaskName":"图片文件上传测试","TaskType":3,"TaskTypeName":"其他","TaskAddr":"办公室","TaskDes":"图片文件上传测试","PersonName":"刘新航","CreateDate":"/Date(-62135596800000)/","EndDate":"/Date(-62135596800000)/","TaskPriority":3,"TaskPriorityName":"低","TaskState":1,"TaskStateName":"未处理","IsImmediatelyName":"是","PersonID":14,"ID":16,"SearchSNO":"T201701191546346Issued16","StartDate":"/Date(-62135596800000)/","IsCheck":false,"ImageList":[],"TaskAssignedID":28,"CreateDateApi":"2017/1/19 15:46:34","StartDateApi":"2017/1/19 15:45:00","EndDateApi":"2017/1/19 15:46:00"},{"TaskSno":"T201701191536176","TaskName":"定期巡检","TaskType":2,"TaskTypeName":"巡检","TaskAddr":"行知楼","TaskDes":"定期巡检","PersonName":"刘新航","CreateDate":"/Date(-62135596800000)/","EndDate":"/Date(-62135596800000)/","TaskPriority":2,"TaskPriorityName":"中","TaskState":1,"TaskStateName":"未处理","IsImmediatelyName":"是","PersonID":14,"ID":15,"SearchSNO":"T201701191536176Issued15","StartDate":"/Date(-62135596800000)/","IsCheck":false,"ImageList":[{"FileName":"$$%Z9K$]}C)E2S2)F$5J_ZG.png","FileUrl":null,"FileID":11,"AttachmentType":1,"SNO":"T201701191536176Issued15"},{"FileName":"1.png","FileUrl":null,"FileID":12,"AttachmentType":1,"SNO":"T201701191536176Issued15"},{"FileName":"SVN地址.txt","FileUrl":null,"FileID":13,"AttachmentType":2,"SNO":"T201701191536176Issued15"}],"TaskAssignedID":27,"CreateDateApi":"2017/1/19 15:36:17","StartDateApi":"2017/1/20 15:35:00","EndDateApi":"2017/1/21 15:35:00"}]
+     * total : 5
+     * rows : [{"TaskSno":"T201702241016011","TaskName":"手机任务下发功能测试","TaskType":3,"TaskTypeName":"其他","TaskAddr":"会议室","TaskDes":"手机任务下发功能测试","PersonName":"刘新航","CreateDate":"/Date(-62135596800000)/","EndDate":"/Date(-62135596800000)/","TaskPriority":1,"TaskPriorityName":"高","TaskState":4,"TaskStateName":"未完成","IsImmediatelyName":"是","PersonID":14,"ID":5,"SearchSNO":"T20170224101601115","StartDate":"/Date(-62135596800000)/","IsCheck":true,"ImageList":[{"FileName":"$$%Z9K$]}C)E2S2)F$5J_ZG.png","FileUrl":"http://123.56.96.237:8001/Content/FileStore/TasIssuedFile/2017/2/24/1/0ae8bcb0-9ae6-4a01-a038-e87b7d1d347e.png","FileID":26,"AttachmentType":1,"SNO":"T20170224101601115"},{"FileName":"1.png","FileUrl":"http://123.56.96.237:8001/Content/FileStore/TasIssuedFile/2017/2/24/1/0491ad45-b626-437f-8a7d-cf0c460202f6.png","FileID":27,"AttachmentType":1,"SNO":"T20170224101601115"},{"FileName":"image.jpg","FileUrl":"http://123.56.96.237:8001/Content/FileStore/TasIssuedFile/2017/2/24/1/dd646da8-9ace-40fc-8d7e-d1c6dde3d8be.jpg","FileID":28,"AttachmentType":1,"SNO":"T20170224101601115"},{"FileName":"数据库原理.xlsx","FileUrl":"http://123.56.96.237:8001/Content/FileStore/TasIssuedFile/2017/2/24/1/8c5e18a8-7eb4-4acc-9347-bb9d86380a02.xlsx","FileID":29,"AttachmentType":2,"SNO":"T20170224101601115"}],"TaskAssignedID":32,"CreateDateApi":"2017/2/24 10:16:01","StartDateApi":"2017/2/24 10:15:00","EndDateApi":"2017/2/24 11:15:00","TaskAssignedState":3,"TaskAssignedStateName":"已完成"}]
      * pageIndex : 0
      * pageSize : 0
      * pages : 0
@@ -78,32 +77,34 @@ public class TaskBean implements Serializable {
         this.rows = rows;
     }
 
-    public static class RowsBean implements Serializable{
+    public static class RowsBean implements Serializable {
         /**
-         * TaskSno : T201702151019476
-         * TaskName : 文件保存测试
-         * TaskType : 1
-         * TaskTypeName : 巡逻
-         * TaskAddr : 测试
-         * TaskDes :
+         * TaskSno : T201702241016011
+         * TaskName : 手机任务下发功能测试
+         * TaskType : 3
+         * TaskTypeName : 其他
+         * TaskAddr : 会议室
+         * TaskDes : 手机任务下发功能测试
          * PersonName : 刘新航
          * CreateDate : /Date(-62135596800000)/
          * EndDate : /Date(-62135596800000)/
          * TaskPriority : 1
          * TaskPriorityName : 高
-         * TaskState : 1
-         * TaskStateName : 未处理
+         * TaskState : 4
+         * TaskStateName : 未完成
          * IsImmediatelyName : 是
          * PersonID : 14
-         * ID : 21
-         * SearchSNO : T201702151019476Issued21
+         * ID : 5
+         * SearchSNO : T20170224101601115
          * StartDate : /Date(-62135596800000)/
-         * IsCheck : false
-         * ImageList : [{"FileName":"你的名字.jpg","FileUrl":"Content/FileStore/TasIssuedFile/2017/2/15/6/40127b3d-9d92-4618-8ab3-266fbd80fcd0.jpg","FileID":27,"AttachmentType":1,"SNO":"T201702151019476Issued21"},{"FileName":"数据库原理.xlsx","FileUrl":"Content/FileStore/TasIssuedFile/2017/2/15/6/06cd033f-5396-4de5-b459-991c44530bda.xlsx","FileID":28,"AttachmentType":2,"SNO":"T201702151019476Issued21"}]
-         * TaskAssignedID : 41
-         * CreateDateApi : 2017/2/15 10:19:47
-         * StartDateApi : 2017/2/16 10:18:00
-         * EndDateApi : 2017/2/17 10:18:00
+         * IsCheck : true
+         * ImageList : [{"FileName":"$$%Z9K$]}C)E2S2)F$5J_ZG.png","FileUrl":"http://123.56.96.237:8001/Content/FileStore/TasIssuedFile/2017/2/24/1/0ae8bcb0-9ae6-4a01-a038-e87b7d1d347e.png","FileID":26,"AttachmentType":1,"SNO":"T20170224101601115"},{"FileName":"1.png","FileUrl":"http://123.56.96.237:8001/Content/FileStore/TasIssuedFile/2017/2/24/1/0491ad45-b626-437f-8a7d-cf0c460202f6.png","FileID":27,"AttachmentType":1,"SNO":"T20170224101601115"},{"FileName":"image.jpg","FileUrl":"http://123.56.96.237:8001/Content/FileStore/TasIssuedFile/2017/2/24/1/dd646da8-9ace-40fc-8d7e-d1c6dde3d8be.jpg","FileID":28,"AttachmentType":1,"SNO":"T20170224101601115"},{"FileName":"数据库原理.xlsx","FileUrl":"http://123.56.96.237:8001/Content/FileStore/TasIssuedFile/2017/2/24/1/8c5e18a8-7eb4-4acc-9347-bb9d86380a02.xlsx","FileID":29,"AttachmentType":2,"SNO":"T20170224101601115"}]
+         * TaskAssignedID : 32
+         * CreateDateApi : 2017/2/24 10:16:01
+         * StartDateApi : 2017/2/24 10:15:00
+         * EndDateApi : 2017/2/24 11:15:00
+         * TaskAssignedState : 3
+         * TaskAssignedStateName : 已完成
          */
 
         private String TaskSno;
@@ -129,6 +130,8 @@ public class TaskBean implements Serializable {
         private String CreateDateApi;
         private String StartDateApi;
         private String EndDateApi;
+        private int TaskAssignedState;
+        private String TaskAssignedStateName;
         private List<ImageListBean> ImageList;
 
         public String getTaskSno() {
@@ -315,6 +318,22 @@ public class TaskBean implements Serializable {
             this.EndDateApi = EndDateApi;
         }
 
+        public int getTaskAssignedState() {
+            return TaskAssignedState;
+        }
+
+        public void setTaskAssignedState(int TaskAssignedState) {
+            this.TaskAssignedState = TaskAssignedState;
+        }
+
+        public String getTaskAssignedStateName() {
+            return TaskAssignedStateName;
+        }
+
+        public void setTaskAssignedStateName(String TaskAssignedStateName) {
+            this.TaskAssignedStateName = TaskAssignedStateName;
+        }
+
         public List<ImageListBean> getImageList() {
             return ImageList;
         }
@@ -323,13 +342,13 @@ public class TaskBean implements Serializable {
             this.ImageList = ImageList;
         }
 
-        public static class ImageListBean implements Serializable{
+        public static class ImageListBean implements Serializable {
             /**
-             * FileName : 你的名字.jpg
-             * FileUrl : Content/FileStore/TasIssuedFile/2017/2/15/6/40127b3d-9d92-4618-8ab3-266fbd80fcd0.jpg
-             * FileID : 27
+             * FileName : $$%Z9K$]}C)E2S2)F$5J_ZG.png
+             * FileUrl : http://123.56.96.237:8001/Content/FileStore/TasIssuedFile/2017/2/24/1/0ae8bcb0-9ae6-4a01-a038-e87b7d1d347e.png
+             * FileID : 26
              * AttachmentType : 1
-             * SNO : T201702151019476Issued21
+             * SNO : T20170224101601115
              */
 
             private String FileName;
@@ -377,59 +396,6 @@ public class TaskBean implements Serializable {
             public void setSNO(String SNO) {
                 this.SNO = SNO;
             }
-
-            @Override
-            public String toString() {
-                return "ImageListBean{" +
-                        "FileName='" + FileName + '\'' +
-                        ", FileUrl='" + FileUrl + '\'' +
-                        ", FileID=" + FileID +
-                        ", AttachmentType=" + AttachmentType +
-                        ", SNO='" + SNO + '\'' +
-                        '}';
-            }
         }
-
-        @Override
-        public String toString() {
-            return "RowsBean{" +
-                    "TaskSno='" + TaskSno + '\'' +
-                    ", TaskName='" + TaskName + '\'' +
-                    ", TaskType=" + TaskType +
-                    ", TaskTypeName='" + TaskTypeName + '\'' +
-                    ", TaskAddr='" + TaskAddr + '\'' +
-                    ", TaskDes='" + TaskDes + '\'' +
-                    ", PersonName='" + PersonName + '\'' +
-                    ", CreateDate='" + CreateDate + '\'' +
-                    ", EndDate='" + EndDate + '\'' +
-                    ", TaskPriority=" + TaskPriority +
-                    ", TaskPriorityName='" + TaskPriorityName + '\'' +
-                    ", TaskState=" + TaskState +
-                    ", TaskStateName='" + TaskStateName + '\'' +
-                    ", IsImmediatelyName='" + IsImmediatelyName + '\'' +
-                    ", PersonID=" + PersonID +
-                    ", ID=" + ID +
-                    ", SearchSNO='" + SearchSNO + '\'' +
-                    ", StartDate='" + StartDate + '\'' +
-                    ", IsCheck=" + IsCheck +
-                    ", TaskAssignedID=" + TaskAssignedID +
-                    ", CreateDateApi='" + CreateDateApi + '\'' +
-                    ", StartDateApi='" + StartDateApi + '\'' +
-                    ", EndDateApi='" + EndDateApi + '\'' +
-                    ", ImageList=" + ImageList +
-                    '}';
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "TaskBean{" +
-                "total=" + total +
-                ", pageIndex=" + pageIndex +
-                ", pageSize=" + pageSize +
-                ", pages=" + pages +
-                ", stateEndTime='" + stateEndTime + '\'' +
-                ", rows=" + rows +
-                '}';
     }
 }

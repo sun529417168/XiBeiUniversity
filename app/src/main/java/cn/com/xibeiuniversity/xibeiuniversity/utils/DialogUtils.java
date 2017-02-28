@@ -129,6 +129,7 @@ public class DialogUtils {
         dialog.setCancelable(false);
         return dialog;
     }
+
     /**
      * 方法名：initGPS
      * 功    能：是否打开的GPS
@@ -145,6 +146,34 @@ public class DialogUtils {
                 // 转到手机设置界面，用户设置GPS
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 activity.startActivity(intent); // 设置完成后返回到原来的界面
+            }
+        });
+        dialog.setNeutralButton("取消",
+                new android.content.DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        arg0.dismiss();
+                    }
+                });
+        dialog.show();
+    }
+
+    /**
+     * 方法名：clearData
+     * 功    能：清楚缓存
+     * 参    数：Context context, final TextView textView
+     * 返回值：无
+     */
+    public static void clearData(final Context context, final TextView textView) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle("提示信息");
+        dialog.setMessage("确定要清楚缓存么？");
+        dialog.setPositiveButton("确定", new android.content.DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                DataCleanManager.clearAllCache(context);
+                textView.setText("0KB");
             }
         });
         dialog.setNeutralButton("取消",

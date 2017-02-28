@@ -22,24 +22,22 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.fastaccess.permission.base.PermissionHelper;
-import com.fastaccess.permission.base.callback.OnPermissionCallback;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.DetailImageActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.task.TaskDetalPhotoAdapter;
-import cn.com.xibeiuniversity.xibeiuniversity.function.gps.GPSLocationManager;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.app.TakePhotoActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.compress.CompressConfig;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.GetGPSInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.SearchTypePopInterface;
-import cn.com.xibeiuniversity.xibeiuniversity.service.MyGPSListener;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.DateTimePickDialogUtil;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.DialogUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
@@ -56,7 +54,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
  * 版    本：V1.0.0
  */
 
-public class AddProblemActivity extends TakePhotoActivity implements View.OnClickListener, AdapterView.OnItemClickListener, SearchTypePopInterface, OnPermissionCallback, GetGPSInterface {
+public class AddProblemActivity extends TakePhotoActivity implements View.OnClickListener, AdapterView.OnItemClickListener, SearchTypePopInterface, GetGPSInterface {
     private Context context;
     private TextView titleName;
     private LinearLayout back;
@@ -64,6 +62,7 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
     private ArrayList<String> listPath = new ArrayList<String>();
     private ArrayList<Bitmap> list = new ArrayList<Bitmap>();
     private List<File> listFile = new ArrayList<>();
+    private Map<String, File> fileMap = new HashMap<>();
     private File mCameraFile;
     private GridView gridView;
     private TaskDetalPhotoAdapter taskDetalPhotoAdapter;
@@ -73,12 +72,6 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
     private PopupWindow showProblemTypePop;
     private Button sendInfoBtn;
     private int problemType = 0;
-    private GPSLocationManager gpsLocationManager;
-    //权限类
-    private PermissionHelper mPermissionHelper;
-    private final static String[] MULTI_PERMISSIONS = new String[]{
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION};
     private String gps;
     private String problemTitle, address, findDate, problemDes;
 
@@ -92,9 +85,6 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
         if (!MyUtils.gpsIsOPen(this)) {
             DialogUtils.initGPS(this);
         }
-        mPermissionHelper = PermissionHelper.getInstance(AddProblemActivity.this);
-        mPermissionHelper.request(MULTI_PERMISSIONS);
-        gpsLocationManager = GPSLocationManager.getInstances(AddProblemActivity.this);
         if (savedInstanceState != null) {
             list = savedInstanceState.getParcelableArrayList("listBitmap");
         }
@@ -165,20 +155,15 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
                     DialogUtils.initGPS(this);
                     return;
                 }
-                gpsLocationManager.start(new MyGPSListener(this));
+                MyUtils.getLoc(this);
                 problemTitle = nameEdit.getText().toString().trim();
                 address = addressEdit.getText().toString().trim();
                 findDate = findTimeText.getText().toString().trim();
                 problemDes = inputInfoEdit.getText().toString().trim();
                 if (isEmpty()) {
-                    if (listFile.size() == 0) {
-                        MyRequest.addProblemRequest(this, problemTitle, problemType, address, gps, findDate, problemDes);
-                    } else {
-                        for (File files : listFile) {
-                            MyRequest.addProblemPicRequest(this, files, problemTitle, problemType, address, gps, findDate, problemDes);
-                        }
-                    }
+                    MyRequest.addProblemRequestsb(this, fileMap, problemTitle, problemType, address, gps, findDate, problemDes);//不管有没有图片
                 }
+
                 break;
         }
     }
@@ -217,9 +202,10 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
     @Override
     public void takeSuccess(String imagePath) {
         super.takeSuccess(imagePath);
-        Log.i("imagePaths",imagePath);
+        Log.i("imagePaths", imagePath);
         listPath.add(imagePath);
         mCameraFile = new File(imagePath);
+        fileMap.put(imagePath, mCameraFile);
         listFile.add(mCameraFile);
         showImg(imagePath);
     }
@@ -251,49 +237,10 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        mPermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mPermissionHelper.onActivityForResult(requestCode);
-    }
-
-    @Override
-    public void onPermissionGranted(@NonNull String[] permissionName) {
-
-    }
-
-    @Override
-    public void onPermissionDeclined(@NonNull String[] permissionName) {
-
-    }
-
-    @Override
-    public void onPermissionPreGranted(@NonNull String permissionsName) {
-
-    }
-
-    @Override
-    public void onPermissionNeedExplanation(@NonNull String permissionName) {
-
-    }
-
-    @Override
-    public void onPermissionReallyDeclined(@NonNull String permissionName) {
-
-    }
-
-    @Override
-    public void onNoPermissionNeeded() {
-
-    }
 
     @Override
     public void getGPS(String longitude, String latitude) {
         gps = longitude + "," + latitude;
-        Log.i("gps",gps);
+        Log.i("gps", gps);
     }
 }

@@ -11,6 +11,7 @@ import android.view.WindowManager;
 
 import cn.com.xibeiuniversity.xibeiuniversity.application.XibeiActivityUtil;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.NetEventHandler;
+import cn.com.xibeiuniversity.xibeiuniversity.okhttps.OkHttpUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.service.NetBroadcastReceiver;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.NetWorkUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.SharedUtil;
@@ -136,5 +137,11 @@ public abstract class BaseActivity extends BaseCheckPermissionActivity implement
     public PendingIntent getDefalutIntent(int flags) {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, new Intent(), flags);
         return pendingIntent;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        OkHttpUtils.getInstance().cancelTag(this);
     }
 }

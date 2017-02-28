@@ -169,6 +169,11 @@
                     android:numColumns="3"
                     android:scrollbars="none"
                     android:verticalSpacing="10dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_below="@+id/problem_detail_gridView" />
             </RelativeLayout>
             <!--图片end-->
 
@@ -178,12 +183,11 @@
                 android:id="@+id/problem_detail_describe"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginTop="1dp"
+                android:layout_marginTop="10dp"
                 android:background="@color/white"
                 android:gravity="left|top"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:text="反馈内容：教学楼3号楼整体消防设备检查"
                 android:textColor="@color/black" />
             <!--问题描述end-->
 
@@ -193,8 +197,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:gravity="bottom"
                 android:layout_marginTop="10dp"
+                android:gravity="bottom"
                 android:text="@string/problem_detail_bottomName"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
@@ -211,7 +215,6 @@
                     android:layout_alignParentRight="true" />
             </RelativeLayout>
             <!--回复时间end-->
-
 
 
             <!--回复内容start-->

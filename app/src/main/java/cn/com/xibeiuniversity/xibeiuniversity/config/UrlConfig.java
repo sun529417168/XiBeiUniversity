@@ -9,7 +9,8 @@ package cn.com.xibeiuniversity.xibeiuniversity.config;
  */
 
 public class UrlConfig {
-    public static final String BaseUrl = "http://123.56.96.237:8001";// 测试
+    public static final String BaseUrl = "http://123.56.96.237:8001";// 正式
+//    public static final String BaseUrl = "http://192.168.0.90:8001";// 测试
 
     /**
      * 登陆接口返回token的
@@ -48,7 +49,11 @@ public class UrlConfig {
      */
     public static final String URL_IMGUPLOAD = BaseUrl + "/API/ApiProblemReport/ImgUpload";
     /**
-     * 新增问题返回信息没有图片
+     * 修改密码
      */
-    public static final String URL_ADDPROBLEMREPORTINFO = BaseUrl + "/API/ApiProblemReport/AddProblemReportInfo";
+    public static final String URL_UPDATEPASSWORD = BaseUrl + "/API/ApiPersonInfo/UpdatePassWord";
+    /**
+     * 获取任务反馈信息
+     */
+    public static final String URL_GETTASKASSIGNEDINFO = BaseUrl + "/API/ApiTasIssued/GetTaskAssignedInfo";
 }

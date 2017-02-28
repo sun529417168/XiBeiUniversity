@@ -56,32 +56,34 @@
                 android:layout_height="match_parent" />
         </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
-            android:layout_weight="7">
+            android:layout_weight="7"
+            android:orientation="vertical">
 
 
             <TextView
                 android:id="@+id/item_problem_name"
                 style="@style/problem_item"
-                android:layout_marginLeft="10dp" />
+                android:ellipsize="end"
+                android:lines="1"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/item_problem_sender"
                 style="@style/problem_item"
-                android:layout_alignParentRight="true" />
+                android:layout_marginTop="5dp" />
 
 
             <TextView
                 android:id="@+id/item_problem_info"
                 style="@style/problem_item"
-                android:layout_below="@+id/item_problem_name"
+                android:layout_marginTop="8dp"
                 android:duplicateParentState="true"
                 android:ellipsize="end"
-                android:lines="2"
-                android:textSize="16sp" />
+                android:lines="1" />
 
             <TextView
                 android:id="@+id/item_problem_executor"
@@ -89,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true" />
-        </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <View

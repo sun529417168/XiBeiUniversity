@@ -3,8 +3,12 @@ package cn.com.xibeiuniversity.xibeiuniversity.utils;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.widget.Toast;
 
@@ -12,6 +16,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.util.Vector;
+
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.GetGPSInterface;
 
 import static android.R.attr.path;
 import static android.content.Context.LOCATION_SERVICE;
@@ -111,5 +117,49 @@ public class MyUtils {
         } catch (PendingIntent.CanceledException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void getLoc(Context context) {
+        final GetGPSInterface getGPSInterface = (GetGPSInterface) context;
+        // 位置
+        LocationManager locationManager;
+        LocationListener locationListener;
+        Location location;
+        String contextService = context.LOCATION_SERVICE;
+        String provider;
+        double lat;
+        double lon;
+        locationManager = (LocationManager) context.getSystemService(contextService);
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);// 高精度
+        criteria.setAltitudeRequired(false);// 不要求海拔
+        criteria.setBearingRequired(false);// 不要求方位
+        criteria.setCostAllowed(true);// 允许有花费
+        criteria.setPowerRequirement(Criteria.POWER_LOW);// 低功耗
+        // 从可用的位置提供器中，匹配以上标准的最佳提供器
+        provider = locationManager.getBestProvider(criteria, true);
+        // 获得最后一次变化的位置
+        location = locationManager.getLastKnownLocation(provider);
+        locationListener = new LocationListener() {
+            public void onStatusChanged(String provider, int status,
+                                        Bundle extras) {
+                // TODO Auto-generated method stub
+            }
+
+            public void onProviderEnabled(String provider) {
+                // TODO Auto-generated method stub
+            }
+
+            public void onProviderDisabled(String provider) {
+                // TODO Auto-generated method stub
+            }
+
+            public void onLocationChanged(Location location) {
+                getGPSInterface.getGPS(location.getLongitude() + "", location.getLatitude() + "");
+            }
+        };
+        // 监听位置变化，2秒一次，距离10米以上
+        locationManager.requestLocationUpdates(provider, 2000, 10,
+                locationListener);
     }
 }

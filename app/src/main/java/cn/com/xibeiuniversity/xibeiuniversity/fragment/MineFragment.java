@@ -13,6 +13,12 @@ import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.UpdatePasswordActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.base.BaseFragment;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.PersonBean;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.PersonInfoInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemListInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.DataCleanManager;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.DialogUtils;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.SharedUtil;
 
 /**
  * 文件名：MineFragment
@@ -22,7 +28,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.bean.PersonBean;
  * 版    本：V1.0.0
  */
 
-public class MineFragment extends BaseFragment implements View.OnClickListener{
+public class MineFragment extends BaseFragment implements View.OnClickListener, PersonInfoInterface {
     private Context context;
     private TextView titleName;//标题名称
     private PersonBean mineBean;
@@ -31,6 +37,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
      * 姓名，手机号，身份证号
      */
     private TextView nameText, phoneText, userIDText;
+    private TextView userNameText, workNoText;
+    private RelativeLayout clearCacheLayout;
+    private TextView cacheSize;
 
     @Override
     protected View setView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,31 +50,52 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
 
     @Override
     protected void setDate() {
+        MyRequest.personInfoRequest(context, this, SharedUtil.getString(context, "PersonID"));
     }
 
     @Override
     protected void init(View rootView) {
         titleName = (TextView) rootView.findViewById(R.id.title_name);
         titleName.setText("我的");
+        userNameText = (TextView) rootView.findViewById(R.id.mine_titleUsername);
+        workNoText = (TextView) rootView.findViewById(R.id.mine_titleWorkNo);
+
         nameText = (TextView) rootView.findViewById(R.id.mine_name);
         phoneText = (TextView) rootView.findViewById(R.id.mine_phone);
         userIDText = (TextView) rootView.findViewById(R.id.mine_userID);
 
         updatePassword = (RelativeLayout) rootView.findViewById(R.id.mine_updatePassword);
         updatePassword.setOnClickListener(this);
-
-        nameText.setText("张三");
-        phoneText.setText("18514235676");
-        userIDText.setText("130628199101064112");
+        clearCacheLayout = (RelativeLayout) rootView.findViewById(R.id.mine_cache_Layout);
+        clearCacheLayout.setOnClickListener(this);
+        cacheSize = (TextView) rootView.findViewById(R.id.mine_cacheSize);
+        try {
+            cacheSize.setText(DataCleanManager.getTotalCacheSize(context));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.mine_updatePassword:
                 Intent intent = new Intent(context, UpdatePasswordActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.mine_cache_Layout:
+                DialogUtils.clearData(context, cacheSize);
+                break;
         }
     }
+
+    @Override
+    public void getPersonInfo(PersonBean personBean) {
+        userNameText.setText("帐号:" + SharedUtil.getString(context, "userName"));
+        workNoText.setText("工号:" + personBean.getWorkNO());
+        nameText.setText(personBean.getName());
+        phoneText.setText(personBean.getPhone());
+        userIDText.setText(personBean.getIDCard());
+    }
+
 }

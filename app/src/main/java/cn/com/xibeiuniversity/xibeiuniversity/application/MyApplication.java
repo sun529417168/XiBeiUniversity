@@ -35,12 +35,11 @@ public class MyApplication extends Application {
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .showStubImage(R.mipmap.login_logo)//加载开始默认的图片
                 .showImageForEmptyUri(R.mipmap.login_logo)     //url爲空會显yg7示该图片
-                .showImageOnFail(R.mipmap.ic_launcher)                //加载图片出现问题
+                .showImageOnFail(R.mipmap.image_on_fail)                //加载图片出现问题
                 .cacheInMemory() // 1.8.6包使用时候，括号里面传入参数true
                 .cacheOnDisc() // 1.8.6包使用时候，括号里面传入参数true
                 .build();
-        ImageLoaderConfiguration config2 = new ImageLoaderConfiguration.Builder(
-                this)
+        ImageLoaderConfiguration config2 = new ImageLoaderConfiguration.Builder(this)
                 .defaultDisplayImageOptions(defaultOptions)
                 .threadPriority(Thread.NORM_PRIORITY - 2)
                 .denyCacheImageMultipleSizesInMemory()

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.task.TaskDetailActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.base.MyBaseAdapter;
@@ -61,42 +62,42 @@ public class TaskAdapter extends MyBaseAdapter {
         /**
          * 赋值
          */
-        number.setText("编号：" + rowsBean.getTaskSno());
+        number.setText(rowsBean.getTaskSno());
         for (TaskBean.RowsBean.ImageListBean imageBean : rowsBean.getImageList()) {
             if (imageBean.getAttachmentType() == 1) {
                 ImageLoader.getInstance().displayImage(imageBean.getFileUrl(), imageView);
             }
         }
-        if (rowsBean.getImageList().size()==0){
+        if (rowsBean.getImageList().size() == 0) {
             imageView.setImageResource(R.mipmap.login_logo);
         }
         if (rowsBean.isIsCheck()) {
             setTextColor(views);
         }
-        if ("未完成".equals(rowsBean.getTaskStateName())) {
-            state.setText("未完成");
-            state.setBackgroundResource(R.color.fenSe);
+        if (rowsBean.getTaskAssignedState()==1) {
+            state.setText("未查阅");
+            state.setBackgroundResource(R.color.red);
         }
-        if ("处理中".equals(rowsBean.getTaskStateName())) {
+        if (rowsBean.getTaskAssignedState()==2) {
             state.setText("处理中");
             state.setBackgroundResource(R.color.yellow);
         }
-        if ("未处理".equals(rowsBean.getTaskStateName())) {
-            state.setText("未处理");
-            state.setBackgroundResource(R.color.red);
-        }
-        if ("已完成".equals(rowsBean.getTaskStateName())) {
+        if (rowsBean.getTaskAssignedState()==3) {
             state.setText("已完成");
             state.setBackgroundResource(R.color.green);
         }
-        date.setText("日期：" + rowsBean.getCreateDateApi());
+        if (rowsBean.getTaskAssignedState()==4) {
+            state.setText("未完成");
+            state.setBackgroundResource(R.color.fenSe);
+        }
+        date.setText(rowsBean.getCreateDateApi());
         name.setText("名称：" + rowsBean.getTaskName());
         sender.setText("发送人：" + rowsBean.getPersonName());
         info.setText("任务内容：" + rowsBean.getTaskDes());
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (false==rowsBean.isIsCheck()) {
+                if (false == rowsBean.isIsCheck()) {
                     setTextColor(views);
                     notifyDataSetChanged();
                     isCheckRequest(rowsBean.getTaskAssignedID());

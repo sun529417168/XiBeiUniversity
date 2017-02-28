@@ -45,8 +45,8 @@ public class ProblemDetailActivity extends TakePhotoActivity implements View.OnC
      * 编号，问题名称，状态，上报人，上报时间，处理人，处理时间
      */
     private TextView numberText, nameText, stateText, senderText, sendTimeText;
-    private TextView problemTypeText,addressText;
-    private TextView infoEdit,describeText;
+    private TextView problemTypeText, addressText;
+    private TextView infoEdit, describeText, replyTimeText;
 
     @Override
     protected void setView() {
@@ -83,21 +83,23 @@ public class ProblemDetailActivity extends TakePhotoActivity implements View.OnC
         sendTimeText = (TextView) findViewById(R.id.problem_detail_sendTime);
         infoEdit = (TextView) findViewById(R.id.problem_detail_infoEdit);
         describeText = (TextView) findViewById(R.id.problem_detail_describe);
+        replyTimeText = (TextView) findViewById(R.id.problem_detail_replyTime);
 
         numberText.setText(problemBean.getProblemSno());
         nameText.setText(problemBean.getProblemTitle());
-        if (problemBean.getState()==1) {
+        if (problemBean.getState() == 1) {
             stateText.setText("已上报");
         }
-        if (problemBean.getState()==2) {
+        if (problemBean.getState() == 2) {
             stateText.setText("已回复");
         }
         problemTypeText.setText(problemBean.getProblemTypeName());
         addressText.setText(problemBean.getPosition());
         senderText.setText(problemBean.getReportPersonName());
         sendTimeText.setText(problemBean.getFindDateApi());
-        infoEdit.setText(problemBean.getProblemDes());
-        describeText.setText(problemBean.getDescribe());
+        infoEdit.setText(problemBean.getDescribe());
+        describeText.setText(problemBean.getProblemDes());
+        replyTimeText.setText(problemBean.getProcessDateApi());
         takePhoto = (ImageView) findViewById(R.id.problem_detail_takePhoto);
         takePhoto.setOnClickListener(this);
         takePhoto.setVisibility(View.INVISIBLE);

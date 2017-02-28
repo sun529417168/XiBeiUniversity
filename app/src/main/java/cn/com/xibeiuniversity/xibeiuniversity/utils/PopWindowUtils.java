@@ -3,7 +3,11 @@ package cn.com.xibeiuniversity.xibeiuniversity.utils;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -113,7 +117,7 @@ public class PopWindowUtils {
         // TODO：更新popupwindow的状态
         window.update();
         // TODO: 2016/5/17 以下拉的方式显示，并且可以设置显示的位置
-        window.showAsDropDown(btnPopup, 0, 20);
+        window.showAsDropDown(btnPopup);
         return window;
     }
 
@@ -123,7 +127,7 @@ public class PopWindowUtils {
      * 参    数：Activity activity, View btnPopup, List groups
      * 返回值：popupWindow
      */
-    public static PopupWindow showProblemPop(Activity activity, ProblemTypeInterface problemInterface, View btnPopup, final List groups, final int type) {
+    public static PopupWindow showProblemPop(Context activity, ProblemTypeInterface problemInterface, View btnPopup, final List groups, final int type,int layoutHight) {
         final ProblemTypeInterface problemTypeInterface = problemInterface;
         LayoutInflater layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.pop_problem, null);
@@ -146,24 +150,16 @@ public class PopWindowUtils {
         popupWindow.setFocusable(true);
         // TODO: 2016/5/17 设置可以触摸弹出框以外的区域
         popupWindow.setOutsideTouchable(true);
+        if (Build.VERSION.SDK_INT != 24) {
+            // TODO: 2016/5/17 以下拉的方式显示，并且可以设置显示的位置
+            popupWindow.showAsDropDown(btnPopup);
+        } else {
+            popupWindow.showAtLocation(btnPopup, Gravity.TOP, 0, layoutHight);
+        }
         // TODO：更新popupwindow的状态
         popupWindow.update();
-        // TODO: 2016/5/17 以下拉的方式显示，并且可以设置显示的位置
-        popupWindow.showAsDropDown(btnPopup);
         return popupWindow;
     }
-
-    /**
-     * 设置添加屏幕的背景透明度
-     *
-     * @param bgAlpha
-     */
-    public static void backgroundAlpha(Activity activity, float bgAlpha) {
-        WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
-        lp.alpha = bgAlpha; //0.0-1.0
-        activity.getWindow().setAttributes(lp);
-    }
-
 
     /**
      * 方法名：showAddProblemTypePop

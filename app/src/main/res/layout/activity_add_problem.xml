@@ -26,7 +26,7 @@
 
                 <EditText
                     android:id="@+id/add_problem_detail_name"
-                    style="@style/add_problem_textView"
+                    style="@style/add_problem_editView"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="13dp"
                     android:background="@null"
@@ -72,7 +72,7 @@
 
                 <EditText
                     android:id="@+id/add_problem_address"
-                    style="@style/add_problem_textView"
+                    style="@style/add_problem_editView"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="13dp"
                     android:background="@null"
@@ -125,7 +125,9 @@
 
 
             <!--上报时间start-->
-            <RelativeLayout style="@style/add_problem_layout">
+            <RelativeLayout
+                style="@style/add_problem_layout"
+                android:visibility="gone">
 
                 <TextView
                     style="@style/add_problem_textView"
@@ -187,8 +189,10 @@
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
                 android:gravity="left|top"
+                android:hint="@string/add_problem_inputProblemInfo"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp" />
+                android:paddingRight="20dp"
+                android:textSize="16sp" />
             <!--内容区域end-->
             <View
                 android:layout_width="match_parent"

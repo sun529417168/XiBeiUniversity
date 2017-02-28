@@ -73,8 +73,8 @@ public class ProblemAdapter extends MyBaseAdapter {
             imageView.setImageResource(R.mipmap.login_logo);
         }
         date.setText(rowsBean.getFindDateApi());
-        name.setText(rowsBean.getProblemTitle());
-        sender.setText(rowsBean.getReportPersonName());
+        name.setText("名称："+rowsBean.getProblemTitle());
+        sender.setText("上报人："+rowsBean.getReportPersonName());
         info.setText("问题描述："+rowsBean.getProblemDes());
         view.setOnClickListener(new View.OnClickListener() {
             @Override
