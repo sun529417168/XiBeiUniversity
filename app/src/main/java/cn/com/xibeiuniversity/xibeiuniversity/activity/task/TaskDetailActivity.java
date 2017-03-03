@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -20,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -72,7 +75,6 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
     private TaskDetalDescribePhotoAdapter taskDetalDescribePhotoAdapter;
     private TaskDetalFeedbackPhotoAdapter taskDetalFeedbackPhotoAdapter;
     private Button submitBtn;
-    private RelativeLayout stateReplyLayout;
     private ArrayList<String> describeList = new ArrayList<>();
     private ArrayList<String> describeListFanKui = new ArrayList<>();
     private PopupWindow showReplyPop;
@@ -81,6 +83,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
     private File mCameraFile;
     private String path;
     private TextView taskInfo;
+    private CheckBox over, noOver;
 
     @Override
     protected void setView() {
@@ -130,8 +133,6 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
 
 
         stateReplyText = (TextView) findViewById(R.id.task_detail_state_reply);//反馈状态
-        stateReplyLayout = (RelativeLayout) findViewById(R.id.task_detail_state_reply_layout);//反馈状态的layout
-        stateReplyLayout.setOnClickListener(this);
         feedbackTimeText = (TextView) findViewById(R.id.task_detail_feedbackTime);//反馈时间
         infoEdit = (EditText) findViewById(R.id.task_detail_info);//任务描述
         gridView = (GridView) findViewById(R.id.task_detail_gridView);
@@ -182,10 +183,37 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
         if (taskBean.getTaskState() == 4) {
             stateTaskText.setText("未完成");
         }
-
-
         taskInfo.setText(taskBean.getTaskDes());
+        over = (CheckBox) findViewById(R.id.task_detail_state_over);
+        noOver = (CheckBox) findViewById(R.id.task_detail_state_noOver);
+        over.setOnCheckedChangeListener(checkedChangeListener);
+        noOver.setOnCheckedChangeListener(checkedChangeListener);
     }
+
+    private CompoundButton.OnCheckedChangeListener checkedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            switch (buttonView.getId()) {
+                case R.id.task_detail_state_over:
+                    if (isChecked) {
+                        noOver.setChecked(false);
+                        feedbackState = 3;
+                    } else {
+                        feedbackState = -1;
+                    }
+                    break;
+                case R.id.task_detail_state_noOver:
+                    if (isChecked) {
+                        over.setChecked(false);
+                        feedbackState = 4;
+                    } else {
+                        feedbackState = -1;
+                    }
+                    break;
+            }
+
+        }
+    };
 
     @Override
     public void onClick(View v) {
@@ -199,12 +227,6 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
                 Uri imageUri = Uri.fromFile(file);
                 CompressConfig compressConfig = new CompressConfig.Builder().setMaxSize(50 * 1024).setMaxPixel(800).create();//压缩方法实例化就是压缩图片，根据配置参数压缩
                 getTakePhoto().onEnableCompress(compressConfig, true).onPickFromCapture(imageUri);//从相机拍取照片不裁剪
-                break;
-            case R.id.task_detail_state_reply_layout://回复状态
-                if ("未完成".equals(taskBean.getTaskStateName()) || "已完成".equals(taskBean.getTaskStateName())) {
-                    return;
-                }
-                showReplyPop = PopWindowUtils.showTaskReplyPop(this, stateReplyLayout);
                 break;
             case R.id.task_detail_button:// 确认提交
                 info = infoEdit.getText().toString().trim();
@@ -344,18 +366,23 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
     @Override
     public void getTaskAssignedInfo(TaskAssignedBean taskAssignedBean) {
         if (taskAssignedBean.getFeedbackState() == 3) {
+            stateReplyText.setVisibility(View.VISIBLE);
+            over.setVisibility(View.GONE);
+            noOver.setVisibility(View.GONE);
             stateReplyText.setText("已完成");
             submitBtn.setVisibility(View.INVISIBLE);
             takePhoto.setVisibility(View.INVISIBLE);
             infoEdit.setFocusable(false);
-            findViewById(R.id.task_detail_reply_image).setVisibility(View.INVISIBLE);
+
         }
         if (taskAssignedBean.getFeedbackState() == 4) {
+            stateReplyText.setVisibility(View.VISIBLE);
+            over.setVisibility(View.GONE);
+            noOver.setVisibility(View.GONE);
             stateReplyText.setText("未完成");
             submitBtn.setVisibility(View.INVISIBLE);
             takePhoto.setVisibility(View.INVISIBLE);
             infoEdit.setFocusable(false);
-            findViewById(R.id.task_detail_reply_image).setVisibility(View.INVISIBLE);
         }
         infoEdit.setText(taskAssignedBean.getFeedBackContent());
         for (TaskAssignedBean.ImageListBean imageBean : taskAssignedBean.getImageList()) {

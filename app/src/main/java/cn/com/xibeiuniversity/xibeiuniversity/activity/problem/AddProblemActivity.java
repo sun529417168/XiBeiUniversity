@@ -8,9 +8,9 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import java.io.File;
@@ -33,10 +34,13 @@ import java.util.Map;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.DetailImageActivity;
+import cn.com.xibeiuniversity.xibeiuniversity.activity.MainActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.task.TaskDetalPhotoAdapter;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemTypeLeft;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.app.TakePhotoActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.compress.CompressConfig;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.GetGPSInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeLeftInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.SearchTypePopInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.DateTimePickDialogUtil;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.DialogUtils;
@@ -45,6 +49,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.utils.MyUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.PopWindowUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.SharedUtil;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
+import cn.com.xibeiuniversity.xibeiuniversity.weight.ChangeAddressPopwindow;
 
 /**
  * 文件名：AddProblemActivity
@@ -54,7 +59,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
  * 版    本：V1.0.0
  */
 
-public class AddProblemActivity extends TakePhotoActivity implements View.OnClickListener, AdapterView.OnItemClickListener, SearchTypePopInterface, GetGPSInterface {
+public class AddProblemActivity extends TakePhotoActivity implements View.OnClickListener, AdapterView.OnItemClickListener, GetGPSInterface, ProblemTypeLeftInterface {
     private Context context;
     private TextView titleName;
     private LinearLayout back;
@@ -69,9 +74,8 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
     private EditText nameEdit, addressEdit, inputInfoEdit;
     private RelativeLayout typeLayout, findTimeLayout;
     private TextView typeText, senderText, findTimeText, sendTimeText;
-    private PopupWindow showProblemTypePop;
     private Button sendInfoBtn;
-    private int problemType = 0;
+    private String problemType = "";
     private String gps;
     private String problemTitle, address, findDate, problemDes;
 
@@ -144,7 +148,7 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
                 getTakePhoto().onEnableCompress(compressConfig, true).onPickFromCapture(imageUri);//从相机拍取照片不裁剪
                 break;
             case R.id.add_problem_typeLayout://问题类型
-                showProblemTypePop = PopWindowUtils.showAddProblemTypePop(this, typeLayout);
+                MyRequest.getProblemTypeLeft(this, AddProblemActivity.this);
                 break;
             case R.id.add_problem_findTimeLayout://发现时间
                 DateTimePickDialogUtil dateTimePicKDialog = new DateTimePickDialogUtil(AddProblemActivity.this, "");
@@ -172,7 +176,7 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
         if (TextUtils.isEmpty(problemTitle)) {
             ToastUtil.show(this, "请输入问题名称");
             return false;
-        } else if (problemType == 0) {
+        } else if (TextUtils.isEmpty(problemType)) {
             ToastUtil.show(this, "请选择问题类型");
             return false;
         } else if (TextUtils.isEmpty(address)) {
@@ -229,18 +233,21 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
     }
 
     @Override
-    public void searchType(String typeName) {
-        typeText.setText(typeName);
-        problemType = "部件类型".equals(typeName) ? 1 : "事件类型".equals(typeName) ? 2 : 0;
-        if (showProblemTypePop.isShowing()) {
-            showProblemTypePop.dismiss();
-        }
-    }
-
-
-    @Override
     public void getGPS(String longitude, String latitude) {
         gps = longitude + "," + latitude;
         Log.i("gps", gps);
+    }
+
+    @Override
+    public void getTypeLeft(List<ProblemTypeLeft> problemTypeLeftList) {
+        ChangeAddressPopwindow mChangeAddressPopwindow = new ChangeAddressPopwindow(AddProblemActivity.this, (ArrayList<ProblemTypeLeft>) problemTypeLeftList);
+        mChangeAddressPopwindow.showAtLocation(typeLayout, Gravity.BOTTOM, 0, 0);
+        mChangeAddressPopwindow.setAddresskListener(new ChangeAddressPopwindow.OnAddressCListener() {
+            @Override
+            public void onClick(String left, String right, String code) {
+                typeText.setText(right);
+                problemType = code;
+            }
+        });
     }
 }

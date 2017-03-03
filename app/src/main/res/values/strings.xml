@@ -3,7 +3,7 @@
     <string name="back">"返回 "</string>
 
     <!--登陆界面start-->
-    <string name="username">"学号/手机号"</string>
+    <string name="username">"请输入帐号"</string>
     <string name="password">"请输入密码"</string>
     <string name="login">"登录"</string>
     <string name="cancellation">"注销"</string>
@@ -20,7 +20,7 @@
     <string name="editor_newPassword_hint">"请输入新密码"</string>
     <string name="editor_again_newPassword_hint">"再次输入新密码"</string>
     <string name="editor_name">"姓名"</string>
-    <string name="editor_username">"用户名"</string>
+    <string name="editor_username">"帐号"</string>
     <string name="editor_workNum">"工号"</string>
     <string name="editor_name_hint">"请输入姓名"</string>
     <string name="editor_userID">"身份证号"</string>
@@ -88,6 +88,8 @@
     <string name="task_detail_bottomName">"反馈信息"</string>
     <string name="task_detail_feedbackTime">"反馈时间"</string>
     <string name="task_detail_inputFeedbackInfo">"请输入反馈内容"</string>
+    <string name="task_detail_over">"完成"</string>
+    <string name="task_detail_noOver">"未完成"</string>
     <!--任务详情end-->
 
     <!--个人信息start-->

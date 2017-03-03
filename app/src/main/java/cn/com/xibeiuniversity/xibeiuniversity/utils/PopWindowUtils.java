@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -13,15 +14,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.problem.PopProblemAdapter;
+import cn.com.xibeiuniversity.xibeiuniversity.adapter.problem.PopProblemTypeLeftAdapter;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemTypeLeft;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeRightInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.SearchTypePopInterface;
 
 /**
@@ -123,11 +129,11 @@ public class PopWindowUtils {
 
     /**
      * 方法名：showProblemPop
-     * 功    能：弹出问题上报类型的pop
+     * 功    能：弹出问题上报时间，状态的pop
      * 参    数：Activity activity, View btnPopup, List groups
      * 返回值：popupWindow
      */
-    public static PopupWindow showProblemPop(Context activity, ProblemTypeInterface problemInterface, View btnPopup, final List groups, final int type,int layoutHight) {
+    public static PopupWindow showProblemPop(Context activity, ProblemTypeInterface problemInterface, View btnPopup, final List groups, final int type, int layoutHight) {
         final ProblemTypeInterface problemTypeInterface = problemInterface;
         LayoutInflater layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.pop_problem, null);
@@ -199,5 +205,58 @@ public class PopWindowUtils {
         // TODO: 2016/5/17 以下拉的方式显示，并且可以设置显示的位置
         window.showAsDropDown(btnPopup, 0, 20);
         return window;
+    }
+
+    /**
+     * 方法名：showProblemTypePop
+     * 功    能：弹出问题上报类型的pop
+     * 参    数：Activity activity, View btnPopup, List groups
+     * 返回值：popupWindow
+     */
+    public static PopupWindow showProblemTypePop(final Context activity, ProblemTypeInterface problemInterface, ProblemTypeRightInterface problemTypeRightInterfaces, View btnPopup, int layoutHight, final ArrayList<ProblemTypeLeft> leftList) {
+        final ProblemTypeInterface problemTypeInterface = problemInterface;
+        final ProblemTypeRightInterface problemTypeRightInterface = problemTypeRightInterfaces;
+        LayoutInflater layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = layoutInflater.inflate(R.layout.pop_problem_type, null);
+        ListView listViewLeft = (ListView) view.findViewById(R.id.pop_problem_type_leftList);
+        final ListView listViewRight = (ListView) view.findViewById(R.id.pop_problem_type_rightList);
+        //添加头部
+        View headView = layoutInflater.inflate(R.layout.item_textview, null);
+        TextView textView = (TextView) headView.findViewById(R.id.item_textView);
+        textView.setText("全部");
+        listViewLeft.addHeaderView(headView);
+        // 加载数据
+        final PopProblemTypeLeftAdapter popProblemTypeLeftAdapter = new PopProblemTypeLeftAdapter(activity, leftList);
+        listViewLeft.setAdapter(popProblemTypeLeftAdapter);
+        listViewLeft.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    problemTypeInterface.getProblemType(0, "全部");
+                } else {
+                    popProblemTypeLeftAdapter.setPosition(position - 1);
+                    popProblemTypeLeftAdapter.notifyDataSetChanged();
+                    MyRequest.getTypeListByCodeRequest(activity, leftList.get(position - 1).getCode(), listViewRight, problemTypeRightInterface);
+                }
+            }
+        });
+        // 创建一个PopuWidow对象
+        WindowManager windowManager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+        PopupWindow popupWindow = new PopupWindow(view, ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT, true);
+        // TODO: 2016/5/17 设置可以获取焦点
+        popupWindow.setFocusable(true);
+        // TODO: 2016/5/17 设置可以触摸弹出框以外的区域
+        popupWindow.setOutsideTouchable(true);
+        if (Build.VERSION.SDK_INT != 24) {
+            // TODO: 2016/5/17 以下拉的方式显示，并且可以设置显示的位置
+            popupWindow.showAsDropDown(btnPopup);
+        } else {
+            popupWindow.showAtLocation(btnPopup, Gravity.TOP, 0, layoutHight);
+        }
+        // TODO：更新popupwindow的状态
+        popupWindow.update();
+        return popupWindow;
     }
 }

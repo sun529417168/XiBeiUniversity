@@ -33,10 +33,15 @@ import cn.com.xibeiuniversity.xibeiuniversity.adapter.problem.PopProblemAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.problem.ProblemAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.base.BaseFragment;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemTypeLeft;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemTypeRight;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemListInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeLeftInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeRightInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.PopWindowUtils;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.ProblemTypePopWindow;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
 
 import static cn.com.xibeiuniversity.xibeiuniversity.R.id.textView;
@@ -49,7 +54,8 @@ import static cn.com.xibeiuniversity.xibeiuniversity.R.id.textView;
  * 版    本：V1.0.0
  */
 
-public class ProblemFragment extends BaseFragment implements View.OnClickListener, ProblemTypeInterface, ProblemListInterface {
+public class ProblemFragment extends BaseFragment implements View.OnClickListener, ProblemTypeInterface,
+        ProblemListInterface, ProblemTypeLeftInterface, ProblemTypeRightInterface {
     private Context context;
     private TextView titleName;//标题名称
     //刷新控件
@@ -67,7 +73,7 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
     private int state = 0;//状态
     private int pageindex = 1;//页码数
     private int searchState = 0;//状态
-    private int searchProblemType = 0;//类型
+    private String searchProblemType = "";//类型
     private int searchDate = 0;//时间
     private List<ProblemBean.RowsBean> rowsBeanList = new ArrayList();
     private TextView[] textViewsTit;
@@ -88,7 +94,7 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
         requestData(pageindex, searchState, searchProblemType, searchDate);
     }
 
-    private void requestData(int pageindex, int searchState, int searchProblemType, int searchDate) {
+    private void requestData(int pageindex, int searchState, String searchProblemType, int searchDate) {
         MyRequest.problemListRequest(context, this, pageindex, searchState, searchProblemType, searchDate);
     }
 
@@ -125,7 +131,6 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
                 // 这里写下拉刷新的任务
                 pageindex = 1;
                 requestData(pageindex, searchState, searchProblemType, searchDate);
-                problemAdapter.notifyDataSetChanged();
                 mPullRefreshListView.onRefreshComplete();
             }
 
@@ -136,7 +141,6 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
                 // 这里写上拉加载更多的任务
                 pageindex++;
                 requestData(pageindex, searchState, searchProblemType, searchDate);
-                problemAdapter.notifyDataSetChanged();
                 mPullRefreshListView.onRefreshComplete();
             }
         });
@@ -147,14 +151,14 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
             @Override
             public void onGlobalLayout() {
                 ViewHight = titleLayout.getHeight();
-                Log.i("ViewHight",ViewHight+"");
+                Log.i("ViewHight", ViewHight + "");
             }
         });
         ViewTreeObserver problemTitleLayoutVTO = problemTitleLayout.getViewTreeObserver();
         problemTitleLayoutVTO.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                ViewHight = problemTitleLayout.getHeight()*2 + ViewHight;
+                ViewHight = problemTitleLayout.getHeight() * 2 + ViewHight;
             }
         });
     }
@@ -168,11 +172,12 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
                 startActivity(intent);
                 break;
             case R.id.problem_layout_type:
-                list = new ArrayList();
-                list.add("全部");
-                list.add("部件问题");
-                list.add("事件问题");
-                popupWindow = PopWindowUtils.showProblemPop(getActivity(), this, v, list, 0,ViewHight);
+//                list = new ArrayList();
+//                list.add("全部");
+//                list.add("部件问题");
+//                list.add("事件问题");
+//                popupWindow = PopWindowUtils.showProblemPop(getActivity(), this, v, list, 0,ViewHight);
+                MyRequest.getProblemTypeLeft(getActivity(), this);
                 setTextViewColor(typeText);
                 break;
             case R.id.problem_layout_time:
@@ -181,7 +186,7 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
                 list.add("三天");
                 list.add("一周");
                 list.add("一个月");
-                popupWindow = PopWindowUtils.showProblemPop(getActivity(), this, v, list, 1,ViewHight);
+                popupWindow = PopWindowUtils.showProblemPop(getActivity(), this, v, list, 1, ViewHight);
                 setTextViewColor(timeText);
                 break;
             case R.id.problem_layout_state:
@@ -189,7 +194,7 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
                 list.add("全部");
                 list.add("已上报");
                 list.add("已回复");
-                popupWindow = PopWindowUtils.showProblemPop(getActivity(), this, v, list, 2,ViewHight);
+                popupWindow = PopWindowUtils.showProblemPop(getActivity(), this, v, list, 2, ViewHight);
                 setTextViewColor(stateText);
                 break;
         }
@@ -218,7 +223,7 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
     public void getProblemType(int type, String typeName) {
         switch (type) {
             case 0:
-                searchProblemType = "全部".equals(typeName) ? 0 : "部件类型".equals(typeName) ? 1 : "事件类型".equals(typeName) ? 2 : 0;
+                searchProblemType = "";
                 typeText.setText(typeName);
                 setTextViewColor(null);
                 break;
@@ -252,10 +257,12 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
                 rowsBeanList = problemBean.getRows();
                 problemAdapter = new ProblemAdapter(context, rowsBeanList);
                 mPullRefreshListView.setAdapter(problemAdapter);
+                problemAdapter.notifyDataSetChanged();
             } else if (pageindex > 1 && problemBean.getRows().size() != 0) {
                 rowsBeanList.addAll(problemBean.getRows());
                 problemAdapter = new ProblemAdapter(context, rowsBeanList);
                 mPullRefreshListView.setAdapter(problemAdapter);
+                problemAdapter.notifyDataSetChanged();
             } else if (pageindex > 1 && problemBean.getRows().size() == 0) {
                 ToastUtil.show(context, "没有更多数据了");
             }
@@ -268,4 +275,20 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
         requestData(pageindex, searchState, searchProblemType, searchDate);
     }
 
+    @Override
+    public void getTypeLeft(List<ProblemTypeLeft> problemTypeLeftList) {
+        popupWindow = PopWindowUtils.showProblemTypePop(context, this, this, typeLayout, ViewHight, (ArrayList<ProblemTypeLeft>) problemTypeLeftList);
+    }
+
+    @Override
+    public void getTypeRight(ProblemTypeRight problemTypeRight) {
+        searchProblemType = problemTypeRight.getCode();
+        typeText.setText(problemTypeRight.getName());
+        setTextViewColor(null);
+        pageindex = 1;
+        requestData(pageindex, searchState, searchProblemType, searchDate);
+        if (popupWindow.isShowing()) {
+            popupWindow.dismiss();
+        }
+    }
 }

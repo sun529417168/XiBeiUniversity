@@ -88,7 +88,7 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:background">@color/white</item>
-        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginTop">1dp</item>
     </style>
     <!--完善个人信息LinearLayout的end-->
 

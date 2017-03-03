@@ -12,6 +12,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/task_detail_button"
         android:layout_below="@+id/task_detail_title">
 
         <LinearLayout
@@ -212,13 +213,18 @@
             <TextView
                 android:id="@+id/task_detail_describe"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
                 android:gravity="left|top"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:textColor="@color/black" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@color/white" />
             <!--任务描述end-->
 
 
@@ -265,16 +271,24 @@
                     <TextView
                         android:id="@+id/task_detail_state_reply"
                         style="@style/task_detail_textView"
-                        android:layout_marginRight="5dp"
-                        android:layout_toLeftOf="@+id/task_detail_reply_image" />
-
-                    <ImageView
-                        android:id="@+id/task_detail_reply_image"
-                        android:layout_width="8dp"
-                        android:layout_height="10dp"
                         android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:background="@mipmap/right" />
+                        android:layout_marginRight="5dp"
+                        android:visibility="gone" />
+
+                    <CheckBox
+                        android:id="@+id/task_detail_state_over"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@+id/task_detail_state_noOver"
+                        android:text="@string/task_detail_over" />
+
+                    <CheckBox
+                        android:id="@+id/task_detail_state_noOver"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/task_detail_noOver" />
                 </RelativeLayout>
                 <!--反馈状态end-->
 
@@ -328,13 +342,18 @@
                 <EditText
                     android:id="@+id/task_detail_info"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:background="@color/white"
                     android:gravity="left|top"
                     android:hint="@string/task_detail_inputFeedbackInfo"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:background="@color/white" />
                 <!--内容区域end-->
             </LinearLayout>
         </LinearLayout>

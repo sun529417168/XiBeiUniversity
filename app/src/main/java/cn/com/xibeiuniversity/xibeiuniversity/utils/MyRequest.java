@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -22,15 +24,20 @@ import java.util.List;
 import java.util.Map;
 
 import cn.com.xibeiuniversity.xibeiuniversity.activity.MainActivity;
+import cn.com.xibeiuniversity.xibeiuniversity.adapter.problem.PopProblemTypeRightAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.PersonBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.UserBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemTypeLeft;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemTypeRight;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskAssignedBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskBean;
 import cn.com.xibeiuniversity.xibeiuniversity.config.UrlConfig;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.LoginInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.PersonInfoInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemListInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeLeftInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeRightInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.TaskAssignedInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.TaskListInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.OkHttpUtils;
@@ -592,4 +599,56 @@ public class MyRequest {
             }
         });
     }
+
+    /**
+     * 方法名：getProblemTypeLeft
+     * 功    能：获取一级节点信息
+     * 参    数：Activity activity final String username, final String password
+     * 返回值：无
+     */
+    public static void getProblemTypeLeft(final Activity activity, ProblemTypeLeftInterface problemTypeLeftInterfaces) {
+        final ProblemTypeLeftInterface problemTypeLeftInterface = problemTypeLeftInterfaces;
+        OkHttpUtils.get().url(UrlConfig.URL_GETBEGINNINGENTITY).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
+            @Override
+            public void onResponse(String response, int id) {
+                ArrayList<ProblemTypeLeft> problemTypeLeftList = (ArrayList<ProblemTypeLeft>) JSON.parseArray(response, ProblemTypeLeft.class);
+                problemTypeLeftInterface.getTypeLeft(problemTypeLeftList);
+            }
+
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                ToastUtil.show(activity, "服务器有错误，请稍候再试");
+            }
+        });
+    }
+
+    /**
+     * 方法名：getTypeListByCodeRequest
+     * 功    能：获取二级节点信息（根据code）
+     * 参    数：Activity activity final String username, final String password
+     * 返回值：无
+     */
+    public static void getTypeListByCodeRequest(final Context activity, String code, final ListView listView, final ProblemTypeRightInterface problemTypeRightInterfaces) {
+        Map<String, Object> params = new HashMap<>();
+        try {
+            params.put("SearchProblemType", code);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        OkHttpUtils.post().url(UrlConfig.URL_GETTYPELISTBYCODE).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
+            @Override
+            public void onResponse(String response, int id) {
+                listView.setVisibility(View.VISIBLE);
+                ArrayList<ProblemTypeRight> problemTypeRight = (ArrayList<ProblemTypeRight>) JSON.parseArray(response, ProblemTypeRight.class);
+                PopProblemTypeRightAdapter problemTypeRightAdapter = new PopProblemTypeRightAdapter(activity, problemTypeRight, problemTypeRightInterfaces);
+                listView.setAdapter(problemTypeRightAdapter);
+            }
+
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                ToastUtil.show(activity, "服务器有错误，请稍候再试");
+            }
+        });
+    }
+
 }

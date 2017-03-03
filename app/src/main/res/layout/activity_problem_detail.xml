@@ -182,13 +182,18 @@
             <TextView
                 android:id="@+id/problem_detail_describe"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
                 android:gravity="left|top"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:textColor="@color/black" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@color/white" />
             <!--问题描述end-->
 
 
@@ -221,12 +226,17 @@
             <TextView
                 android:id="@+id/problem_detail_infoEdit"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
                 android:gravity="left|top"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@color/white" />
             <!--回复内容end-->
 
 

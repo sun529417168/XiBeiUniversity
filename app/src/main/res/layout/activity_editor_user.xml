@@ -32,7 +32,6 @@
                     style="@style/editor_userInfo_EditText"
                     android:layout_toRightOf="@+id/username" />
 
-
             </RelativeLayout>
             <!--用户名end-->
 
