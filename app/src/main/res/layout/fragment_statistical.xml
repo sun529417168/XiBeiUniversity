@@ -6,113 +6,66 @@
 
     <include layout="@layout/title" />
 
-    <lecho.lib.hellocharts.view.LineChartView
-        android:id="@+id/statistical_lineChartView"
-        android:layout_width="match_parent"
-        android:layout_height="280dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp" />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_height="50dp"
         android:orientation="horizontal">
-        <!--任务start-->
-        <RelativeLayout
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/blue2" />
+
+        <TextView
+            android:id="@+id/statistical_task"
             android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="10dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/blue2"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:text="@string/statistical_task"
+            android:textColor="@color/blue" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:text="任务"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/blue2" />
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
-                android:layout_marginBottom="20dp"
-                android:text="详情"
-                android:textColor="@color/blue3"
-                android:textSize="14sp" />
-        </RelativeLayout>
-        <!--任务end-->
-        <!--通知公告start-->
-        <RelativeLayout
+        <TextView
+            android:id="@+id/statistical_notice"
             android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/blue2"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:text="@string/statistical_notice"
+            android:textColor="@color/blue" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:text="通知公告"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/blue2" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
-                android:layout_marginBottom="20dp"
-                android:text="详情"
-                android:textColor="@color/blue3"
-                android:textSize="14sp" />
-        </RelativeLayout>
-        <!--通知公告end-->
-        <!--问题start-->
-        <RelativeLayout
+        <TextView
+            android:id="@+id/statistical_problem"
             android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="20dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/blue2"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:text="@string/statistical_problem"
+            android:textColor="@color/blue" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:text="问题"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
-                android:layout_marginBottom="20dp"
-                android:text="详情"
-                android:textColor="@color/blue3"
-                android:textSize="14sp" />
-        </RelativeLayout>
-        <!--问题end-->
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/blue2" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/blue2" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/statistical_viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

@@ -119,7 +119,7 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
         findTimeText = (TextView) findViewById(R.id.add_problem_findTime);
         sendTimeText = (TextView) findViewById(R.id.add_problem_sendTime);
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");//设置日期格式
-        sendTimeText.setText(df.format(new Date()));
+        findTimeText.setText(df.format(new Date()));
         inputInfoEdit = (EditText) findViewById(R.id.add_problem_inputInfo);
         sendInfoBtn = (Button) findViewById(R.id.add_problem_detail_button);
         sendInfoBtn.setOnClickListener(this);

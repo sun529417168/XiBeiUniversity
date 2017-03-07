@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">"西北工大 "</string>
+    <string name="app_name">"移动园区卫士"</string>
     <string name="back">"返回 "</string>
 
     <!--登陆界面start-->
@@ -189,4 +189,24 @@
     <string name="pop_addProblem_type_event">"事件类型"</string>
     <string name="pop_addProblem_type_parts">"部件类型"</string>
     <!--添加问题类型end-->
+
+
+
+    <!--统计查询start-->
+    <string name="statistical_task">"任务下发"</string>
+    <string name="statistical_notice">"通知公告"</string>
+    <string name="statistical_problem">"问题上报"</string>
+    <string name="statistical_week">"本周"</string>
+    <string name="statistical_month">"本月"</string>
+    <string name="statistical_quarter">"季度"</string>
+    <string name="statistical_halfYear">"半年"</string>
+    <string name="statistical_detail_screen">"详细筛选"</string>
+    <string name="statistical_state_title">"状态统计（个）"</string>
+    <string name="statistical_type_title">"类型统计（个）"</string>
+    <!--统计查询end-->
+
+
+
+
+
 </resources>

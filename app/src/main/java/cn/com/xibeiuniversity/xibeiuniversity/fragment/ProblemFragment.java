@@ -1,19 +1,14 @@
 package cn.com.xibeiuniversity.xibeiuniversity.fragment;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -29,7 +24,6 @@ import java.util.List;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.problem.AddProblemActivity;
-import cn.com.xibeiuniversity.xibeiuniversity.adapter.problem.PopProblemAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.problem.ProblemAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.base.BaseFragment;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
@@ -41,10 +35,8 @@ import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeLeftInterfac
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeRightInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.PopWindowUtils;
-import cn.com.xibeiuniversity.xibeiuniversity.utils.ProblemTypePopWindow;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
 
-import static cn.com.xibeiuniversity.xibeiuniversity.R.id.textView;
 
 /**
  * 文件名：ProblemFragment

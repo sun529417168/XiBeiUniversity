@@ -8,7 +8,13 @@ import android.preference.PreferenceManager;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
+/**
+ * 文件名：SharedUtil
+ * 描    述：Shared工具类
+ * 作    者：stt
+ * 时    间：2016.12.30
+ * 版    本：V1.0.0
+ */
 public class SharedUtil {
 
     public static SharedPreferences mPreference;

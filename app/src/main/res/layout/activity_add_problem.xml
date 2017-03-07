@@ -110,8 +110,7 @@
                     android:id="@+id/add_problem_findTime"
                     style="@style/add_problem_textView"
                     android:layout_marginRight="5dp"
-                    android:layout_toLeftOf="@+id/add_problem_date_find_right"
-                    android:hint="@string/add_problem_choose" />
+                    android:layout_toLeftOf="@+id/add_problem_date_find_right" />
 
                 <ImageView
                     android:id="@+id/add_problem_date_find_right"
