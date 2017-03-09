@@ -24,20 +24,24 @@ import java.util.List;
 import java.util.Map;
 
 import cn.com.xibeiuniversity.xibeiuniversity.activity.MainActivity;
+import cn.com.xibeiuniversity.xibeiuniversity.activity.task.TaskSearchActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.problem.PopProblemTypeRightAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.PersonBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.UserBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemTypeLeft;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemTypeRight;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.statistical.TaskStatisticalBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskAssignedBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskBean;
 import cn.com.xibeiuniversity.xibeiuniversity.config.UrlConfig;
+import cn.com.xibeiuniversity.xibeiuniversity.fragment.statistical.StatisticalTaskFragment;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.LoginInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.PersonInfoInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemListInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeLeftInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeRightInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.StatisticalInfoInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.TaskAssignedInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.TaskListInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.OkHttpUtils;
@@ -650,5 +654,44 @@ public class MyRequest {
             }
         });
     }
+
+    /**
+     * 方法名：statisticalTaskRequest
+     * 功    能：任务下发统计
+     * 参    数：
+     * 返回值：无
+     */
+    public static void statisticalTaskRequest(final Context activity, StatisticalInfoInterface statisticalInfoInterfaces, final Object... strings) {
+        Map<String, Object> params = new HashMap<>();
+        final Dialog progDialog = DialogUtils.showWaitDialog(activity);
+        final StatisticalInfoInterface statisticalInfoInterface = statisticalInfoInterfaces;
+        try {
+            params.put("StartingTime", "2017-03-01");
+            params.put("EndTime", "2017-03-09");
+            params.put("dataType", strings[0]);
+            params.put("PersonID", SharedUtil.getString(activity, "PersonID"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        OkHttpUtils.post().url(UrlConfig.URL_TASISSUEDDATASECTOR).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
+            @Override
+            public void onResponse(String response, int id) {
+                ArrayList<TaskStatisticalBean> bean = (ArrayList<TaskStatisticalBean>) JSON.parseArray(response, TaskStatisticalBean.class);
+                statisticalInfoInterface.getStatisticalInfo(bean, (Integer) strings[0]);
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                ToastUtil.show(activity, "服务器有错误，请稍候再试");
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+        });
+    }
+
 
 }

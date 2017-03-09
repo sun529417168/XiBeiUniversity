@@ -18,7 +18,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="@dimen/y420"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
@@ -35,8 +35,7 @@
                 <cn.com.xibeiuniversity.xibeiuniversity.weight.BarChartView
                     android:id="@+id/statistical_task_bar_chart"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="30dp"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="5dp" />
             </LinearLayout>
 
@@ -60,8 +59,15 @@
                     android:id="@+id/mPieChart"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="5dp" />
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:padding="10dp" />
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@color/white" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -91,7 +91,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void getPersonInfo(PersonBean personBean) {
-        userNameText.setText("帐号:" + SharedUtil.getString(context, "userName"));
+        userNameText.setText("用户名:" + SharedUtil.getString(context, "userName"));
         workNoText.setText("工号:" + personBean.getWorkNO());
         nameText.setText(personBean.getName());
         phoneText.setText(personBean.getPhone());

@@ -53,7 +53,7 @@ public class ProblemAdapter extends MyBaseAdapter {
         /**
          * 赋值
          */
-        number.setText(rowsBean.getProblemSno());
+        number.setText("P"+rowsBean.getProblemSno().substring(9));
         if ("已上报".equals(rowsBean.getStateName())) {
             state.setText("已上报");
             state.setTextColor(ContextCompat.getColor(context, R.color.white));

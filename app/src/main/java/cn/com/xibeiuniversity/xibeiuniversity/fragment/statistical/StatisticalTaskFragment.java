@@ -3,11 +3,13 @@ package cn.com.xibeiuniversity.xibeiuniversity.fragment.statistical;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
@@ -20,6 +22,9 @@ import java.util.ArrayList;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.base.BaseFragment;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.statistical.TaskStatisticalBean;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.StatisticalInfoInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
 import cn.com.xibeiuniversity.xibeiuniversity.weight.BarChartView;
 
 /**
@@ -30,9 +35,10 @@ import cn.com.xibeiuniversity.xibeiuniversity.weight.BarChartView;
  * 版    本：V1.0.3
  */
 
-public class StatisticalTaskFragment extends BaseFragment {
+public class StatisticalTaskFragment extends BaseFragment implements StatisticalInfoInterface {
     private Context context;
     private PieChart mPieChart;
+    private BarChartView barChartView;
 
     @Override
     protected View setView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,23 +49,23 @@ public class StatisticalTaskFragment extends BaseFragment {
 
     @Override
     protected void setDate() {
-
+        MyRequest.statisticalTaskRequest(context, this, 2);
+        MyRequest.statisticalTaskRequest(context, this, 1);
     }
 
     @Override
     protected void init(View rootView) {
-        BarChartView barChartView = (BarChartView) rootView.findViewById(R.id.statistical_task_bar_chart);
-        BarChartView.BarChartItemBean[] items = new BarChartView.BarChartItemBean[]{
-                new BarChartView.BarChartItemBean("已下发", 156),
-                new BarChartView.BarChartItemBean("处理中", 120),
-                new BarChartView.BarChartItemBean("已完成", 140),
-                new BarChartView.BarChartItemBean("未完成", 125),
-                new BarChartView.BarChartItemBean("逾期未完成", 160)
-        };
-        barChartView.setItems(items);
+        /*****************饼状图*******************/
+        initPieChart(rootView);
+        /*****************柱状图*******************/
+        initBarChart(rootView);
+    }
 
+    private void initBarChart(View rootView) {
+        barChartView = (BarChartView) rootView.findViewById(R.id.statistical_task_bar_chart);
+    }
 
-        /***************************饼状图*****************************/
+    private void initPieChart(View rootView) {
         //饼状图
         mPieChart = (PieChart) rootView.findViewById(R.id.mPieChart);
         mPieChart.setUsePercentValues(true);
@@ -67,8 +73,6 @@ public class StatisticalTaskFragment extends BaseFragment {
         mPieChart.setExtraOffsets(5, 10, 5, 5);
 
         mPieChart.setDragDecelerationFrictionCoef(0.95f);
-        //设置中间文件
-//        mPieChart.setCenterText(generateCenterSpannableText());
 
         mPieChart.setDrawHoleEnabled(false);
         mPieChart.setHoleColor(Color.WHITE);
@@ -89,15 +93,6 @@ public class StatisticalTaskFragment extends BaseFragment {
         //变化监听
 //        mPieChart.setOnChartValueSelectedListener(this);
 
-        //模拟数据
-        ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
-        entries.add(new PieEntry(40, "会议"));
-        entries.add(new PieEntry(20, "维修"));
-        entries.add(new PieEntry(30, "安全"));
-        entries.add(new PieEntry(10, "其他"));
-
-        //设置数据
-        setData(entries);
 
         mPieChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
 
@@ -123,16 +118,10 @@ public class StatisticalTaskFragment extends BaseFragment {
 
         //数据和颜色
         ArrayList<Integer> colors = new ArrayList<Integer>();
-        for (int c : ColorTemplate.VORDIPLOM_COLORS)
-            colors.add(c);
-        for (int c : ColorTemplate.JOYFUL_COLORS)
-            colors.add(c);
-        for (int c : ColorTemplate.COLORFUL_COLORS)
-            colors.add(c);
-        for (int c : ColorTemplate.LIBERTY_COLORS)
-            colors.add(c);
-        for (int c : ColorTemplate.PASTEL_COLORS)
-            colors.add(c);
+        colors.add(Color.parseColor("#FC585C"));
+        colors.add(Color.parseColor("#4C5060"));
+        colors.add(Color.parseColor("#44BCBC"));
+        colors.add(Color.parseColor("#FCB45C"));
         colors.add(ColorTemplate.getHoloBlue());
         dataSet.setColors(colors);
         PieData data = new PieData(dataSet);
@@ -143,5 +132,21 @@ public class StatisticalTaskFragment extends BaseFragment {
         mPieChart.highlightValues(null);
         //刷新
         mPieChart.invalidate();
+    }
+
+    @Override
+    public void getStatisticalInfo(Object bean, int type) {
+        if (type == 2)
+            barChartView.setItems((ArrayList<TaskStatisticalBean>) bean);
+        if (type == 1) {
+            ArrayList<TaskStatisticalBean> beanList = (ArrayList<TaskStatisticalBean>) bean;
+            //模拟数据
+            ArrayList<PieEntry> entries = new ArrayList<>();
+            for (TaskStatisticalBean taskBean : beanList) {
+                entries.add(new PieEntry(taskBean.getValue(), taskBean.getName()));
+            }
+            //设置数据
+            setData(entries);
+        }
     }
 }

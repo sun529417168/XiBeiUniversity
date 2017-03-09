@@ -62,7 +62,7 @@ public class TaskAdapter extends MyBaseAdapter {
         /**
          * 赋值
          */
-        number.setText(rowsBean.getTaskSno());
+        number.setText("T"+rowsBean.getTaskSno().substring(9));
         for (TaskBean.RowsBean.ImageListBean imageBean : rowsBean.getImageList()) {
             if (imageBean.getAttachmentType() == 1) {
                 ImageLoader.getInstance().displayImage(imageBean.getFileUrl(), imageView);

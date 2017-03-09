@@ -14,7 +14,10 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
+
 import cn.com.xibeiuniversity.xibeiuniversity.R;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.statistical.TaskStatisticalBean;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.ScreenUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.Utility;
 
@@ -28,7 +31,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.utils.Utility;
 public class BarChartView extends View {
     private int screenW, screenH;
 
-    private BarChartItemBean[] mItems;
+    private ArrayList<TaskStatisticalBean> mItems;
     // max value in mItems.
     private float maxValue;
     // max height of the bar
@@ -57,10 +60,11 @@ public class BarChartView extends View {
     private Bitmap arrowBmp;
     private Rect x_index_arrowRect, y_index_arrowRect;
 
-    private static final int BG_COLOR = Color.parseColor("#E5E5E5");
+    private static final int BG_COLOR = Color.parseColor("#FFFFFF");
 
     public BarChartView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mItems = new ArrayList<>();
         init(context);
     }
 
@@ -111,25 +115,24 @@ public class BarChartView extends View {
         checkLeftMoving();
 
         textPaint.setTextSize(ScreenUtils.dp2px(getContext(), 12));
-        for (int i = 0; i < mItems.length; i++) {
+        for (int i = 0; i < mItems.size(); i++) {
             // draw bar rect
-            barRect.left = (int) y_index_startX + barItemWidth * i + barSpace
-                    * (i + 1) - (int) leftMoving;
-            barRect.top = topMargin
-                    * 2
-                    + (int) (maxHeight * (1.0f - mItems[i].itemValue / maxValue));
+            barRect.left = (int) y_index_startX + barItemWidth * i + barSpace * (i + 1) - (int) leftMoving;
+            barRect.top = topMargin * 2 + (int) (maxHeight * (1.0f - mItems.get(i).getValue() / maxValue));
             barRect.right = barRect.left + barItemWidth;
 
             barPaint.setColor(mBarColors[i % mBarColors.length]);
             canvas.drawRect(barRect, barPaint);
 
             // draw type text
-            String typeText = mItems[i].itemType;
-            // float textPathStartX = barRect.left + barItemWidth / 2
-            // - (float) (Math.sin(Math.PI / 6))
-            // * textPaint.measureText("好") / 2;
-            float textPathStartX = barRect.left - barItemWidth / 2
-                    - textPaint.measureText("好") / 2;
+            String typeText = mItems.get(i).getName();
+            float textPathStartX;
+            if ("逾期".equals(typeText)) {
+                typeText = "逾期未完成";
+                textPathStartX = barRect.left - barItemWidth / 2 - textPaint.measureText("好") / 2 - 30;
+            } else {
+                textPathStartX = barRect.left - barItemWidth / 2 - textPaint.measureText("好") / 2;
+            }
             float textPathStartY = barRect.bottom;
             textPath.reset();
             textPath.moveTo(textPathStartX, textPathStartY);
@@ -140,7 +143,7 @@ public class BarChartView extends View {
                     smallMargin * 2, textPaint);
 
             // draw value text
-            String valueText = String.valueOf(mItems[i].itemValue);
+            String valueText = String.valueOf(mItems.get(i).getValue());
             canvas.drawText(valueText,
                     barRect.left
                             - (textPaint.measureText(valueText) - barItemWidth)
@@ -163,7 +166,6 @@ public class BarChartView extends View {
         canvas.drawLine(y_index_startX, x_index_startY + lineStrokeWidth / 2,
                 y_index_startX, topMargin / 2, linePaint);
 
-        canvas.drawBitmap(arrowBmp, null, y_index_arrowRect, null);
         canvas.save();
         canvas.rotate(90,
                 (x_index_arrowRect.left + x_index_arrowRect.right) / 2,
@@ -233,30 +235,30 @@ public class BarChartView extends View {
         }
 
         if (leftMoving > (maxRight - minRight)) {
-            leftMoving = maxRight - minRight;
+            leftMoving = maxRight - minRight + 110;
         }
     }
 
-    public BarChartItemBean[] getItems() {
+    public ArrayList<TaskStatisticalBean> getItems() {
         return mItems;
     }
 
-    public void setItems(BarChartItemBean[] items) {
+    public void setItems(ArrayList<TaskStatisticalBean> items) {
         if (items == null) {
             throw new RuntimeException(
                     "BarChartView.setItems(): the param items cannot be null.");
         }
-        if (items.length == 0) {
+        if (items.size() == 0) {
             return;
         }
 
         this.mItems = items;
 
         // Calculate the max value.
-        maxValue = items[0].itemValue;
-        for (BarChartItemBean bean : items) {
-            if (bean.itemValue > maxValue) {
-                maxValue = bean.itemValue;
+        maxValue = items.get(0).getValue();
+        for (TaskStatisticalBean bean : items) {
+            if (bean.getValue() > maxValue) {
+                maxValue = bean.getValue();
             }
         }
 
@@ -264,7 +266,7 @@ public class BarChartView extends View {
         getRange(maxValue, 0);
 
         // Get the width of each bar.
-        getBarItemWidth(screenW, items.length);
+        getBarItemWidth(screenW, items.size());
 
         // Refresh the view.
         invalidate();
@@ -280,9 +282,9 @@ public class BarChartView extends View {
         // The min width of the bar is 50dp.
         int minBarWidth = ScreenUtils.dp2px(getContext(), 20);// 条形的最小宽度
         // The min width of spacing.
-        int minBarSpacing = ScreenUtils.dp2px(getContext(), 40);// 条形的最小间距
+        int minBarSpacing = ScreenUtils.dp2px(getContext(), 35);// 条形的最小间距
 
-        barItemWidth = (screenW - leftMargin * 2) / (itemCount + 3);
+        barItemWidth = (screenW - leftMargin * 2) / (itemCount + 4);
         barSpace = (screenW - leftMargin * 2 - barItemWidth * itemCount)
                 / (itemCount + 1);
 
@@ -292,7 +294,7 @@ public class BarChartView extends View {
         }
 
         maxRight = (int) y_index_startX + lineStrokeWidth
-                + (barSpace + barItemWidth) * mItems.length;
+                + (barSpace + barItemWidth) * mItems.size();
         minRight = screenW - leftMargin - barSpace;
     }
 
@@ -310,7 +312,7 @@ public class BarChartView extends View {
         screenH -= (statusHeight + abHeight);
 
         barRect.top = topMargin * 2;
-        barRect.bottom = screenH - topMargin * 3;
+        barRect.bottom = screenH - topMargin * 9;
         maxHeight = barRect.bottom - barRect.top;
 
         x_index_startY = barRect.bottom;
@@ -432,16 +434,4 @@ public class BarChartView extends View {
         }
     }
 
-    /**
-     * A model class to keep the bar item info.
-     */
-    public static class BarChartItemBean {
-        private String itemType;
-        private float itemValue;
-
-        public BarChartItemBean(String itemType, float itemValue) {
-            this.itemType = itemType;
-            this.itemValue = itemValue;
-        }
-    }
 }

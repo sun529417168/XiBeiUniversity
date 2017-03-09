@@ -9,7 +9,7 @@ package cn.com.xibeiuniversity.xibeiuniversity.config;
  */
 
 public class UrlConfig {
-//    public static final String BaseUrl = "http://123.56.96.237:8001";// 正式
+    //    public static final String BaseUrl = "http://123.56.96.237:8001";// 正式
     public static final String BaseUrl = "http://192.168.0.90:8001";// 测试
 
     /**
@@ -64,4 +64,8 @@ public class UrlConfig {
      * 获取二级节点信息（根据code）
      */
     public static final String URL_GETTYPELISTBYCODE = BaseUrl + "/API/ApiProblemReport/GetTypeListByCode";
+    /**
+     * 任务下发统计
+     */
+    public static final String URL_TASISSUEDDATASECTOR = BaseUrl + "/API/ApiTasIssued/DataSector";
 }

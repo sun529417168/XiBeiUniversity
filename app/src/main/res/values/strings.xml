@@ -202,7 +202,7 @@
     <string name="statistical_halfYear">"半年"</string>
     <string name="statistical_detail_screen">"详细筛选"</string>
     <string name="statistical_state_title">"状态统计（个）"</string>
-    <string name="statistical_type_title">"类型统计（个）"</string>
+    <string name="statistical_type_title">"类型统计（%）"</string>
     <!--统计查询end-->
 
 
