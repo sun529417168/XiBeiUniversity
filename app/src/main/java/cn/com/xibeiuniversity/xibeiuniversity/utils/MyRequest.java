@@ -666,18 +666,21 @@ public class MyRequest {
         final Dialog progDialog = DialogUtils.showWaitDialog(activity);
         final StatisticalInfoInterface statisticalInfoInterface = statisticalInfoInterfaces;
         try {
-            params.put("StartingTime", "2017-03-01");
-            params.put("EndTime", "2017-03-09");
             params.put("dataType", strings[0]);
-            params.put("PersonID", SharedUtil.getString(activity, "PersonID"));
+            params.put("StartingTime", strings[1]);
+            params.put("EndTime", strings[2]);
+            params.put("type", strings[3]);
+            params.put("PersonId", SharedUtil.getString(activity, "PersonID"));
         } catch (Exception e) {
             e.printStackTrace();
         }
         OkHttpUtils.post().url(UrlConfig.URL_TASISSUEDDATASECTOR).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
             @Override
             public void onResponse(String response, int id) {
-                ArrayList<TaskStatisticalBean> bean = (ArrayList<TaskStatisticalBean>) JSON.parseArray(response, TaskStatisticalBean.class);
-                statisticalInfoInterface.getStatisticalInfo(bean, (Integer) strings[0]);
+                response = response.replace(":null,", ":\"\",");
+                Log.i("shuju",response);
+                TaskStatisticalBean bean = JSON.parseObject(response, TaskStatisticalBean.class);
+                statisticalInfoInterface.getStatisticalInfo(bean.getList(), (Integer) strings[0]);
                 if (progDialog.isShowing()) {
                     progDialog.dismiss();
                 }

@@ -31,7 +31,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.utils.Utility;
 public class BarChartView extends View {
     private int screenW, screenH;
 
-    private ArrayList<TaskStatisticalBean> mItems;
+    private ArrayList<TaskStatisticalBean.ListBean> mItems;
     // max value in mItems.
     private float maxValue;
     // max height of the bar
@@ -127,7 +127,7 @@ public class BarChartView extends View {
             // draw type text
             String typeText = mItems.get(i).getName();
             float textPathStartX;
-            if ("逾期".equals(typeText)) {
+            if ("逾期未完成".equals(typeText)) {
                 typeText = "逾期未完成";
                 textPathStartX = barRect.left - barItemWidth / 2 - textPaint.measureText("好") / 2 - 30;
             } else {
@@ -178,6 +178,7 @@ public class BarChartView extends View {
         textPaint.setTextSize(ScreenUtils.dp2px(getContext(), 10));
         for (int i = 1; i <= 10; i++) {
             float startY = barRect.bottom - maxDivisionValueHeight * 0.1f * i;
+            startY = (float) (Math.round(startY * 100) / 100);
             if (startY < topMargin / 2) {
                 break;
             }
@@ -239,11 +240,11 @@ public class BarChartView extends View {
         }
     }
 
-    public ArrayList<TaskStatisticalBean> getItems() {
+    public ArrayList<TaskStatisticalBean.ListBean> getItems() {
         return mItems;
     }
 
-    public void setItems(ArrayList<TaskStatisticalBean> items) {
+    public void setItems(ArrayList<TaskStatisticalBean.ListBean> items) {
         if (items == null) {
             throw new RuntimeException(
                     "BarChartView.setItems(): the param items cannot be null.");
@@ -256,7 +257,7 @@ public class BarChartView extends View {
 
         // Calculate the max value.
         maxValue = items.get(0).getValue();
-        for (TaskStatisticalBean bean : items) {
+        for (TaskStatisticalBean.ListBean bean : items) {
             if (bean.getValue() > maxValue) {
                 maxValue = bean.getValue();
             }
