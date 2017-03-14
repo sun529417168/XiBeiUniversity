@@ -121,7 +121,7 @@ public class TaskAdapter extends MyBaseAdapter {
     /**
      * 方法名：isCheckRequest
      * 功    能：点击修改查阅状态
-     * 参    数：Activity activity String... strings
+     * 参    数：int id
      * 返回值：无
      */
     public static void isCheckRequest(int id) {

@@ -55,7 +55,7 @@
 
     <!--通知公告界面start-->
     <string name="notice_all">"全部"</string>
-    <string name="notice_oneDay">"一天"</string>
+    <string name="notice_threeDay">"三天"</string>
     <string name="notice_oneWeek">"一周"</string>
     <string name="notice_oneMonth">"一个月"</string>
     <!--通知公告界面end-->
@@ -203,6 +203,9 @@
     <string name="statistical_detail_screen">"详细筛选"</string>
     <string name="statistical_state_title">"状态统计（个）"</string>
     <string name="statistical_type_title">"类型统计（%）"</string>
+    <string name="statistical_problem_count">"数量统计（个）"</string>
+    <string name="statistical_problem_buJian">"部件类型统计（%）"</string>
+    <string name="statistical_problem_shiJian">"事件类型统计（%）"</string>
     <!--统计查询end-->
 
 

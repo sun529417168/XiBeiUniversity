@@ -28,6 +28,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.activity.task.TaskSearchActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.problem.PopProblemTypeRightAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.PersonBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.UserBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.notice.NoticeBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemTypeLeft;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemTypeRight;
@@ -37,6 +38,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskBean;
 import cn.com.xibeiuniversity.xibeiuniversity.config.UrlConfig;
 import cn.com.xibeiuniversity.xibeiuniversity.fragment.statistical.StatisticalTaskFragment;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.LoginInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.NoticeListInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.PersonInfoInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemListInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeLeftInterface;
@@ -656,9 +658,47 @@ public class MyRequest {
     }
 
     /**
+     * 方法名：getNoticeListRequest
+     * 功    能：获取通知信息列表
+     * 参    数：Context activity, NoticeListInterface noticeListInterfaces,int SearchTime
+     * 返回值：无
+     */
+    public static void getNoticeListRequest(final Context activity, NoticeListInterface noticeListInterfaces, int searchTime) {
+        Map<String, Object> params = new HashMap<>();
+        final Dialog progDialog = DialogUtils.showWaitDialog(activity);
+        final NoticeListInterface noticeListInterface = noticeListInterfaces;
+        try {
+            params.put("SearchTimeNumber", searchTime);
+            params.put("PersonID", SharedUtil.getString(activity, "PersonID"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        OkHttpUtils.post().url(UrlConfig.URL_GETINFORMISSUEDINFO).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
+            @Override
+            public void onResponse(String response, int id) {
+                response = response.replace(":null,", ":\"\",");
+                Log.i("noticeBean",response);
+                NoticeBean noticeBean = JSON.parseObject(response, NoticeBean.class);
+                noticeListInterface.getNoticeList(noticeBean);
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                ToastUtil.show(activity, "服务器有错误，请稍候再试");
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+        });
+    }
+
+    /**
      * 方法名：statisticalTaskRequest
      * 功    能：任务下发统计
-     * 参    数：
+     * 参    数：Context activity, StatisticalInfoInterface statisticalInfoInterfaces, final Object... strings
      * 返回值：无
      */
     public static void statisticalTaskRequest(final Context activity, StatisticalInfoInterface statisticalInfoInterfaces, final Object... strings) {
@@ -678,7 +718,7 @@ public class MyRequest {
             @Override
             public void onResponse(String response, int id) {
                 response = response.replace(":null,", ":\"\",");
-                Log.i("shuju",response);
+                Log.i("shuju", response);
                 TaskStatisticalBean bean = JSON.parseObject(response, TaskStatisticalBean.class);
                 statisticalInfoInterface.getStatisticalInfo(bean.getList(), (Integer) strings[0]);
                 if (progDialog.isShowing()) {
@@ -689,6 +729,7 @@ public class MyRequest {
             @Override
             public void onError(Call call, Exception e, int id) {
                 ToastUtil.show(activity, "服务器有错误，请稍候再试");
+                statisticalInfoInterface.getStatisticalInfo(null, 3);
                 if (progDialog.isShowing()) {
                     progDialog.dismiss();
                 }

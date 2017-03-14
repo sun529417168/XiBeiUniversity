@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -19,7 +20,9 @@ import java.util.ArrayList;
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.notice.NoticeAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.base.BaseFragment;
-import cn.com.xibeiuniversity.xibeiuniversity.bean.NoticeBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.notice.NoticeBean;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.NoticeListInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyUtils;
 
 /**
@@ -30,7 +33,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.utils.MyUtils;
  * 版    本：V1.0.0
  */
 
-public class NoticeFragment extends BaseFragment implements View.OnClickListener {
+public class NoticeFragment extends BaseFragment implements View.OnClickListener, NoticeListInterface {
     private Context context;
     private TextView titleName;//标题名称
     /**
@@ -40,8 +43,10 @@ public class NoticeFragment extends BaseFragment implements View.OnClickListener
     private TextView[] textviews;
     //刷新控件
     private PullToRefreshListView mPullRefreshListView;
-    private ArrayList<NoticeBean> noticeList = new ArrayList<>();
+    private ArrayList<NoticeBean.RowsBean> noticeList = new ArrayList<>();
     private NoticeAdapter noticeAdapter;
+    private RelativeLayout nothing;
+    private int timeNum = 0;
 
     @Override
     protected View setView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,7 +57,11 @@ public class NoticeFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     protected void setDate() {
+        request(timeNum);
+    }
 
+    private void request(int searchTime) {
+        MyRequest.getNoticeListRequest(context, this, searchTime);
     }
 
     @Override
@@ -66,29 +75,27 @@ public class NoticeFragment extends BaseFragment implements View.OnClickListener
         noticeOneWeek = (TextView) rootView.findViewById(R.id.notice_oneWeek);
         noticeOneMonth = (TextView) rootView.findViewById(R.id.notice_oneMonth);
         textviews = new TextView[]{noticeAll, noticeOneDay, noticeOneWeek, noticeOneMonth};
+        nothing = (RelativeLayout) rootView.findViewById(R.id.notice_nothing);
         setTextBack(noticeAll);
         noticeAll.setOnClickListener(this);
         noticeOneDay.setOnClickListener(this);
         noticeOneWeek.setOnClickListener(this);
         noticeOneMonth.setOnClickListener(this);
-        noticeList = (ArrayList<NoticeBean>) JSON.parseArray(MyUtils.getFromAssets(context, "noticeList.txt"), NoticeBean.class);
-        noticeAdapter = new NoticeAdapter(context, noticeList);
-        mPullRefreshListView.setAdapter(noticeAdapter);
         mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
-            public void onPullDownToRefresh(
-                    PullToRefreshBase<ListView> refreshView) {
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 Log.e("TAG", "onPullDownToRefresh");
                 // 这里写下拉刷新的任务
+                request(timeNum);
                 noticeAdapter.notifyDataSetChanged();
                 mPullRefreshListView.onRefreshComplete();
             }
 
             @Override
-            public void onPullUpToRefresh(
-                    PullToRefreshBase<ListView> refreshView) {
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 Log.e("TAG", "onPullUpToRefresh");
                 // 这里写上拉加载更多的任务
+                request(timeNum);
                 noticeAdapter.notifyDataSetChanged();
                 mPullRefreshListView.onRefreshComplete();
             }
@@ -101,15 +108,23 @@ public class NoticeFragment extends BaseFragment implements View.OnClickListener
         switch (v.getId()) {
             case R.id.notice_all:
                 setTextBack(noticeAll);
+                timeNum = 0;
+                request(timeNum);
                 break;
             case R.id.notice_oneDay:
                 setTextBack(noticeOneDay);
+                timeNum = 1;
+                request(timeNum);
                 break;
             case R.id.notice_oneWeek:
                 setTextBack(noticeOneWeek);
+                timeNum = 2;
+                request(timeNum);
                 break;
             case R.id.notice_oneMonth:
                 setTextBack(noticeOneMonth);
+                timeNum = 3;
+                request(timeNum);
                 break;
         }
     }
@@ -123,6 +138,21 @@ public class NoticeFragment extends BaseFragment implements View.OnClickListener
                 textviews[i].setTextColor(ContextCompat.getColor(context, R.color.blue));
                 textviews[i].setBackgroundResource(R.color.white);
             }
+        }
+    }
+
+    @Override
+    public void getNoticeList(NoticeBean noticeBean) {
+        if (noticeBean.getRows().size() == 0) {
+            mPullRefreshListView.setVisibility(View.GONE);
+            nothing.setVisibility(View.VISIBLE);
+        } else {
+            mPullRefreshListView.setVisibility(View.VISIBLE);
+            nothing.setVisibility(View.GONE);
+            noticeList = (ArrayList<NoticeBean.RowsBean>) noticeBean.getRows();
+            noticeAdapter = new NoticeAdapter(context, noticeList);
+            mPullRefreshListView.setAdapter(noticeAdapter);
+            noticeAdapter.notifyDataSetChanged();
         }
     }
 }

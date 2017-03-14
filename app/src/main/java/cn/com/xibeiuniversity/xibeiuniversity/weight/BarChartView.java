@@ -159,13 +159,11 @@ public class BarChartView extends View {
         canvas.drawRect(rightWhiteRect, barPaint);
         barPaint.setColor(c);
 
-        // draw x-index line.
+        // x-index画线
         canvas.drawLine(y_index_startX - lineStrokeWidth / 2, x_index_startY,
                 screenW - leftMargin, x_index_startY, linePaint);
-        // draw y-index line.
-        canvas.drawLine(y_index_startX, x_index_startY + lineStrokeWidth / 2,
-                y_index_startX, topMargin / 2, linePaint);
-
+        // y-index画线
+        canvas.drawLine(y_index_startX, x_index_startY + lineStrokeWidth / 2,y_index_startX, topMargin / 2, linePaint);
         canvas.save();
         canvas.rotate(90,
                 (x_index_arrowRect.left + x_index_arrowRect.right) / 2,
@@ -173,12 +171,11 @@ public class BarChartView extends View {
         canvas.drawBitmap(arrowBmp, null, x_index_arrowRect, null);
         canvas.restore();
 
-        // draw division value
+        // 画分度值
         int maxDivisionValueHeight = (int) (maxHeight * 1.0f / maxValue * maxDivisionValue);
         textPaint.setTextSize(ScreenUtils.dp2px(getContext(), 10));
         for (int i = 1; i <= 10; i++) {
             float startY = barRect.bottom - maxDivisionValueHeight * 0.1f * i;
-            startY = (float) (Math.round(startY * 100) / 100);
             if (startY < topMargin / 2) {
                 break;
             }
@@ -236,7 +233,7 @@ public class BarChartView extends View {
         }
 
         if (leftMoving > (maxRight - minRight)) {
-            leftMoving = maxRight - minRight + 110;
+            leftMoving = maxRight - minRight + 100;
         }
     }
 
@@ -255,7 +252,7 @@ public class BarChartView extends View {
 
         this.mItems = items;
 
-        // Calculate the max value.
+        // 计算的最大价值。
         maxValue = items.get(0).getValue();
         for (TaskStatisticalBean.ListBean bean : items) {
             if (bean.getValue() > maxValue) {
@@ -263,13 +260,13 @@ public class BarChartView extends View {
             }
         }
 
-        // Calculate the max division value.
+        // 计算最大分度值。
         getRange(maxValue, 0);
 
-        // Get the width of each bar.
+        // 每一栏的宽度。
         getBarItemWidth(screenW, items.size());
 
-        // Refresh the view.
+        // 刷新视图。
         invalidate();
     }
 
@@ -304,9 +301,9 @@ public class BarChartView extends View {
      * screen.
      */
     private void subStatusBarHeight() {
-        // The height of the status bar
+        // 状态栏的高度
         int statusHeight = ScreenUtils.getStatusBarHeight((Activity) getContext());
-        // The height of the actionBar
+        // actionBar的高度
         ActionBar ab = ((Activity) getContext()).getActionBar();
         int abHeight = ab == null ? 0 : ab.getHeight();
 
@@ -322,10 +319,10 @@ public class BarChartView extends View {
                 (int) (x_index_startY + 10));
     }
 
-    // The max and min division value.
+    // 最大和最小分度值。
     private float maxDivisionValue, minDivisionValue;
 
-    // Get the max and min division value by the max and min value in mItems.
+    // 得到的最大和最小分度值最大和最小价值的物品。
     private void getRange(float maxValue, float minValue) {
         // max
         int scale = Utility.getScale(maxValue);

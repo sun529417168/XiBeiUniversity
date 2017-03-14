@@ -95,20 +95,15 @@
     <!--发送时间end-->
 
     <!--附件start-->
-    <RelativeLayout style="@style/notice_layout">
+    <RelativeLayout
+        android:id="@+id/notice_detail_state_fileLayout"
+        style="@style/notice_layout">
 
         <TextView
-            android:id="@+id/fujian"
+            android:id="@+id/notice_detail_fileName"
             style="@style/notice_detail_textView"
             android:text="@string/notice_detail_attachment" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/fujian"
-            android:text="@string/notice_detail_attachmentName" />
 
         <TextView
             android:id="@+id/notice_detail_attachment"
@@ -120,15 +115,21 @@
     <!--附件end-->
 
     <!--内容区域start-->
-    <EditText
+    <TextView
         android:id="@+id/notice_detail_info"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@color/white"
         android:gravity="left|top"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:text="通知内容  教学楼三楼摁扣坏了请及时修复" />
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/white" />
     <!--内容区域end-->
 </LinearLayout>
