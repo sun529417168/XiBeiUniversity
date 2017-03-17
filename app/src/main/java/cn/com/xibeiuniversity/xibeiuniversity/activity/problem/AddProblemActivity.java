@@ -1,6 +1,5 @@
 package cn.com.xibeiuniversity.xibeiuniversity.activity.problem;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,10 +17,8 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import java.io.File;
@@ -34,22 +31,19 @@ import java.util.Map;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.DetailImageActivity;
-import cn.com.xibeiuniversity.xibeiuniversity.activity.MainActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.task.TaskDetalPhotoAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemTypeLeft;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.app.TakePhotoActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.compress.CompressConfig;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.GetGPSInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeLeftInterface;
-import cn.com.xibeiuniversity.xibeiuniversity.interfaces.SearchTypePopInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.DateTimePickDialogUtil;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.DialogUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyUtils;
-import cn.com.xibeiuniversity.xibeiuniversity.utils.PopWindowUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.SharedUtil;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
-import cn.com.xibeiuniversity.xibeiuniversity.weight.ChangeAddressPopwindow;
+import cn.com.xibeiuniversity.xibeiuniversity.weight.AddProblemTypePopwindow;
 
 /**
  * 文件名：AddProblemActivity
@@ -240,9 +234,9 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
 
     @Override
     public void getTypeLeft(List<ProblemTypeLeft> problemTypeLeftList) {
-        ChangeAddressPopwindow mChangeAddressPopwindow = new ChangeAddressPopwindow(AddProblemActivity.this, (ArrayList<ProblemTypeLeft>) problemTypeLeftList);
-        mChangeAddressPopwindow.showAtLocation(typeLayout, Gravity.BOTTOM, 0, 0);
-        mChangeAddressPopwindow.setAddresskListener(new ChangeAddressPopwindow.OnAddressCListener() {
+        AddProblemTypePopwindow mAddProblemTypePopwindow = new AddProblemTypePopwindow(AddProblemActivity.this, (ArrayList<ProblemTypeLeft>) problemTypeLeftList);
+        mAddProblemTypePopwindow.showAtLocation(typeLayout, Gravity.BOTTOM, 0, 0);
+        mAddProblemTypePopwindow.setAddresskListener(new AddProblemTypePopwindow.OnAddressCListener() {
             @Override
             public void onClick(String left, String right, String code) {
                 typeText.setText(right);

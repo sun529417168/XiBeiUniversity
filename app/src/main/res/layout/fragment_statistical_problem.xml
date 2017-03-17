@@ -31,7 +31,7 @@
                     android:layout_marginTop="5dp"
                     android:text="@string/statistical_problem_count" />
 
-                <cn.com.xibeiuniversity.xibeiuniversity.weight.BarChartView
+                <com.github.mikephil.charting.charts.BarChart
                     android:id="@+id/statistical_problem_barChart"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

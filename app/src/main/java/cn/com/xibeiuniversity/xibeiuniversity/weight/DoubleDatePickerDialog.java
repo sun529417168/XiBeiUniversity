@@ -55,32 +55,17 @@ public class DoubleDatePickerDialog extends AlertDialog implements OnClickListen
      */
     public interface OnDateSetListener {
 
-        /**
-         * @param view
-         *            The view associated with this listener.
-         * @param year
-         *            The year that was set.
-         * @param monthOfYear
-         *            The month that was set (0-11) for compatibility with
-         *            {@link java.util.Calendar}.
-         * @param dayOfMonth
-         *            The day of the month that was set.
-         */
+
         void onDateSet(DatePicker startDatePicker, int startYear, int startMonthOfYear, int startDayOfMonth,
                        DatePicker endDatePicker, int endYear, int endMonthOfYear, int endDayOfMonth);
     }
 
     /**
-     * @param context
-     *            The context the dialog is to run in.
-     * @param callBack
-     *            How the parent is notified that the date is set.
-     * @param year
-     *            The initial year of the dialog.
-     * @param monthOfYear
-     *            The initial month of the dialog.
-     * @param dayOfMonth
-     *            The initial day of the dialog.
+     * @param context     The context the dialog is to run in.
+     * @param callBack    How the parent is notified that the date is set.
+     * @param year        The initial year of the dialog.
+     * @param monthOfYear The initial month of the dialog.
+     * @param dayOfMonth  The initial day of the dialog.
      */
     public DoubleDatePickerDialog(Context context, OnDateSetListener callBack, int year, int monthOfYear, int dayOfMonth) {
         this(context, 0, callBack, year, monthOfYear, dayOfMonth);
@@ -92,18 +77,12 @@ public class DoubleDatePickerDialog extends AlertDialog implements OnClickListen
     }
 
     /**
-     * @param context
-     *            The context the dialog is to run in.
-     * @param theme
-     *            the theme to apply to this dialog
-     * @param callBack
-     *            How the parent is notified that the date is set.
-     * @param year
-     *            The initial year of the dialog.
-     * @param monthOfYear
-     *            The initial month of the dialog.
-     * @param dayOfMonth
-     *            The initial day of the dialog.
+     * @param context     The context the dialog is to run in.
+     * @param theme       the theme to apply to this dialog
+     * @param callBack    How the parent is notified that the date is set.
+     * @param year        The initial year of the dialog.
+     * @param monthOfYear The initial month of the dialog.
+     * @param dayOfMonth  The initial day of the dialog.
      */
     public DoubleDatePickerDialog(Context context, int theme, OnDateSetListener callBack, int year, int monthOfYear,
                                   int dayOfMonth, boolean isDayVisible) {
@@ -196,12 +175,9 @@ public class DoubleDatePickerDialog extends AlertDialog implements OnClickListen
     /**
      * Sets the start date.
      *
-     * @param year
-     *            The date year.
-     * @param monthOfYear
-     *            The date month.
-     * @param dayOfMonth
-     *            The date day of month.
+     * @param year        The date year.
+     * @param monthOfYear The date month.
+     * @param dayOfMonth  The date day of month.
      */
     public void updateStartDate(int year, int monthOfYear, int dayOfMonth) {
         mDatePicker_start.updateDate(year, monthOfYear, dayOfMonth);
@@ -210,12 +186,9 @@ public class DoubleDatePickerDialog extends AlertDialog implements OnClickListen
     /**
      * Sets the end date.
      *
-     * @param year
-     *            The date year.
-     * @param monthOfYear
-     *            The date month.
-     * @param dayOfMonth
-     *            The date day of month.
+     * @param year        The date year.
+     * @param monthOfYear The date month.
+     * @param dayOfMonth  The date day of month.
      */
     public void updateEndDate(int year, int monthOfYear, int dayOfMonth) {
         mDatePicker_end.updateDate(year, monthOfYear, dayOfMonth);

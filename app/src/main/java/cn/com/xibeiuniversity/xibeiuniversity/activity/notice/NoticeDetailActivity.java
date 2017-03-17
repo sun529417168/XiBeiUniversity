@@ -9,15 +9,20 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.task.TaskDetailActivity;
+import cn.com.xibeiuniversity.xibeiuniversity.adapter.notice.NoticeDetalPhotoAdapter;
+import cn.com.xibeiuniversity.xibeiuniversity.adapter.problem.ProblemDetalPhotoAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.base.BaseActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.notice.NoticeBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskBean;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.DownloadUtil;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyUtils;
@@ -38,6 +43,9 @@ public class NoticeDetailActivity extends BaseActivity implements View.OnClickLi
     private TextView numberText, nameText, typeText, stateText, senderText, sendTimeText, fileNameText, filePath, infoText;
     private NoticeBean.RowsBean rowsBean = new NoticeBean.RowsBean();
     private String path;
+    private GridView gridView;
+    private ArrayList<String> describeList = new ArrayList<String>();
+    private NoticeDetalPhotoAdapter noticeDetalPhotoAdapter;
 
     @Override
     protected void setView() {
@@ -66,6 +74,7 @@ public class NoticeDetailActivity extends BaseActivity implements View.OnClickLi
         filePath = (TextView) findViewById(R.id.notice_detail_attachment);
         filePath.setOnClickListener(this);
         infoText = (TextView) findViewById(R.id.notice_detail_info);
+        gridView = (GridView) findViewById(R.id.notice_detail_gridView_describe);
         numberText.setText(rowsBean.getInformSno());
         nameText.setText(rowsBean.getName());
         typeText.setText(rowsBean.getInformTypeName());
@@ -74,14 +83,19 @@ public class NoticeDetailActivity extends BaseActivity implements View.OnClickLi
         sendTimeText.setText(rowsBean.getApiCreateTime());
         filePath.setText(isAttachment() ? "打开" : "下载");
         for (NoticeBean.RowsBean.FileListBean fileBean : rowsBean.getFileList()) {
-            if (fileBean.getAttachmentType() == 1) {
+            if (fileBean.getAttachmentType() == 2) {
                 fileNameText.setText("文件(" + fileBean.getFileName() + ")");
+            }
+            if (fileBean.getAttachmentType()==1){
+                describeList.add(fileBean.getFileUrl());
             }
         }
         if (TextUtils.isEmpty(fileNameText.getText().toString().trim())) {
             findViewById(R.id.notice_detail_state_fileLayout).setVisibility(View.GONE);
         }
         infoText.setText(rowsBean.getContentInfo());
+        noticeDetalPhotoAdapter = new NoticeDetalPhotoAdapter(this, describeList);
+        gridView.setAdapter(noticeDetalPhotoAdapter);
     }
 
     private boolean isAttachment() {

@@ -101,6 +101,7 @@ public class MyRequest {
 
             @Override
             public void onError(Call call, Exception e, int id) {
+                Log.i("loginError",e.getMessage().toString());
                 ToastUtil.show(activity, "服务器有错误，请稍候再试");
                 if (progDialog.isShowing()) {
                     progDialog.dismiss();
@@ -717,8 +718,6 @@ public class MyRequest {
         OkHttpUtils.post().url(UrlConfig.URL_TASISSUEDDATASECTOR).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
             @Override
             public void onResponse(String response, int id) {
-                response = response.replace(":null,", ":\"\",");
-                Log.i("shuju", response);
                 TaskStatisticalBean bean = JSON.parseObject(response, TaskStatisticalBean.class);
                 statisticalInfoInterface.getStatisticalInfo(bean.getList(), (Integer) strings[0]);
                 if (progDialog.isShowing()) {
@@ -729,7 +728,83 @@ public class MyRequest {
             @Override
             public void onError(Call call, Exception e, int id) {
                 ToastUtil.show(activity, "服务器有错误，请稍候再试");
-                statisticalInfoInterface.getStatisticalInfo(null, 3);
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+        });
+    }
+    /**
+     * 方法名：statisticalNoticeRequest
+     * 功    能：通知公告统计
+     * 参    数：Context activity, StatisticalInfoInterface statisticalInfoInterfaces, final Object... strings
+     * 返回值：无
+     */
+    public static void statisticalNoticeRequest(final Context activity, StatisticalInfoInterface statisticalInfoInterfaces, final Object... strings) {
+        Map<String, Object> params = new HashMap<>();
+        final Dialog progDialog = DialogUtils.showWaitDialog(activity);
+        final StatisticalInfoInterface statisticalInfoInterface = statisticalInfoInterfaces;
+        try {
+            params.put("StartingTime", strings[0]);
+            params.put("EndTime", strings[1]);
+            params.put("type", strings[2]);
+            params.put("PersonId", SharedUtil.getString(activity, "PersonID"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        OkHttpUtils.post().url(UrlConfig.URL_INFORMISSUEDDATASECTOR).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
+            @Override
+            public void onResponse(String response, int id) {
+                Log.i("statisticalNotice",response);
+                TaskStatisticalBean bean = JSON.parseObject(response, TaskStatisticalBean.class);
+                statisticalInfoInterface.getStatisticalInfo(bean.getList(), 0);
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                ToastUtil.show(activity, "服务器有错误，请稍候再试");
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+        });
+    }
+    /**
+     * 方法名：statisticalProblemRequest
+     * 功    能：问题统计
+     * 参    数：Context activity, StatisticalInfoInterface statisticalInfoInterfaces, final Object... strings
+     * 返回值：无
+     */
+    public static void statisticalProblemRequest(final Context activity, StatisticalInfoInterface statisticalInfoInterfaces, final Object... strings) {
+        Map<String, Object> params = new HashMap<>();
+        final Dialog progDialog = DialogUtils.showWaitDialog(activity);
+        final StatisticalInfoInterface statisticalInfoInterface = statisticalInfoInterfaces;
+        try {
+            params.put("showType", strings[0]);
+            params.put("StartingTime", strings[1]);
+            params.put("EndTime", strings[2]);
+            params.put("type", strings[3]);
+            params.put("PersonId", SharedUtil.getString(activity, "PersonID"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        OkHttpUtils.post().url(UrlConfig.URL_PROBLEMREPORTDATASECTOR).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
+            @Override
+            public void onResponse(String response, int id) {
+                Log.i("statisticalProblem",response);
+                TaskStatisticalBean bean = JSON.parseObject(response, TaskStatisticalBean.class);
+                statisticalInfoInterface.getStatisticalInfo(bean.getList(), (Integer) strings[0]);
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                ToastUtil.show(activity, "服务器有错误，请稍候再试");
                 if (progDialog.isShowing()) {
                     progDialog.dismiss();
                 }

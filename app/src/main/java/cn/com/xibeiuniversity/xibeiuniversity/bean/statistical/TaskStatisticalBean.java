@@ -1,5 +1,6 @@
 package cn.com.xibeiuniversity.xibeiuniversity.bean.statistical;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,14 +11,14 @@ import java.util.List;
  * 版    本：V1.0.5
  */
 
-public class TaskStatisticalBean {
+public class TaskStatisticalBean implements Serializable{
 
 
     /**
-     * list : [{"name":"逾期","value":1,"code":""}]
+     * list : [{"name":"已下发","value":4,"code":""},{"name":"逾期","value":2,"code":""},{"name":"进行中","value":0,"code":""},{"name":"已完成","value":0,"code":""},{"name":"未完成","value":0,"code":""},{"name":"未完成1","value":0,"code":""},{"name":"逾期1","value":0,"code":""}]
      * module :
-     * StartingTime : 2017-03-06
-     * endTime : 2017-03-12
+     * StartingTime : 2017-03-13
+     * endTime : 2017-03-19
      */
 
     private String module;
@@ -57,24 +58,16 @@ public class TaskStatisticalBean {
         this.list = list;
     }
 
-    public static class ListBean {
+    public static class ListBean implements Serializable{
         /**
-         * name : 逾期
-         * value : 1
+         * name : 已下发
+         * value : 4
          * code :
          */
 
         private String name;
         private int value;
         private String code;
-
-        public ListBean() {
-        }
-
-        public ListBean(String name, int value) {
-            this.name = name;
-            this.value = value;
-        }
 
         public String getName() {
             return name;

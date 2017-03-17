@@ -113,7 +113,42 @@
             android:textColor="@color/blue" />
     </RelativeLayout>
     <!--附件end-->
+    <!--图片start-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@color/white"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
 
+        <TextView
+            android:id="@+id/notice_detail_photoText_describe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/task_detail_image"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+
+        <cn.com.xibeiuniversity.xibeiuniversity.weight.ReportedGridview
+            android:id="@+id/notice_detail_gridView_describe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/notice_detail_photoText_describe"
+            android:layout_marginTop="15dp"
+            android:horizontalSpacing="3dp"
+            android:numColumns="3"
+            android:scrollbars="none"
+            android:verticalSpacing="10dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_below="@+id/notice_detail_gridView_describe" />
+    </RelativeLayout>
+    <!--图片end-->
     <!--内容区域start-->
     <TextView
         android:id="@+id/notice_detail_info"

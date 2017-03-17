@@ -8,18 +8,10 @@ import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-
 import com.alibaba.fastjson.JSON;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
@@ -29,15 +21,19 @@ import cn.com.xibeiuniversity.xibeiuniversity.config.UrlConfig;
 import cn.com.xibeiuniversity.xibeiuniversity.function.wheelview.OnWheelChangedListener;
 import cn.com.xibeiuniversity.xibeiuniversity.function.wheelview.OnWheelScrollListener;
 import cn.com.xibeiuniversity.xibeiuniversity.function.wheelview.adapter.AbstractWheelTextAdapter1;
-import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeRightInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.OkHttpUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.callback.GenericsCallback;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.utils.JsonGenericsSerializator;
-import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
 import okhttp3.Call;
-
-public class ChangeAddressPopwindow extends PopupWindow implements View.OnClickListener {
+/**
+ * 文件名：AddTaskTypePopwindow
+ * 描    述：添加任务类型的pop
+ * 作    者：stt
+ * 时    间：2017.3.17
+ * 版    本：V1.0.7
+ */
+public class AddTaskTypePopwindow extends PopupWindow implements View.OnClickListener {
 
     private WheelView wvProvince;
     private WheelView wvCitys;
@@ -59,7 +55,7 @@ public class ChangeAddressPopwindow extends PopupWindow implements View.OnClickL
     private ArrayList<ProblemTypeLeft> problemTypeLeftList;
     private ArrayList<ProblemTypeRight> problemTypeRightList;
 
-    public ChangeAddressPopwindow(final Activity context, ArrayList<ProblemTypeLeft> problemTypeLeftLists) {
+    public AddTaskTypePopwindow(final Activity context, ArrayList<ProblemTypeLeft> problemTypeLeftLists) {
         super(context);
         this.context = context;
         this.problemTypeLeftList = problemTypeLeftLists;
@@ -241,7 +237,7 @@ public class ChangeAddressPopwindow extends PopupWindow implements View.OnClickL
      * @author Administrator
      */
     public interface OnAddressCListener {
-        void onClick(String left, String right,String code);
+        void onClick(String left, String right, String code);
     }
 
 

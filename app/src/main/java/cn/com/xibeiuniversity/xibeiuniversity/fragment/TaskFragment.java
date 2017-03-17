@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
+import cn.com.xibeiuniversity.xibeiuniversity.activity.problem.AddProblemActivity;
+import cn.com.xibeiuniversity.xibeiuniversity.activity.task.AddTaskActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.task.TaskSearchActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.task.TaskAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.task.TaskStateAdapter;
@@ -57,6 +59,7 @@ public class TaskFragment extends BaseFragment implements View.OnClickListener, 
     private int state = 0;//状态
     private int pageindex = 1;//页码数
     private List<TaskBean.RowsBean> rowsBeanList = new ArrayList();
+    private LinearLayout addTask;
 
     @Override
     protected View setView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,6 +81,9 @@ public class TaskFragment extends BaseFragment implements View.OnClickListener, 
         searchLayout = (LinearLayout) rootView.findViewById(R.id.title_search);
         searchLayout.setVisibility(View.INVISIBLE);
         searchLayout.setOnClickListener(this);
+        addTask = (LinearLayout) rootView.findViewById(R.id.problem_addInfo);
+        addTask.setVisibility(View.VISIBLE);
+        addTask.setOnClickListener(this);
         mPullRefreshListView = (PullToRefreshListView) rootView.findViewById(R.id.task_refresh_list);
         mPullRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
         horizontalListView = (HorizontalListView) rootView.findViewById(R.id.task_horizontalListView);
@@ -138,10 +144,15 @@ public class TaskFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
             case R.id.title_search:
-                Intent intent = new Intent(getActivity(), TaskSearchActivity.class);
+                intent = new Intent(getActivity(), TaskSearchActivity.class);
                 startActivityForResult(intent, 200);
+                break;
+            case R.id.problem_addInfo:
+                intent = new Intent(context, AddTaskActivity.class);
+                startActivity(intent);
                 break;
         }
     }

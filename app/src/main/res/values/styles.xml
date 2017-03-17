@@ -174,6 +174,7 @@
         <item name="android:background">@color/white</item>
         <item name="android:paddingLeft">20dp</item>
         <item name="android:paddingRight">20dp</item>
+        <item name="android:layout_marginTop">1.5dp</item>
     </style>
     <!--添加问题layout的end-->
 
@@ -293,4 +294,37 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">30sp</item>
     </style>
+
+    <!--添加任务layout的start-->
+    <style name="add_task_layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:layout_marginTop">2dp</item>
+    </style>
+    <!--添加任务layout的end-->
+
+    <!--添加任务start-->
+    <style name="add_task_textView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/gray</item>
+    </style>
+    <!--添加任务end-->
+
+    <!--添加任务输入start-->
+    <style name="add_task_editView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/gray</item>
+    </style>
+    <!--添加任务输入end-->
 </resources>

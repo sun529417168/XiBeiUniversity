@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +20,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.notice.NoticeDetailActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.base.MyBaseAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.notice.NoticeBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskBean;
 import cn.com.xibeiuniversity.xibeiuniversity.config.UrlConfig;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.OkHttpUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.callback.GenericsCallback;
@@ -53,6 +57,7 @@ public class NoticeAdapter extends MyBaseAdapter {
         TextView number = get(view, R.id.item_notice_number);  // 编号
         TextView date = get(view, R.id.item_notice_date);  // 日期
         TextView name = get(view, R.id.item_notice_name);  // 名称
+        ImageView imageView = get(view,R.id.item_notice_imageView);//图片
         final TextView info = get(view, R.id.item_notice_info);  // 具体内容
         final TextView[] views = {number, date, name, info};
         final NoticeBean.RowsBean bean = list.get(position);
@@ -60,9 +65,17 @@ public class NoticeAdapter extends MyBaseAdapter {
          * 赋值
          */
         number.setText(bean.getInformSno());
-        date.setText(list.get(position).getApiCreateTime());
-        name.setText(list.get(position).getName());
-        info.setText(list.get(position).getContentInfo());
+        date.setText(bean.getApiCreateTime());
+        name.setText(bean.getName());
+        info.setText(bean.getContentInfo());
+        for (NoticeBean.RowsBean.FileListBean fileBean : bean.getFileList()) {
+            if (fileBean.getAttachmentType() == 1) {
+                ImageLoader.getInstance().displayImage(fileBean.getFileUrl(), imageView);
+            }
+        }
+        if (bean.getFileList().size() == 0) {
+            imageView.setImageResource(R.mipmap.login_logo);
+        }
         if (bean.isIsCheck()) {
             setTextColor(views);
         }
@@ -73,7 +86,7 @@ public class NoticeAdapter extends MyBaseAdapter {
                 if (false == bean.isIsCheck()) {
                     setTextColor(views);
                     notifyDataSetChanged();
-                    isCheckRequest(bean.getID());
+                    isCheckRequest(bean.getAcceptID());
                 }
                 Intent intent = new Intent(context, NoticeDetailActivity.class);
                 Bundle bundle = new Bundle();
@@ -99,7 +112,7 @@ public class NoticeAdapter extends MyBaseAdapter {
     public static void isCheckRequest(int id) {
         Map<String, Object> params = new HashMap<>();
         try {
-            params.put("ID", id);
+            params.put("AcceptID", id);
         } catch (Exception e) {
             e.printStackTrace();
         }

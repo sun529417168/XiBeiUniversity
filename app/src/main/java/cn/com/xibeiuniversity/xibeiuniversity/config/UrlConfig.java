@@ -76,4 +76,12 @@ public class UrlConfig {
      * 任务下发统计
      */
     public static final String URL_TASISSUEDDATASECTOR = BaseUrl + "/API/ApiTasIssued/DataSector";
+    /**
+     * 通知统计
+     */
+    public static final String URL_INFORMISSUEDDATASECTOR = BaseUrl + "/API/ApiInformIssued/DataSector";
+    /**
+     * 问题统计
+     */
+    public static final String URL_PROBLEMREPORTDATASECTOR = BaseUrl + "/API/ApiProblemReport/DataSector";
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,6 @@ public class StatisticalNoticeFragment extends BaseFragment implements Statistic
     private TextView weekText, monthText, quarterText, halfYearText, screenText;
     private TextView[] textviews;
     private PieChart mPieChart;
-    Random random;
 
     @Override
     protected View setView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,13 +56,11 @@ public class StatisticalNoticeFragment extends BaseFragment implements Statistic
 
     @Override
     protected void setDate() {
-        random = new java.util.Random();// 定义随机类
         request("", "", 1);
     }
 
     private void request(String startTime, String endTime, int type) {
-        MyRequest.statisticalTaskRequest(context, this, 2, startTime, endTime, type);
-        MyRequest.statisticalTaskRequest(context, this, 1, startTime, endTime, type);
+        MyRequest.statisticalNoticeRequest(context, this, startTime, endTime, type);
     }
 
     @Override
@@ -115,17 +113,17 @@ public class StatisticalNoticeFragment extends BaseFragment implements Statistic
                 break;
             case R.id.statistical_screen:
                 Calendar c = Calendar.getInstance();
+                // 最后一个false表示不显示日期，如果要显示日期，最后参数可以是true或者不用输入
                 new DoubleDatePickerDialog(context, 5, new DoubleDatePickerDialog.OnDateSetListener() {
-
                     @Override
-                    public void onDateSet(DatePicker startDatePicker, int startYear, int startMonthOfYear,
-                                          int startDayOfMonth, DatePicker endDatePicker, int endYear, int endMonthOfYear,
-                                          int endDayOfMonth) {
-                        String start = startYear + "-" + startMonthOfYear + 1 + "-" + startDayOfMonth;
-                        String end = endYear + "-" + endMonthOfYear + 1 + "-" + endDayOfMonth;
+                    public void onDateSet(DatePicker startDatePicker, int startYear, int startMonthOfYear, int startDayOfMonth, DatePicker endDatePicker, int endYear, int endMonthOfYear, int endDayOfMonth) {
+                        String start = String.format("%d-%d-%d", startYear, startMonthOfYear + 1, startDayOfMonth);
+                        String end = String.format("%d-%d-%d", endYear, endMonthOfYear + 1, endDayOfMonth);
                         request(start, end, 0);
+                        Log.i("calendarData", start + "====" + end);
                     }
-                }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), true).show();
+                }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c
+                        .get(Calendar.DATE), false).show();
                 setTextBack(screenText);
                 break;
         }
@@ -133,16 +131,14 @@ public class StatisticalNoticeFragment extends BaseFragment implements Statistic
 
     @Override
     public void getStatisticalInfo(Object bean, int type) {
-        if (type == 3) {
-            ArrayList<TaskStatisticalBean.ListBean> beanList = (ArrayList<TaskStatisticalBean.ListBean>) bean;
-            ArrayList<PieEntry> entries = new ArrayList<>();
-            entries.add(new PieEntry(random.nextInt(10) + 2, "会议"));
-            entries.add(new PieEntry(random.nextInt(10) + 2, "维修"));
-            entries.add(new PieEntry(random.nextInt(10) + 2, "安全"));
-            entries.add(new PieEntry(random.nextInt(10) + 2, "其他"));
-            //设置数据
-            initPieChart(entries);
+        ArrayList<TaskStatisticalBean.ListBean> beanList = (ArrayList<TaskStatisticalBean.ListBean>) bean;
+        ArrayList<PieEntry> entries = new ArrayList<>();
+        for (TaskStatisticalBean.ListBean taskBean : beanList) {
+            if (taskBean.getValue() != 0)
+                entries.add(new PieEntry(taskBean.getValue() == 1 ? 1.1f : taskBean.getValue(), taskBean.getName()));
         }
+        //设置数据
+        initPieChart(entries);
     }
 
     private void initPieChart(ArrayList<PieEntry> entries) {
