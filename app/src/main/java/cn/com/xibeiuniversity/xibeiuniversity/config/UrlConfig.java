@@ -84,4 +84,16 @@ public class UrlConfig {
      * 问题统计
      */
     public static final String URL_PROBLEMREPORTDATASECTOR = BaseUrl + "/API/ApiProblemReport/DataSector";
+    /**
+     * 获取任务下发类型
+     */
+    public static final String URL_GETTASKTYPE = BaseUrl + "/API/ApiTasIssued/getTaskType";
+    /**
+     * 获取优先级类型
+     */
+    public static final String URL_GETTASKPRIORITY = BaseUrl + "/API/ApiTasIssued/GetTaskPriorityXml";
+    /**
+     * 获取人员部门树状结构数据
+     */
+    public static final String URL_GETPERSONINFOBYDEPARTMENT = BaseUrl + "/API/ApiTasIssued/GetPersonInfoByDepartment";
 }

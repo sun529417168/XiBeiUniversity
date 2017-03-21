@@ -88,7 +88,14 @@
         <activity
             android:name=".activity.task.AddTaskActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.picker" />
+        <!--获取人员部门-->
+        <activity
+            android:name=".activity.task.TaskChoosePersonActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.picker" />
         <!--通告详情界面-->
         <activity
             android:name=".activity.notice.NoticeDetailActivity"

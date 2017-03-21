@@ -18,6 +18,7 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.GetPhotoTypeInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.SexChooseInterface;
 
 /**
@@ -36,7 +37,7 @@ public class DialogUtils {
      * 参    数：Context context
      * 返回值：Dialog
      */
-    public static Dialog showSexDialog(final Context context) {
+    public static Dialog showSexDialog(final Activity context) {
         final SexChooseInterface sexChoose = (SexChooseInterface) context;
         Dialog mCameraDialog = new Dialog(context, R.style.sex_dialog);
         LinearLayout root = (LinearLayout) LayoutInflater.from(context).inflate(
@@ -185,5 +186,64 @@ public class DialogUtils {
                     }
                 });
         dialog.show();
+    }
+
+
+    /**
+     * 方法名：showSexDialog
+     * 功    能：弹出性别的dialog
+     * 参    数：Context context
+     * 返回值：Dialog
+     */
+    public static Dialog showPhotoDialog(final Activity context) {
+        final GetPhotoTypeInterface photoType = (GetPhotoTypeInterface) context;
+        Dialog mCameraDialog = new Dialog(context, R.style.sex_dialog);
+        LinearLayout root = (LinearLayout) LayoutInflater.from(context).inflate(
+                R.layout.dialog_photo, null);
+        TextView album = (TextView) root.findViewById(R.id.dialog_photo_album);
+        TextView camera = (TextView) root.findViewById(R.id.dialog_photo_camera);
+        TextView file = (TextView) root.findViewById(R.id.dialog_photo_file);
+        TextView cancel = (TextView) root.findViewById(R.id.dialog_photo_cancel);
+        album.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                photoType.getPhotoType(0);
+            }
+        });
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                photoType.getPhotoType(1);
+            }
+        });
+        file.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                photoType.getPhotoType(2);
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                photoType.getPhotoType(3);
+            }
+        });
+        mCameraDialog.setContentView(root);
+        Window dialogWindow = mCameraDialog.getWindow();
+        dialogWindow.setGravity(Gravity.BOTTOM);
+        dialogWindow.setWindowAnimations(R.style.sex_dialogStyle); // 添加动画
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+        lp.x = 0; // 新位置X坐标
+        lp.y = -20; // 新位置Y坐标
+        lp.width = context.getResources().getDisplayMetrics().widthPixels; // 宽度
+//      lp.height = WindowManager.LayoutParams.WRAP_CONTENT; // 高度
+//      lp.alpha = 9f; // 透明度
+        root.measure(0, 0);
+        lp.height = root.getMeasuredHeight();
+        lp.alpha = 9f; // 透明度
+        dialogWindow.setAttributes(lp);
+        mCameraDialog.show();
+
+        return mCameraDialog;
     }
 }

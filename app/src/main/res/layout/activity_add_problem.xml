@@ -178,6 +178,11 @@
                     android:numColumns="3"
                     android:scrollbars="none"
                     android:verticalSpacing="10dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="6dp"
+                    android:layout_below="@+id/add_problem_detail_gridView" />
             </RelativeLayout>
             <!--图片end-->
             <!--内容区域start-->

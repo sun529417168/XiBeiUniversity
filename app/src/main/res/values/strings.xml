@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">"移动园区卫士"</string>
-    <string name="back">"返回 "</string>
+    <string name="back">"返回"</string>
+    <string name="men">"男"</string>
+    <string name="woman">"女"</string>
+    <string name="cancel">"取消"</string>
+    <string name="photo_album">"从相册获取图片"</string>
+    <string name="photo_camera">"从相机获取图片"</string>
+    <string name="photo_file">"从文件获取图片"</string>
 
     <!--登陆界面start-->
     <string name="username">"请输入帐号"</string>
@@ -222,6 +228,7 @@
     <string name="add_task_inputDescribe">"请输入任务描述"</string>
     <string name="add_task_choose">"请选择"</string>
     <string name="add_task_inputPlease">"请输入"</string>
+    <string name="add_task_send">"提交"</string>
     <!--添加任务end-->
 
 

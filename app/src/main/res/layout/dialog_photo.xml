@@ -9,36 +9,48 @@
     android:paddingRight="22dp">
 
     <TextView
-        android:id="@+id/dialog_sex_men"
+        android:id="@+id/dialog_photo_album"
         android:layout_width="match_parent"
         android:layout_height="42dip"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/sex_background"
         android:gravity="center"
-        android:text="@string/men"
+        android:text="@string/photo_album"
         android:textColor="@color/blue2"
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/dialog_sex_woman"
+        android:id="@+id/dialog_photo_camera"
         android:layout_width="match_parent"
         android:layout_height="42dip"
-        android:layout_marginTop="16dip"
+        android:layout_marginTop="8dip"
         android:background="@drawable/sex_background"
         android:gravity="center"
-        android:text="@string/woman"
+        android:text="@string/photo_camera"
         android:textColor="@color/blue2"
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/dialog_sex_cancel"
+        android:id="@+id/dialog_photo_file"
+        android:layout_width="match_parent"
+        android:layout_height="42dip"
+        android:layout_marginTop="8dip"
+        android:background="@drawable/sex_background"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="@string/photo_file"
+        android:textColor="@color/blue2"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/dialog_photo_cancel"
         android:layout_width="match_parent"
         android:layout_height="42dip"
         android:layout_marginBottom="40dp"
-        android:layout_marginTop="16dip"
+        android:layout_marginTop="8dip"
         android:background="@drawable/sex_background"
         android:gravity="center"
-        android:text="@string/cancel"
+        android:text="取消"
         android:textColor="@color/blue2"
         android:textSize="18sp" />
 </LinearLayout>

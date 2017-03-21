@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/title" />
+    <include
+        android:id="@+id/add_task_title"
+        layout="@layout/title" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/add_problem_detail_title">
+        android:layout_below="@+id/add_task_title">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,7 +28,7 @@
                     android:text="@string/add_task_name" />
 
                 <EditText
-                    android:id="@+id/add_problem_detail_name"
+                    android:id="@+id/add_problem_name"
                     style="@style/add_task_editView"
                     android:layout_marginRight="13dp"
                     android:layout_toRightOf="@+id/name"
@@ -73,7 +75,7 @@
                     android:text="@string/add_task_address" />
 
                 <EditText
-                    android:id="@+id/add_problem_detail_address"
+                    android:id="@+id/add_task_address"
                     style="@style/add_task_editView"
                     android:layout_marginRight="13dp"
                     android:layout_toRightOf="@+id/diDian"
@@ -221,6 +223,11 @@
                     android:numColumns="3"
                     android:scrollbars="none"
                     android:verticalSpacing="10dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="6dp"
+                    android:layout_below="@+id/add_task_gridView" />
             </RelativeLayout>
             <!--图片上传end-->
             <View
@@ -245,6 +252,7 @@
                     android:textSize="16sp" />
 
                 <EditText
+                    android:id="@+id/add_task_inputInfo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -259,4 +267,17 @@
             <!--任务描述end-->
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+
+    <Button
+        android:id="@+id/add_task_button"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/login_button"
+        android:text="@string/add_task_send"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+</RelativeLayout>

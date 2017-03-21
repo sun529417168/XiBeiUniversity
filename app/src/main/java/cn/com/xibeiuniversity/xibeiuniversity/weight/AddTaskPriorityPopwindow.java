@@ -1,7 +1,5 @@
 package cn.com.xibeiuniversity.xibeiuniversity.weight;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
@@ -10,21 +8,23 @@ import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import cn.com.xibeiuniversity.xibeiuniversity.R;
-import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskTypeBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskPriorityBean;
 import cn.com.xibeiuniversity.xibeiuniversity.function.wheelview.OnWheelChangedListener;
 import cn.com.xibeiuniversity.xibeiuniversity.function.wheelview.OnWheelScrollListener;
 import cn.com.xibeiuniversity.xibeiuniversity.function.wheelview.adapter.AbstractWheelTextAdapter1;
 
 
 /**
- * 文件名：AddTaskTypePopwindow
- * 描 述：添加任务类型的pop
+ * 文件名：AddTaskPriorityPopwindow
+ * 描 述：添加任务优先级的pop
  * 作 者：stt
- * 时 间：2017.3.17
+ * 时 间：2017.3.21
  * 版 本：V1.0.7
  */
-public class AddTaskTypePopwindow extends PopupWindow implements
+public class AddTaskPriorityPopwindow extends PopupWindow implements
         View.OnClickListener {
 
     private WheelView wvProvince;
@@ -42,13 +42,13 @@ public class AddTaskTypePopwindow extends PopupWindow implements
 
     private int maxsize = 14;
     private int minsize = 12;
-    ArrayList<TaskTypeBean> taskTypeBean;
+    ArrayList<TaskPriorityBean> taskPriorityBean;
 
-    public AddTaskTypePopwindow(final Activity context,
-                                ArrayList<TaskTypeBean> taskTypeBeans) {
+    public AddTaskPriorityPopwindow(final Activity context,
+                                    ArrayList<TaskPriorityBean> taskTypeBeans) {
         super(context);
         this.context = context;
-        this.taskTypeBean = taskTypeBeans;
+        this.taskPriorityBean = taskTypeBeans;
         View view = View.inflate(context, R.layout.pop_add_task_type,
                 null);
 
@@ -77,13 +77,13 @@ public class AddTaskTypePopwindow extends PopupWindow implements
         btnSure.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
 
-        provinceAdapter = new AddressTextAdapter(context, taskTypeBean,
-                getProvinceItem(taskTypeBean.get(0).getName()), maxsize,
+        provinceAdapter = new AddressTextAdapter(context, taskPriorityBean,
+                getProvinceItem(taskPriorityBean.get(0).getName()), maxsize,
                 minsize);
         wvProvince.setVisibleItems(5);
         wvProvince.setViewAdapter(provinceAdapter);
         wvProvince
-                .setCurrentItem(getProvinceItem(taskTypeBean.get(0).getName()));
+                .setCurrentItem(getProvinceItem(taskPriorityBean.get(0).getName()));
 
         wvProvince.addChangingListener(new OnWheelChangedListener() {
 
@@ -109,7 +109,7 @@ public class AddTaskTypePopwindow extends PopupWindow implements
             public void onScrollingFinished(WheelView wheel) {
                 // TODO Auto-generated method stub
                 String currentText = (String) provinceAdapter.getItemText(wheel.getCurrentItem());
-                code = taskTypeBean.get(wheel.getCurrentItem()).getValue() + "";
+                code = taskPriorityBean.get(wheel.getCurrentItem()).getValue() + "";
                 setTextviewSize(currentText, provinceAdapter);
 
             }
@@ -118,9 +118,9 @@ public class AddTaskTypePopwindow extends PopupWindow implements
     }
 
     private class AddressTextAdapter extends AbstractWheelTextAdapter1 {
-        ArrayList<TaskTypeBean> taskArrayList;
+        ArrayList<TaskPriorityBean> taskArrayList;
 
-        protected AddressTextAdapter(Context context, ArrayList<TaskTypeBean> list, int currentItem, int maxsize,
+        protected AddressTextAdapter(Context context, ArrayList<TaskPriorityBean> list, int currentItem, int maxsize,
                                      int minsize) {
             super(context, R.layout.item_wheelview, NO_RESOURCE, currentItem,
                     maxsize, minsize);
@@ -204,11 +204,11 @@ public class AddTaskTypePopwindow extends PopupWindow implements
      * @return
      */
     public int getProvinceItem(String province) {
-        int size = taskTypeBean.size();
+        int size = taskPriorityBean.size();
         int provinceIndex = 0;
         boolean noprovince = true;
         for (int i = 0; i < size; i++) {
-            if (province.equals(taskTypeBean.get(i))) {
+            if (province.equals(taskPriorityBean.get(i))) {
                 noprovince = false;
                 return provinceIndex;
             } else {
@@ -216,7 +216,7 @@ public class AddTaskTypePopwindow extends PopupWindow implements
             }
         }
         if (noprovince) {
-            taskTypeName = taskTypeBean.get(0).getName();
+            taskTypeName = taskPriorityBean.get(0).getName();
             return 0;
         }
         return provinceIndex;

@@ -214,7 +214,7 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
         Bitmap bitmap = BitmapFactory.decodeFile(imagePath, option);
         list.add(bitmap);
         taskDetalPhotoAdapter.setList(list);
-        if (list.size() == 4) {
+        if (list.size() == 5) {
             takePhoto.setVisibility(View.INVISIBLE);
         }
     }
