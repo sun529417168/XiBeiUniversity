@@ -197,7 +197,6 @@
     <!--添加问题类型end-->
 
 
-
     <!--统计查询start-->
     <string name="statistical_task">"任务下发"</string>
     <string name="statistical_notice">"通知公告"</string>
@@ -231,6 +230,10 @@
     <string name="add_task_send">"提交"</string>
     <!--添加任务end-->
 
+    <!--推送任务start-->
+    <string name="pull_task_close">"关闭"</string>
+    <string name="pull_task_sure">"查看"</string>
+    <!--推送任务end-->
 
 
 </resources>

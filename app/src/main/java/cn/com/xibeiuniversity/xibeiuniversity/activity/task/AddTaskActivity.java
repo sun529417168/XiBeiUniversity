@@ -28,6 +28,7 @@ import java.util.Map;
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.DetailImageActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.task.TaskDetalPhotoAdapter;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskChoosePersonBean;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.app.TakePhotoActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.compress.CompressConfig;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.GetPhotoTypeInterface;
@@ -61,8 +62,8 @@ public class AddTaskActivity extends TakePhotoActivity implements View.OnClickLi
     private GridView gridView;
     private TaskDetalPhotoAdapter taskDetalPhotoAdapter;
     private Button sendInfoBtn;
-    private String inputName, inputType, inputAddress, inputPriority, inputStartTime, inputEndTime, inputPerson, inputInfo;
-
+    private String inputName, inputTypeName, inputAddress, inputPriorityName, inputStartTime, inputEndTime, inputPerson, inputInfo;
+    private String inputPersonId = "", inputType = "", inputPriority = "";
 
     @Override
     protected void setView() {
@@ -89,8 +90,8 @@ public class AddTaskActivity extends TakePhotoActivity implements View.OnClickLi
         back = (LinearLayout) findViewById(R.id.title_back);
         back.setVisibility(View.VISIBLE);
         back.setOnClickListener(this);
-        nameEdit = (EditText) findViewById(R.id.add_problem_name);
-        addressEdit = (EditText) findViewById(R.id.add_problem_address);
+        nameEdit = (EditText) findViewById(R.id.add_task_name);
+        addressEdit = (EditText) findViewById(R.id.add_task_address);
         infoEdit = (EditText) findViewById(R.id.add_task_inputInfo);
         typeLayout = (RelativeLayout) findViewById(R.id.add_task_typeLayout);
         priorityLayout = (RelativeLayout) findViewById(R.id.add_task_priorityLayout);
@@ -145,18 +146,22 @@ public class AddTaskActivity extends TakePhotoActivity implements View.OnClickLi
                 showPhotoDialog = DialogUtils.showPhotoDialog(this);
                 break;
             case R.id.add_task_personLayout://人员下发
-                startActivity(new Intent(this,TaskChoosePersonActivity.class));
+                startActivityForResult(new Intent(this, TaskChoosePersonActivity.class), 11);
                 break;
             case R.id.add_task_button:
                 inputName = nameEdit.getText().toString().trim();
-                inputType = typeText.getText().toString().trim();
+                inputTypeName = typeText.getText().toString().trim();
                 inputAddress = addressEdit.getText().toString().trim();
-                inputPriority = priorityText.getText().toString().trim();
+                inputPriorityName = priorityText.getText().toString().trim();
                 inputStartTime = startTimeText.getText().toString().trim();
                 inputEndTime = endTimeText.getText().toString().trim();
                 inputPerson = personText.getText().toString().trim();
                 inputInfo = infoEdit.getText().toString().trim();
-                MyRequest.addTaskRequests(this, fileMap, inputName, inputType, inputAddress, inputPriority, inputStartTime, inputEndTime, inputPerson, inputInfo);//不管有没有图片
+                if (isEmpty()) {
+                    inputPersonId = inputPersonId.substring(0, inputPersonId.length() - 1);
+                    Log.i("inputPersonId","名称:"+ inputName+",类型:"+inputType+",地点:"+inputAddress+",优先级:"+inputPriority+",开始时间:"+inputStartTime+",结束时间:"+inputEndTime+",下发人员:"+inputPersonId+",内容:"+inputInfo);
+                    MyRequest.addTaskRequests(this, fileMap, inputName, inputType, inputAddress, inputPriority, inputStartTime, inputEndTime, inputPersonId, inputInfo);//不管有没有图片
+                }
                 break;
         }
     }
@@ -166,7 +171,7 @@ public class AddTaskActivity extends TakePhotoActivity implements View.OnClickLi
             ToastUtil.show(this, "请输入任务名称");
             return false;
         }
-        if (TextUtils.isEmpty(inputType)) {
+        if (TextUtils.isEmpty(inputTypeName)) {
             ToastUtil.show(this, "请选择任务类型");
             return false;
         }
@@ -174,7 +179,7 @@ public class AddTaskActivity extends TakePhotoActivity implements View.OnClickLi
             ToastUtil.show(this, "请输入任务地点");
             return false;
         }
-        if (TextUtils.isEmpty(inputPriority)) {
+        if (TextUtils.isEmpty(inputPriorityName)) {
             ToastUtil.show(this, "请选择优先级");
             return false;
         }
@@ -213,7 +218,7 @@ public class AddTaskActivity extends TakePhotoActivity implements View.OnClickLi
         Log.i("imagePaths", imagePath);
         listPath.add(imagePath);
         mCameraFile = new File(imagePath);
-        fileMap.put(imagePath, mCameraFile);
+        fileMap.put("AddImage"+imagePath, mCameraFile);
         listFile.add(mCameraFile);
         showImg(imagePath);
     }
@@ -235,9 +240,11 @@ public class AddTaskActivity extends TakePhotoActivity implements View.OnClickLi
     public void getTaskType(String name, String values, int index) {
         if (index == 0) {//任务类型
             typeText.setText(name);
+            inputType = values;
         }
         if (index == 1) {//优先级
             priorityText.setText(name);
+            inputPriority = values;
         }
     }
 
@@ -279,5 +286,25 @@ public class AddTaskActivity extends TakePhotoActivity implements View.OnClickLi
         Intent in = new Intent(this, DetailImageActivity.class);
         in.putStringArrayListExtra("listPath", listPath);
         startActivity(in);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 11:
+                if (resultCode == RESULT_OK) {
+                    List<TaskChoosePersonBean> list = (List<TaskChoosePersonBean>) data.getSerializableExtra("data");
+                    String personName = "";
+                    inputPersonId = "";
+                    if (list.size() != 0) {
+                        for (TaskChoosePersonBean bean : list) {
+                            personName = personName + bean.getName() + ",";
+                            inputPersonId = inputPersonId + bean.getId() + ",";
+                        }
+                    }
+                    personText.setText(TextUtils.isEmpty(personName) ? "" : personName.substring(0, personName.length() - 1));
+                }
+        }
     }
 }

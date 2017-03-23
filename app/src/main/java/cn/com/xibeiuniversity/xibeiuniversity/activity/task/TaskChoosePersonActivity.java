@@ -1,5 +1,17 @@
 package cn.com.xibeiuniversity.xibeiuniversity.activity.task;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ExpandableListView;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.TreeMap;
+
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.task.TaskChoosePersonAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.base.BaseActivity;
@@ -7,21 +19,12 @@ import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskChoosePersonBean;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ChoosePersonInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
 
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ExpandableListView;
-import android.widget.Toast;
-
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeMap;
-
 /**
- * Created by Administrator on 2017/3/21.
+ * 文件名：TaskChoosePersonActivity
+ * 描    述：选择下发人员的类
+ * 作    者：stt
+ * 时    间：2017.03.22
+ * 版    本：V1.0.7
  */
 
 public class TaskChoosePersonActivity extends BaseActivity implements View.OnClickListener, ChoosePersonInterface {
@@ -29,8 +32,8 @@ public class TaskChoosePersonActivity extends BaseActivity implements View.OnCli
     private List<List<TaskChoosePersonBean>> childrenData = new ArrayList<>();
     private List<TaskChoosePersonBean> groupData = new ArrayList<>();
     public static TaskChoosePersonAdapter adapter;
-    private TreeMap<String, TaskChoosePersonBean> parentMap;
-    private TreeMap<String, TaskChoosePersonBean> childMap;
+    private TreeMap<String, TaskChoosePersonBean> parentMap = new TreeMap<>();
+    private TreeMap<String, TaskChoosePersonBean> childMap = new TreeMap<>();
     private List<List<Boolean>> childCheckBox = new ArrayList<>();
     private List<Boolean> parentCheckBox = new ArrayList<>();
     private List<TaskChoosePersonBean> resultData = new ArrayList<>();
@@ -70,18 +73,17 @@ public class TaskChoosePersonActivity extends BaseActivity implements View.OnCli
         Iterator childit = childMap.keySet().iterator();
         while (parentit.hasNext()) {
             Object parentflag = parentit.next();
-            groupData.add(parentCount, (TaskChoosePersonBean) parentflag);
+            groupData.add(parentCount, (TaskChoosePersonBean) parentMap.get(parentflag));
             parentCheckBox.add(false);
             List<TaskChoosePersonBean> flagList = new ArrayList<>();
             List<Boolean> checkList = new ArrayList<Boolean>();
             while (childit.hasNext()) {
                 Object childflag = childit.next();
-                if (parentMap.get(parentflag).equals(childMap.get(childflag))) {
-                    flagList.add(childCount, (TaskChoosePersonBean) childflag);
+                if (parentMap.get(parentflag).getId().equals(childMap.get(childflag).getPid())) {
+                    flagList.add(childCount, (TaskChoosePersonBean) childMap.get(childflag));
                     checkList.add(false);
                     childCount++;
                 }
-
             }
             childrenData.add(flagList);
             childCheckBox.add(checkList);
@@ -102,6 +104,10 @@ public class TaskChoosePersonActivity extends BaseActivity implements View.OnCli
                 }
             }
         }
-        Toast.makeText(this, resultData.toString(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent();
+        intent.putExtra("data", (Serializable) resultData);
+        setResult(RESULT_OK, intent);
+        finish();
+        // Toast.makeText(this, resultData.toString(), Toast.LENGTH_SHORT).show();
     }
 }

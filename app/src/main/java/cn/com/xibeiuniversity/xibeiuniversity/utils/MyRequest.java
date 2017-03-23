@@ -40,6 +40,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.bean.statistical.TaskStatisticalBe
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskAssignedBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskChoosePersonBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskDetailBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskPriorityBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskTypeBean;
 import cn.com.xibeiuniversity.xibeiuniversity.config.UrlConfig;
@@ -86,7 +87,9 @@ public class MyRequest {
         try {
             params.put("Name", username);
             params.put("PassWord", password);
-            params.put("DeviceId", PushServiceFactory.getCloudPushService().getDeviceId());
+            params.put("Module", "XBGD");
+            params.put("DeviceID", PushServiceFactory.getCloudPushService().getDeviceId());
+            Log.i("loginRequestdeviceId", PushServiceFactory.getCloudPushService().getDeviceId());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -294,6 +297,43 @@ public class MyRequest {
                 Log.i("taskList", response);
                 TaskBean taskList = JSON.parseObject(response, TaskBean.class);
                 taskListInterface.showTaskList(taskList);
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                if ("timeout".equals(e.getMessage().toString())) {
+                    ToastUtil.show(activity, "连接超时，请稍后再试");
+                }
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+        });
+    }
+
+    /**
+     * 方法名：taskDetailRequest
+     * 功    能：任务详情
+     * 参    数：final Context activity, TaskListInterface myTaskListInterface, String id
+     * 返回值：无
+     */
+    public static void taskDetailRequest(final Context activity, TaskListInterface myTaskListInterface, String id) {
+        final Dialog progDialog = DialogUtils.showWaitDialog(activity);
+        Map<String, Object> params = new HashMap<>();
+        try {
+            params.put("ID", id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        OkHttpUtils.post().url(UrlConfig.URL_GETTASKINFOBYID).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
+            @Override
+            public void onResponse(String response, int id) {
+                response = response.replace(":null,", ":\"\",");
+                Log.i("taskList", response);
+                TaskDetailBean taskList = JSON.parseObject(response, TaskDetailBean.class);
                 if (progDialog.isShowing()) {
                     progDialog.dismiss();
                 }

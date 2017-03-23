@@ -28,7 +28,7 @@
                     android:text="@string/add_task_name" />
 
                 <EditText
-                    android:id="@+id/add_problem_name"
+                    android:id="@+id/add_task_name"
                     style="@style/add_task_editView"
                     android:layout_marginRight="13dp"
                     android:layout_toRightOf="@+id/name"
@@ -53,6 +53,7 @@
                     android:id="@+id/add_task_type"
                     style="@style/add_problem_textView"
                     android:layout_marginRight="5dp"
+                    android:gravity="right|center_vertical"
                     android:layout_toLeftOf="@+id/add_task_type_right"
                     android:hint="@string/add_task_choose" />
 
@@ -99,6 +100,7 @@
                     android:id="@+id/add_task_priority"
                     style="@style/add_problem_textView"
                     android:layout_marginRight="5dp"
+                    android:gravity="right|center_vertical"
                     android:layout_toLeftOf="@+id/add_task_priority_right"
                     android:hint="@string/add_task_choose" />
 
@@ -173,9 +175,14 @@
                 <TextView
                     android:id="@+id/add_task_person"
                     style="@style/add_problem_textView"
+                    android:layout_width="200dp"
                     android:layout_marginRight="5dp"
                     android:layout_toLeftOf="@+id/add_task_person_right"
-                    android:hint="@string/add_task_choose" />
+                    android:ellipsize="marquee"
+                    android:gravity="right"
+                    android:hint="@string/add_task_choose"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:maxLines="1" />
 
                 <ImageView
                     android:id="@+id/add_task_person_right"

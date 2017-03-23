@@ -77,22 +77,19 @@ public class AddTaskTypePopwindow extends PopupWindow implements
         btnSure.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
 
-        provinceAdapter = new AddressTextAdapter(context, taskTypeBean,
-                getProvinceItem(taskTypeBean.get(0).getName()), maxsize,
-                minsize);
+        provinceAdapter = new AddressTextAdapter(context, taskTypeBean,getProvinceItem(taskTypeBean.get(0).getName()), maxsize,minsize);
         wvProvince.setVisibleItems(5);
         wvProvince.setViewAdapter(provinceAdapter);
-        wvProvince
-                .setCurrentItem(getProvinceItem(taskTypeBean.get(0).getName()));
+        wvProvince.setCurrentItem(getProvinceItem(taskTypeBean.get(0).getName()));
 
         wvProvince.addChangingListener(new OnWheelChangedListener() {
 
             @Override
             public void onChanged(WheelView wheel, int oldValue, int newValue) {
                 // TODO Auto-generated method stub
-                String currentText = (String) provinceAdapter.getItemText(wheel
-                        .getCurrentItem());
+                String currentText = (String) provinceAdapter.getItemText(wheel.getCurrentItem());
                 taskTypeName = currentText;
+                code = taskTypeBean.get(wheel.getCurrentItem()).getValue() + "";
                 setTextviewSize(currentText, provinceAdapter);
             }
         });
@@ -111,7 +108,6 @@ public class AddTaskTypePopwindow extends PopupWindow implements
                 String currentText = (String) provinceAdapter.getItemText(wheel.getCurrentItem());
                 code = taskTypeBean.get(wheel.getCurrentItem()).getValue() + "";
                 setTextviewSize(currentText, provinceAdapter);
-
             }
         });
 
@@ -120,10 +116,8 @@ public class AddTaskTypePopwindow extends PopupWindow implements
     private class AddressTextAdapter extends AbstractWheelTextAdapter1 {
         ArrayList<TaskTypeBean> taskArrayList;
 
-        protected AddressTextAdapter(Context context, ArrayList<TaskTypeBean> list, int currentItem, int maxsize,
-                                     int minsize) {
-            super(context, R.layout.item_wheelview, NO_RESOURCE, currentItem,
-                    maxsize, minsize);
+        protected AddressTextAdapter(Context context, ArrayList<TaskTypeBean> list, int currentItem, int maxsize,int minsize) {
+            super(context, R.layout.item_wheelview, NO_RESOURCE, currentItem,maxsize, minsize);
             this.taskArrayList = list;
             setItemTextResource(R.id.item_wheelView);
         }

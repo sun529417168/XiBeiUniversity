@@ -33,6 +33,10 @@ public class UrlConfig {
      */
     public static final String URL_GETTASISSUEDLIST = BaseUrl + "/API/ApiTasIssued/GetTasIssuedList";
     /**
+     * 任务详情
+     */
+    public static final String URL_GETTASKINFOBYID = BaseUrl + "/API/ApiTasIssued/GetTaskInfoByID";
+    /**
      * 点击修改查阅状态
      */
     public static final String URL_ISCHECK = BaseUrl + "/API/ApiTasIssued/IsCheckState";
