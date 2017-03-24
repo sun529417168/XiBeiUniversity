@@ -59,6 +59,7 @@ public class MyMessageReceiver extends MessageReceiver {
     public void onMessage(Context context, CPushMessage cPushMessage) {
         try {
             Log.i("pullMessage", cPushMessage.getTitle() + "====" + cPushMessage.getContent());
+            ToastUtil.show(context, cPushMessage.getContent());
             PullIntentUtil.intentAvtivity(context, cPushMessage);
         } catch (Exception e) {
             Log.i(REC_TAG, e.toString());

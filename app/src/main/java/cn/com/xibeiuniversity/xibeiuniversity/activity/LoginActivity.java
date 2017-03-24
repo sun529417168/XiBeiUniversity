@@ -10,6 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.alibaba.sdk.android.push.CloudPushService;
+import com.alibaba.sdk.android.push.CommonCallback;
+import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
+
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.base.BaseActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.UserBean;
@@ -93,7 +97,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     @Override
-    public void login(UserBean userBean) {
+    public void login(final UserBean userBean) {
+        SharedUtil.setString(this, "personId", userBean.getPersonId() + "");
+        SharedUtil.setBoolean(this, "isSuccess", true);
+        CloudPushService pushService = PushServiceFactory.getCloudPushService();
+        pushService.bindAccount(userBean.getPersonId() + "", new CommonCallback() {
+            @Override
+            public void onSuccess(String s) {
+                Log.i("loginInitUserName", "bind account success");
+            }
+
+            @Override
+            public void onFailed(String errorCode, String errorMessage) {
+                Log.i("loginInitUserNameError", "bind account fail" + "err:" + errorCode + " - message:" + errorMessage);
+                initPersonIdAli();
+            }
+        });
         if (userBean.getPersonId() == 0) {
             ToastUtil.show(this, "用户名或者密码不对，请重新输入");
             return;
@@ -110,4 +129,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             this.finish();
         }
     }
+
+    private void initPersonIdAli() {
+        while (SharedUtil.getBoolean(this, "isSuccess", false)) {
+            CloudPushService pushService = PushServiceFactory.getCloudPushService();
+            pushService.bindAccount(SharedUtil.getString(this, "personId"), new CommonCallback() {
+                @Override
+                public void onSuccess(String s) {
+                    SharedUtil.setBoolean(LoginActivity.this, "isSuccess", false);
+                    Log.i("InitPersonId", "bind account success");
+                }
+
+                @Override
+                public void onFailed(String errorCode, String errorMessage) {
+                    Log.i("InitPersonIdError", "bind account fail" + "err:" + errorCode + " - message:" + errorMessage);
+                }
+            });
+        }
+    }
+
 }

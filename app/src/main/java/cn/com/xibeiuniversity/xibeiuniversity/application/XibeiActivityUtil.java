@@ -2,8 +2,16 @@ package cn.com.xibeiuniversity.xibeiuniversity.application;
 
 import android.app.Activity;
 import android.os.Process;
+import android.util.Log;
+
+import com.alibaba.sdk.android.push.CloudPushService;
+import com.alibaba.sdk.android.push.CommonCallback;
+import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 
 import java.util.LinkedList;
+
+import cn.com.xibeiuniversity.xibeiuniversity.activity.LoginActivity;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.SharedUtil;
 
 /**
  * 文件名：XibeiActivityUtil
@@ -79,9 +87,21 @@ public class XibeiActivityUtil {
      * 遍历所有Activity并finish void
      */
     public void exit() {
+        CloudPushService pushService = PushServiceFactory.getCloudPushService();
+        pushService.bindAccount("null", new CommonCallback() {
+            @Override
+            public void onSuccess(String s) {
+                Log.i("unInitUserName", "bind account success");
+            }
+
+            @Override
+            public void onFailed(String errorCode, String errorMessage) {
+                Log.i("unInitUserNameError", "bind account fail" + "err:" + errorCode + " - message:" + errorMessage);
+            }
+        });
         if (activitys != null && activitys.size() > 0) {
             for (int i = 0; i < activitys.size(); i++) {
-                Activity aty = (Activity) activitys.get(i);
+                Activity aty = activitys.get(i);
                 aty.finish();
 
             }

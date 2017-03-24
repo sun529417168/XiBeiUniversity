@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
  */
 
 public class TaskChoosePersonActivity extends BaseActivity implements View.OnClickListener, ChoosePersonInterface {
+    private TextView titleName;
     private ExpandableListView explistview;
     private List<List<TaskChoosePersonBean>> childrenData = new ArrayList<>();
     private List<TaskChoosePersonBean> groupData = new ArrayList<>();
@@ -53,6 +55,8 @@ public class TaskChoosePersonActivity extends BaseActivity implements View.OnCli
 
     @Override
     protected void init() {
+        titleName = (TextView) findViewById(R.id.title_name);
+        titleName.setText("人员选择");
         explistview = (ExpandableListView) findViewById(R.id.task_choose_person_expandableListView);
         submit = (Button) findViewById(R.id.choose_person_submit);
         submit.setOnClickListener(this);

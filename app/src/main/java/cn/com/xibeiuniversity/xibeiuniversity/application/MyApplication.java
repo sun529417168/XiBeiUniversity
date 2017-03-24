@@ -16,6 +16,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.NetWorkUtils;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.SharedUtil;
 
 
 /**

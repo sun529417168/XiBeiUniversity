@@ -44,8 +44,14 @@ public class TaskPullDialogActivity extends BaseActivity implements View.OnClick
         titleNameText.setText(taskInfoBean.getTitle());
         taskNameText.setText(taskInfoBean.getName());
         taskInfoText.setText(taskInfoBean.getContent());
-        close.setOnClickListener(this);
-        sure.setOnClickListener(this);
+        if (taskInfoBean.getId().equals("0")) {
+            sure.setVisibility(View.GONE);
+            close.setOnClickListener(this);
+        } else {
+            sure.setVisibility(View.VISIBLE);
+            close.setOnClickListener(this);
+            sure.setOnClickListener(this);
+        }
     }
 
     @Override

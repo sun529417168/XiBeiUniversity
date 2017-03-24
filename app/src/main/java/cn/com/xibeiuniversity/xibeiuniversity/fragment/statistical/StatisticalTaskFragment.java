@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.animation.Easing;
@@ -59,6 +60,7 @@ public class StatisticalTaskFragment extends BaseFragment implements Statistical
     private int[] mBarColors = new int[]{Color.parseColor("#29B6F6"),
             Color.YELLOW, Color.parseColor("#32B16C"),
             Color.parseColor("#E9616B"), Color.parseColor("#C90110"), Color.YELLOW, Color.parseColor("#32B16C")};
+    private ImageView stateNothing, typeNothing;
 
     @Override
     protected View setView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -84,6 +86,8 @@ public class StatisticalTaskFragment extends BaseFragment implements Statistical
         quarterText = (TextView) rootView.findViewById(R.id.statistical_quarter);
         halfYearText = (TextView) rootView.findViewById(R.id.statistical_halfYear);
         screenText = (TextView) rootView.findViewById(R.id.statistical_screen);
+        stateNothing = (ImageView) rootView.findViewById(R.id.statistical_state_nothing);
+        typeNothing = (ImageView) rootView.findViewById(R.id.statistical_type_nothing);
         weekText.setOnClickListener(this);
         monthText.setOnClickListener(this);
         quarterText.setOnClickListener(this);
@@ -304,7 +308,7 @@ public class StatisticalTaskFragment extends BaseFragment implements Statistical
                                 String start = String.format("%d-%d-%d", startYear, startMonthOfYear + 1, startDayOfMonth);
                                 String end = String.format("%d-%d-%d", endYear, endMonthOfYear + 1, endDayOfMonth);
                                 request(start, end, 0);
-                                Log.i("calendarData",start+"===="+end);
+                                Log.i("calendarData", start + "====" + end);
                             }
                         }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c
                         .get(Calendar.DATE), false).show();

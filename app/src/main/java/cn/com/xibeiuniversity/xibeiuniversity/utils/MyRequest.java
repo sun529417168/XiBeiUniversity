@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.sdk.android.push.CloudPushService;
+import com.alibaba.sdk.android.push.CommonCallback;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 
 import org.json.JSONObject;
@@ -65,6 +67,8 @@ import cn.com.xibeiuniversity.xibeiuniversity.okhttps.utils.JsonGenericsSerializ
 import cn.com.xibeiuniversity.xibeiuniversity.weight.AddTaskPriorityPopwindow;
 import cn.com.xibeiuniversity.xibeiuniversity.weight.AddTaskTypePopwindow;
 import okhttp3.Call;
+
+import static cn.com.xibeiuniversity.xibeiuniversity.okhttps.log.LoggerInterceptor.TAG;
 
 
 /**
