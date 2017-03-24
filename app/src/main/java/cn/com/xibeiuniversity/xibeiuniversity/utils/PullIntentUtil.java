@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.sdk.android.push.notification.CPushMessage;
 
 import cn.com.xibeiuniversity.xibeiuniversity.activity.task.TaskPullDialogActivity;
+import cn.com.xibeiuniversity.xibeiuniversity.activity.task.quitPullDialogActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskInfoBean;
 
 /**
@@ -40,7 +41,11 @@ public class PullIntentUtil {
            e.printStackTrace();
         }*/
         TaskInfoBean taskInfoList = JSON.parseObject(cPushMessage.getContent(), TaskInfoBean.class);
-        intent = new Intent(context, TaskPullDialogActivity.class);
+        if (taskInfoList.getType().equals("ForceQuit")) {
+            intent = new Intent(context, quitPullDialogActivity.class);
+        } else {
+            intent = new Intent(context, TaskPullDialogActivity.class);
+        }
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         bundle = new Bundle();
         bundle.putSerializable("taskInfoBean", taskInfoList);

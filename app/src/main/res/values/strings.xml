@@ -7,6 +7,7 @@
     <string name="photo_album">"从相册获取图片"</string>
     <string name="photo_camera">"从相机获取图片"</string>
     <string name="photo_file">"从文件获取图片"</string>
+    <string name="pull_quit_close">"确定"</string>
 
     <!--登陆界面start-->
     <string name="username">"请输入帐号"</string>

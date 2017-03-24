@@ -10,9 +10,6 @@ import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 
 import java.util.LinkedList;
 
-import cn.com.xibeiuniversity.xibeiuniversity.activity.LoginActivity;
-import cn.com.xibeiuniversity.xibeiuniversity.utils.SharedUtil;
-
 /**
  * 文件名：XibeiActivityUtil
  * 描    述：管理activity的工具类
@@ -87,21 +84,9 @@ public class XibeiActivityUtil {
      * 遍历所有Activity并finish void
      */
     public void exit() {
-        CloudPushService pushService = PushServiceFactory.getCloudPushService();
-        pushService.bindAccount("null", new CommonCallback() {
-            @Override
-            public void onSuccess(String s) {
-                Log.i("unInitUserName", "bind account success");
-            }
-
-            @Override
-            public void onFailed(String errorCode, String errorMessage) {
-                Log.i("unInitUserNameError", "bind account fail" + "err:" + errorCode + " - message:" + errorMessage);
-            }
-        });
         if (activitys != null && activitys.size() > 0) {
             for (int i = 0; i < activitys.size(); i++) {
-                Activity aty = activitys.get(i);
+                Activity aty = (Activity) activitys.get(i);
                 aty.finish();
 
             }
