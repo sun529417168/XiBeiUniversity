@@ -1,13 +1,15 @@
 package cn.com.xibeiuniversity.xibeiuniversity.activity.task;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
+import cn.com.xibeiuniversity.xibeiuniversity.activity.notice.NoticeDetailActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.base.BaseActivity;
-import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskInfoBean;
 
 /**
  * 文件名：TaskPullDialogActivity
@@ -18,7 +20,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskBean;
  */
 
 public class TaskPullDialogActivity extends BaseActivity implements View.OnClickListener {
-    TaskBean taskList;
+    TaskInfoBean taskInfoBean;
     private TextView titleNameText, taskNameText, taskInfoText, close, sure;
     private ImageView imageView;
 
@@ -29,7 +31,7 @@ public class TaskPullDialogActivity extends BaseActivity implements View.OnClick
 
     @Override
     protected void setDate(Bundle savedInstanceState) {
-//        taskList = (TaskBean) this.getIntent().getSerializableExtra("taskBean");
+        taskInfoBean = (TaskInfoBean) this.getIntent().getSerializableExtra("taskInfoBean");
     }
 
     @Override
@@ -39,16 +41,31 @@ public class TaskPullDialogActivity extends BaseActivity implements View.OnClick
         taskInfoText = (TextView) findViewById(R.id.dialog_pull_task_info);
         close = (TextView) findViewById(R.id.dialog_pull_task_close);
         sure = (TextView) findViewById(R.id.dialog_pull_task_sure);
+        titleNameText.setText(taskInfoBean.getTitle());
+        taskNameText.setText(taskInfoBean.getName());
+        taskInfoText.setText(taskInfoBean.getContent());
         close.setOnClickListener(this);
         sure.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
+        Intent in = null;
         switch (v.getId()) {
             case R.id.dialog_pull_task_close:
+                finish();
                 break;
             case R.id.dialog_pull_task_sure:
+                if ("Task".equals(taskInfoBean.getType())) {
+                    in = new Intent(this, TaskDetailActivity.class);
+                    in.putExtra("taskId", taskInfoBean.getId());
+                }
+                if ("Notice".equals(taskInfoBean.getType())) {
+                    in = new Intent(this, NoticeDetailActivity.class);
+                    in.putExtra("noticeId", taskInfoBean.getId());
+                }
+                startActivity(in);
+                finish();
                 break;
         }
     }

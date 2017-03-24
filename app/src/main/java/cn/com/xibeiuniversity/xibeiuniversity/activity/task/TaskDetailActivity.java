@@ -37,6 +37,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.adapter.task.TaskDetalFeedbackPhot
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.task.TaskDetalPhotoAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskAssignedBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskDetailBean;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.app.TakePhotoActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.compress.CompressConfig;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.SearchTypePopInterface;
@@ -59,7 +60,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
     private Context context;
     private TextView titleName;
     private LinearLayout back;
-    private TaskBean.RowsBean taskBean = new TaskBean.RowsBean();
+    private TaskDetailBean taskBean = new TaskDetailBean();
     /**
      * 编号，名称，类型，状态，所在位置，创建人，任务优先级，下发时间，反馈时间
      */
@@ -93,13 +94,10 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
     @Override
     protected void setDate(Bundle savedInstanceState) {
         context = this;
-        taskBean = (TaskBean.RowsBean) getIntent().getSerializableExtra("taskBean");
-        Log.i("taskBean", taskBean.toString());
+        String taskId = getIntent().getStringExtra("taskId");
+        MyRequest.taskDetailRequest(this, taskId);
         if (savedInstanceState != null) {
             list = savedInstanceState.getParcelableArrayList("listBitmap");
-        }
-        if (taskBean.getTaskAssignedState() == 3 || taskBean.getTaskAssignedState() == 4) {
-            MyRequest.taskAssignedInfoRequest(this, taskBean.getTaskAssignedID());
         }
     }
 
@@ -130,8 +128,6 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
         filePath = (TextView) findViewById(R.id.task_detail_state_file);//文件路径
         filePath.setOnClickListener(this);
         taskInfo = (TextView) findViewById(R.id.task_detail_describe);
-
-
         stateReplyText = (TextView) findViewById(R.id.task_detail_state_reply);//反馈状态
         feedbackTimeText = (TextView) findViewById(R.id.task_detail_feedbackTime);//反馈时间
         infoEdit = (EditText) findViewById(R.id.task_detail_info);//任务描述
@@ -141,49 +137,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
         gridView.setAdapter(taskDetalPhotoAdapter);
         taskDetalPhotoAdapter.setList(list);
         gridViewDescribe = (GridView) findViewById(R.id.task_detail_gridView_describe);//描述查看的图片
-        for (TaskBean.RowsBean.ImageListBean imageBean : taskBean.getImageList()) {
-            if (imageBean.getAttachmentType() == 1) {
-                describeList.add(imageBean.getFileUrl());
-            }
-        }
-        taskDetalDescribePhotoAdapter = new TaskDetalDescribePhotoAdapter(this, describeList);
-        gridViewDescribe.setAdapter(taskDetalDescribePhotoAdapter);
-        submitBtn = (Button) findViewById(R.id.task_detail_button);
-        submitBtn.setOnClickListener(this);
 
-        numberText.setText(taskBean.getTaskSno());
-        nameText.setText(taskBean.getTaskName());
-        typeText.setText(taskBean.getTaskTypeName());
-        addressText.setText(taskBean.getTaskAddr());
-        founderText.setText(taskBean.getPersonName());
-        priorityText.setText(taskBean.getTaskPriorityName());
-        sendTimeText.setText(taskBean.getStartDateApi());
-
-        filePath.setText(isAttachment() ? "打开" : "下载");
-        for (TaskBean.RowsBean.ImageListBean imageBean : taskBean.getImageList()) {
-            if (imageBean.getAttachmentType() == 2) {
-                fileName.setText("文件(" + imageBean.getFileName() + ")");
-            }
-        }
-        if (TextUtils.isEmpty(fileName.getText().toString().trim())) {
-            findViewById(R.id.task_detail_state_fileLayout).setVisibility(View.GONE);
-        }
-
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");//设置日期格式
-        feedbackTimeText.setText(df.format(new Date()));
-        if (taskBean.getTaskState() == 1) {
-            stateTaskText.setText("未查阅");
-        }
-        if (taskBean.getTaskState() == 2) {
-            stateTaskText.setText("处理中");
-        }
-        if (taskBean.getTaskState() == 3) {
-            stateTaskText.setText("已完成");
-        }
-        if (taskBean.getTaskState() == 4) {
-            stateTaskText.setText("未完成");
-        }
-        taskInfo.setText(taskBean.getTaskDes());
         over = (CheckBox) findViewById(R.id.task_detail_state_over);
         noOver = (CheckBox) findViewById(R.id.task_detail_state_noOver);
         over.setOnCheckedChangeListener(checkedChangeListener);
@@ -250,7 +204,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
             case R.id.task_detail_state_file://点击下载
                 if (isEmpty()) {
                     if (isAttachment()) {
-                        for (TaskBean.RowsBean.ImageListBean imageBean : taskBean.getImageList()) {
+                        for (TaskDetailBean.ImageListBean imageBean : taskBean.getImageList()) {
                             if (imageBean.getAttachmentType() == 2) {
                                 if (MyUtils.getVideoFileName(path).size() > 0) {
                                     for (String fileUrl : MyUtils.getVideoFileName(path)) {
@@ -273,7 +227,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
                             }
                         }
                     } else {
-                        for (TaskBean.RowsBean.ImageListBean imageBean : taskBean.getImageList()) {
+                        for (TaskDetailBean.ImageListBean imageBean : taskBean.getImageList()) {
                             if (imageBean.getAttachmentType() == 2) {
                                 DownloadUtil down = new DownloadUtil(TaskDetailActivity.this, imageBean.getFileName(), imageBean.getFileUrl(), filePath);
                                 down.showDownloadDialog();
@@ -288,7 +242,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
     private boolean isAttachment() {
         boolean isFlag = false;
         path = Environment.getExternalStorageDirectory() + "/XiBeiDownload";
-        for (TaskBean.RowsBean.ImageListBean imageBean : taskBean.getImageList()) {
+        for (TaskDetailBean.ImageListBean imageBean : taskBean.getImageList()) {
             if (imageBean.getAttachmentType() == 2) {
                 if (MyUtils.getVideoFileName(path).size() > 0) {
                     for (String fileUrl : MyUtils.getVideoFileName(path)) {
@@ -392,5 +346,56 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
         }
         taskDetalFeedbackPhotoAdapter = new TaskDetalFeedbackPhotoAdapter(this, describeListFanKui);
         gridView.setAdapter(taskDetalFeedbackPhotoAdapter);
+    }
+
+    @Override
+    public void getTaskDetail(TaskDetailBean taskDetailBean) {
+        taskBean = taskDetailBean;
+        if (taskBean.getTaskAssignedState() == 3 || taskBean.getTaskAssignedState() == 4) {
+            MyRequest.taskAssignedInfoRequest(this, taskBean.getTaskAssignedID());
+        }
+        for (TaskDetailBean.ImageListBean imageBean : taskBean.getImageList()) {
+            if (imageBean.getAttachmentType() == 1) {
+                describeList.add(imageBean.getFileUrl());
+            }
+        }
+        taskDetalDescribePhotoAdapter = new TaskDetalDescribePhotoAdapter(this, describeList);
+        gridViewDescribe.setAdapter(taskDetalDescribePhotoAdapter);
+        submitBtn = (Button) findViewById(R.id.task_detail_button);
+        submitBtn.setOnClickListener(this);
+
+        numberText.setText(taskBean.getTaskSno());
+        nameText.setText(taskBean.getTaskName());
+        typeText.setText(taskBean.getTaskTypeName());
+        addressText.setText(taskBean.getTaskAddr());
+        founderText.setText(taskBean.getPersonName());
+        priorityText.setText(taskBean.getTaskPriorityName());
+        sendTimeText.setText(taskBean.getStartDateApi());
+
+        filePath.setText(isAttachment() ? "打开" : "下载");
+        for (TaskDetailBean.ImageListBean imageBean : taskBean.getImageList()) {
+            if (imageBean.getAttachmentType() == 2) {
+                fileName.setText("文件(" + imageBean.getFileName() + ")");
+            }
+        }
+        if (TextUtils.isEmpty(fileName.getText().toString().trim())) {
+            findViewById(R.id.task_detail_state_fileLayout).setVisibility(View.GONE);
+        }
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");//设置日期格式
+        feedbackTimeText.setText(df.format(new Date()));
+        if (taskBean.getTaskState() == 1) {
+            stateTaskText.setText("未查阅");
+        }
+        if (taskBean.getTaskState() == 2) {
+            stateTaskText.setText("处理中");
+        }
+        if (taskBean.getTaskState() == 3) {
+            stateTaskText.setText("已完成");
+        }
+        if (taskBean.getTaskState() == 4) {
+            stateTaskText.setText("未完成");
+        }
+        taskInfo.setText(taskBean.getTaskDes());
     }
 }

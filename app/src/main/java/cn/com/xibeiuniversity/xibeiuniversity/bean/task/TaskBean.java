@@ -122,7 +122,7 @@ public class TaskBean implements Serializable {
         private String TaskStateName;
         private String IsImmediatelyName;
         private int PersonID;
-        private int ID;
+        private String ID;
         private String SearchSNO;
         private String StartDate;
         private boolean IsCheck;
@@ -254,11 +254,11 @@ public class TaskBean implements Serializable {
             this.PersonID = PersonID;
         }
 
-        public int getID() {
+        public String getID() {
             return ID;
         }
 
-        public void setID(int ID) {
+        public void setID(String ID) {
             this.ID = ID;
         }
 

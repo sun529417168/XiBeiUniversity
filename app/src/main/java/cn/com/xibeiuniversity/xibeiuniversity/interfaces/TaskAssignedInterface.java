@@ -1,6 +1,7 @@
 package cn.com.xibeiuniversity.xibeiuniversity.interfaces;
 
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskAssignedBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskDetailBean;
 
 /**
  * 文件名：TaskAssignedInterface
@@ -12,4 +13,6 @@ import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskAssignedBean;
 
 public interface TaskAssignedInterface {
     void getTaskAssignedInfo(TaskAssignedBean taskAssignedBean);
+
+    void getTaskDetail(TaskDetailBean taskDetailBean);
 }

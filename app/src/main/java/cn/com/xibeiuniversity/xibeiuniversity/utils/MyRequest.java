@@ -33,6 +33,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.adapter.problem.PopProblemTypeRigh
 import cn.com.xibeiuniversity.xibeiuniversity.bean.PersonBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.UserBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.notice.NoticeBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.notice.NoticeDetailBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemTypeLeft;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemTypeRight;
@@ -47,6 +48,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.config.UrlConfig;
 import cn.com.xibeiuniversity.xibeiuniversity.fragment.statistical.StatisticalTaskFragment;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ChoosePersonInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.LoginInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.NoticeDetailInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.NoticeListInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.PersonInfoInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemListInterface;
@@ -320,8 +322,9 @@ public class MyRequest {
      * 参    数：final Context activity, TaskListInterface myTaskListInterface, String id
      * 返回值：无
      */
-    public static void taskDetailRequest(final Context activity, TaskListInterface myTaskListInterface, String id) {
+    public static void taskDetailRequest(final Activity activity, String id) {
         final Dialog progDialog = DialogUtils.showWaitDialog(activity);
+        final TaskAssignedInterface taskAssignedInterface = (TaskAssignedInterface) activity;
         Map<String, Object> params = new HashMap<>();
         try {
             params.put("ID", id);
@@ -331,9 +334,8 @@ public class MyRequest {
         OkHttpUtils.post().url(UrlConfig.URL_GETTASKINFOBYID).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
             @Override
             public void onResponse(String response, int id) {
-                response = response.replace(":null,", ":\"\",");
-                Log.i("taskList", response);
-                TaskDetailBean taskList = JSON.parseObject(response, TaskDetailBean.class);
+                TaskDetailBean taskBean = JSON.parseObject(response, TaskDetailBean.class);
+                taskAssignedInterface.getTaskDetail(taskBean);
                 if (progDialog.isShowing()) {
                     progDialog.dismiss();
                 }
@@ -748,6 +750,42 @@ public class MyRequest {
     }
 
     /**
+     * 方法名：getNoticeDetailRequest
+     * 功    能：获取通知详情
+     * 参    数：final Activity activity, int searchTime
+     * 返回值：无
+     */
+    public static void getNoticeDetailRequest(final Activity activity, String id) {
+        Map<String, Object> params = new HashMap<>();
+        final Dialog progDialog = DialogUtils.showWaitDialog(activity);
+        final NoticeDetailInterface noticeDetailInterface = (NoticeDetailInterface) activity;
+        try {
+            params.put("ID", id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        OkHttpUtils.post().url(UrlConfig.URL_GETINFORMISSUEDINFOBYID).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
+            @Override
+            public void onResponse(String response, int id) {
+                Log.i("noticeBean", response);
+                NoticeDetailBean noticeBean = JSON.parseObject(response, NoticeDetailBean.class);
+                noticeDetailInterface.getNoticeDetail(noticeBean);
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                ToastUtil.show(activity, "服务器有错误，请稍候再试");
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+        });
+    }
+
+    /**
      * 方法名：statisticalTaskRequest
      * 功    能：任务下发统计
      * 参    数：Context activity, StatisticalInfoInterface statisticalInfoInterfaces, final Object... strings
@@ -914,7 +952,6 @@ public class MyRequest {
         OkHttpUtils.get().url(UrlConfig.URL_GETTASKPRIORITY).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
             @Override
             public void onResponse(String response, int id) {
-
                 ArrayList<TaskPriorityBean> listBean = (ArrayList<TaskPriorityBean>) JSON.parseArray(response, TaskPriorityBean.class);
                 AddTaskPriorityPopwindow mAddTaskPriority = new AddTaskPriorityPopwindow(activity, listBean);
                 mAddTaskPriority.showAtLocation(typeLayout, Gravity.BOTTOM, 0, 0);
@@ -987,7 +1024,7 @@ public class MyRequest {
         params.put("PersonIDs", strings[6]);
         params.put("AddTaskDes", strings[7]);
         params.put("PersonID", SharedUtil.getString(activity, "PersonID"));
-        OkHttpUtils.post().files("mFile", fileMap).url(UrlConfig.URL_IMGUPLOAD).params(params).build().execute(new StringCallback() {
+        OkHttpUtils.post().files("mFile", fileMap).url(UrlConfig.URL_UPLOADTASK).params(params).build().execute(new StringCallback() {
             @Override
             public void onResponse(String response, int id) {
                 if ("true".equals(response)) {
@@ -1003,6 +1040,7 @@ public class MyRequest {
 
             @Override
             public void onError(Call call, Exception e, int id) {
+                Log.i("addTaskRequestsError", e.getMessage().toString());
                 ToastUtil.show(activity, "服务器异常，请稍后再试");
                 if (progDialog.isShowing()) {
                     progDialog.dismiss();

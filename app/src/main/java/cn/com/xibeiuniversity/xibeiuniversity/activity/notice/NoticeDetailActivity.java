@@ -22,9 +22,12 @@ import cn.com.xibeiuniversity.xibeiuniversity.adapter.notice.NoticeDetalPhotoAda
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.problem.ProblemDetalPhotoAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.base.BaseActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.notice.NoticeBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.notice.NoticeDetailBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskBean;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.NoticeDetailInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.DownloadUtil;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
 
@@ -36,12 +39,12 @@ import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
  * 版    本：V1.0.0
  */
 
-public class NoticeDetailActivity extends BaseActivity implements View.OnClickListener {
+public class NoticeDetailActivity extends BaseActivity implements View.OnClickListener, NoticeDetailInterface {
     private Context context;
     private TextView titleName;
     private LinearLayout back;
     private TextView numberText, nameText, typeText, stateText, senderText, sendTimeText, fileNameText, filePath, infoText;
-    private NoticeBean.RowsBean rowsBean = new NoticeBean.RowsBean();
+    private NoticeDetailBean rowsBean = new NoticeDetailBean();
     private String path;
     private GridView gridView;
     private ArrayList<String> describeList = new ArrayList<String>();
@@ -54,7 +57,8 @@ public class NoticeDetailActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     protected void setDate(Bundle savedInstanceState) {
-        rowsBean = (NoticeBean.RowsBean) getIntent().getSerializableExtra("noticeBean");
+        String id = getIntent().getStringExtra("noticeId");
+        MyRequest.getNoticeDetailRequest(this, id);
     }
 
     @Override
@@ -75,33 +79,13 @@ public class NoticeDetailActivity extends BaseActivity implements View.OnClickLi
         filePath.setOnClickListener(this);
         infoText = (TextView) findViewById(R.id.notice_detail_info);
         gridView = (GridView) findViewById(R.id.notice_detail_gridView_describe);
-        numberText.setText(rowsBean.getInformSno());
-        nameText.setText(rowsBean.getName());
-        typeText.setText(rowsBean.getInformTypeName());
-        stateText.setText(rowsBean.getStateName());
-        senderText.setText(rowsBean.getPersonName());
-        sendTimeText.setText(rowsBean.getApiCreateTime());
-        filePath.setText(isAttachment() ? "打开" : "下载");
-        for (NoticeBean.RowsBean.FileListBean fileBean : rowsBean.getFileList()) {
-            if (fileBean.getAttachmentType() == 2) {
-                fileNameText.setText("文件(" + fileBean.getFileName() + ")");
-            }
-            if (fileBean.getAttachmentType()==1){
-                describeList.add(fileBean.getFileUrl());
-            }
-        }
-        if (TextUtils.isEmpty(fileNameText.getText().toString().trim())) {
-            findViewById(R.id.notice_detail_state_fileLayout).setVisibility(View.GONE);
-        }
-        infoText.setText(rowsBean.getContentInfo());
-        noticeDetalPhotoAdapter = new NoticeDetalPhotoAdapter(this, describeList);
-        gridView.setAdapter(noticeDetalPhotoAdapter);
+
     }
 
     private boolean isAttachment() {
         boolean isFlag = false;
         path = Environment.getExternalStorageDirectory() + "/XiBeiDownload";
-        for (NoticeBean.RowsBean.FileListBean fileBean : rowsBean.getFileList()) {
+        for (NoticeDetailBean.FileListBean fileBean : rowsBean.getFileList()) {
             if (fileBean.getAttachmentType() == 2) {
                 if (MyUtils.getVideoFileName(path).size() > 0) {
                     for (String fileUrl : MyUtils.getVideoFileName(path)) {
@@ -124,7 +108,7 @@ public class NoticeDetailActivity extends BaseActivity implements View.OnClickLi
             case R.id.notice_detail_attachment://下载文件
                 if (isEmpty()) {
                     if (isAttachment()) {
-                        for (NoticeBean.RowsBean.FileListBean fileBean : rowsBean.getFileList()) {
+                        for (NoticeDetailBean.FileListBean fileBean : rowsBean.getFileList()) {
                             if (fileBean.getAttachmentType() == 2) {
                                 if (MyUtils.getVideoFileName(path).size() > 0) {
                                     for (String fileUrl : MyUtils.getVideoFileName(path)) {
@@ -147,7 +131,7 @@ public class NoticeDetailActivity extends BaseActivity implements View.OnClickLi
                             }
                         }
                     } else {
-                        for (NoticeBean.RowsBean.FileListBean fileBean : rowsBean.getFileList()) {
+                        for (NoticeDetailBean.FileListBean fileBean : rowsBean.getFileList()) {
                             if (fileBean.getAttachmentType() == 2) {
                                 DownloadUtil down = new DownloadUtil(NoticeDetailActivity.this, fileBean.getFileName(), fileBean.getFileUrl(), filePath);
                                 down.showDownloadDialog();
@@ -171,5 +155,31 @@ public class NoticeDetailActivity extends BaseActivity implements View.OnClickLi
             ToastUtil.show(context, "没有SD卡");
             return false;
         }
+    }
+
+    @Override
+    public void getNoticeDetail(NoticeDetailBean noticeDetailBean) {
+        rowsBean = noticeDetailBean;
+        numberText.setText(rowsBean.getInformSno());
+        nameText.setText(rowsBean.getName());
+        typeText.setText(rowsBean.getInformTypeName());
+        stateText.setText(rowsBean.getStateName());
+        senderText.setText(rowsBean.getPersonName());
+        sendTimeText.setText(rowsBean.getApiCreateTime());
+        filePath.setText(isAttachment() ? "打开" : "下载");
+        for (NoticeDetailBean.FileListBean fileBean : rowsBean.getFileList()) {
+            if (fileBean.getAttachmentType() == 2) {
+                fileNameText.setText("文件(" + fileBean.getFileName() + ")");
+            }
+            if (fileBean.getAttachmentType() == 1) {
+                describeList.add(fileBean.getFileUrl());
+            }
+        }
+        if (TextUtils.isEmpty(fileNameText.getText().toString().trim())) {
+            findViewById(R.id.notice_detail_state_fileLayout).setVisibility(View.GONE);
+        }
+        infoText.setText(rowsBean.getContentInfo());
+        noticeDetalPhotoAdapter = new NoticeDetalPhotoAdapter(this, describeList);
+        gridView.setAdapter(noticeDetalPhotoAdapter);
     }
 }

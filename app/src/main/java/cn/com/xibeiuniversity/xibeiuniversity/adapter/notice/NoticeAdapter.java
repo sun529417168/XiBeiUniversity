@@ -57,7 +57,7 @@ public class NoticeAdapter extends MyBaseAdapter {
         TextView number = get(view, R.id.item_notice_number);  // 编号
         TextView date = get(view, R.id.item_notice_date);  // 日期
         TextView name = get(view, R.id.item_notice_name);  // 名称
-        ImageView imageView = get(view,R.id.item_notice_imageView);//图片
+        ImageView imageView = get(view, R.id.item_notice_imageView);//图片
         final TextView info = get(view, R.id.item_notice_info);  // 具体内容
         final TextView[] views = {number, date, name, info};
         final NoticeBean.RowsBean bean = list.get(position);
@@ -89,9 +89,7 @@ public class NoticeAdapter extends MyBaseAdapter {
                     isCheckRequest(bean.getAcceptID());
                 }
                 Intent intent = new Intent(context, NoticeDetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("noticeBean", bean);
-                intent.putExtras(bundle);
+                intent.putExtra("noticeId", bean.getID());
                 context.startActivity(intent);
             }
         });
@@ -103,6 +101,7 @@ public class NoticeAdapter extends MyBaseAdapter {
             view.setTextColor(ContextCompat.getColor(context, R.color.gray));
         }
     }
+
     /**
      * 方法名：isCheckRequest
      * 功    能：点击修改查阅状态

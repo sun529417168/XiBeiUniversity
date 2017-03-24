@@ -44,8 +44,7 @@ public class AddTaskTypePopwindow extends PopupWindow implements
     private int minsize = 12;
     ArrayList<TaskTypeBean> taskTypeBean;
 
-    public AddTaskTypePopwindow(final Activity context,
-                                ArrayList<TaskTypeBean> taskTypeBeans) {
+    public AddTaskTypePopwindow(final Activity context, ArrayList<TaskTypeBean> taskTypeBeans) {
         super(context);
         this.context = context;
         this.taskTypeBean = taskTypeBeans;
@@ -211,6 +210,7 @@ public class AddTaskTypePopwindow extends PopupWindow implements
         }
         if (noprovince) {
             taskTypeName = taskTypeBean.get(0).getName();
+            code = taskTypeBean.get(0).getValue()+"";
             return 0;
         }
         return provinceIndex;

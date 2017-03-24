@@ -62,7 +62,7 @@ public class TaskAdapter extends MyBaseAdapter {
         /**
          * 赋值
          */
-        number.setText("T"+rowsBean.getTaskSno().substring(9));
+        number.setText("T" + rowsBean.getTaskSno().substring(9));
         for (TaskBean.RowsBean.ImageListBean imageBean : rowsBean.getImageList()) {
             if (imageBean.getAttachmentType() == 1) {
                 ImageLoader.getInstance().displayImage(imageBean.getFileUrl(), imageView);
@@ -74,19 +74,19 @@ public class TaskAdapter extends MyBaseAdapter {
         if (rowsBean.isIsCheck()) {
             setTextColor(views);
         }
-        if (rowsBean.getTaskAssignedState()==1) {
+        if (rowsBean.getTaskAssignedState() == 1) {
             state.setText("未查阅");
             state.setBackgroundResource(R.color.red);
         }
-        if (rowsBean.getTaskAssignedState()==2) {
+        if (rowsBean.getTaskAssignedState() == 2) {
             state.setText("处理中");
             state.setBackgroundResource(R.color.yellow);
         }
-        if (rowsBean.getTaskAssignedState()==3) {
+        if (rowsBean.getTaskAssignedState() == 3) {
             state.setText("已完成");
             state.setBackgroundResource(R.color.green);
         }
-        if (rowsBean.getTaskAssignedState()==4) {
+        if (rowsBean.getTaskAssignedState() == 4) {
             state.setText("未完成");
             state.setBackgroundResource(R.color.fenSe);
         }
@@ -103,9 +103,7 @@ public class TaskAdapter extends MyBaseAdapter {
                     isCheckRequest(rowsBean.getTaskAssignedID());
                 }
                 Intent intent = new Intent(context, TaskDetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("taskBean", rowsBean);
-                intent.putExtras(bundle);
+                intent.putExtra("taskId", rowsBean.getID());
                 context.startActivity(intent);
             }
         });

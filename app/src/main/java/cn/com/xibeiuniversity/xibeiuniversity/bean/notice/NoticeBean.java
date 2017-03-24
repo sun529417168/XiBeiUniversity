@@ -78,7 +78,7 @@ public class NoticeBean implements Serializable {
         this.rows = rows;
     }
 
-    public static class RowsBean implements Serializable{
+    public static class RowsBean implements Serializable {
         /**
          * ID : 14
          * PersonID : 94
@@ -102,7 +102,7 @@ public class NoticeBean implements Serializable {
          * IsCheck : true
          */
 
-        private int ID;
+        private String ID;
         private int PersonID;
         private String PersonName;
         private String ContentInfo;
@@ -123,11 +123,11 @@ public class NoticeBean implements Serializable {
         private boolean IsCheck;
         private List<FileListBean> FileList;
 
-        public int getID() {
+        public String getID() {
             return ID;
         }
 
-        public void setID(int ID) {
+        public void setID(String ID) {
             this.ID = ID;
         }
 
@@ -283,7 +283,7 @@ public class NoticeBean implements Serializable {
             this.FileList = FileList;
         }
 
-        public static class FileListBean implements Serializable{
+        public static class FileListBean implements Serializable {
             /**
              * FileName : new_file.html
              * FileUrl : http://192.168.0.90:8001/Content/FileStore/InformIssuedFile/2017/3/7/1/7221faee-bb18-4ec6-b711-af5c4f6b382d.html

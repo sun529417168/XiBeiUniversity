@@ -37,6 +37,10 @@ public class UrlConfig {
      */
     public static final String URL_GETTASKINFOBYID = BaseUrl + "/API/ApiTasIssued/GetTaskInfoByID";
     /**
+     * 新增任务下发功能
+     */
+    public static final String URL_UPLOADTASK = BaseUrl + "/API/ApiTasIssued/UploadTask";
+    /**
      * 点击修改查阅状态
      */
     public static final String URL_ISCHECK = BaseUrl + "/API/ApiTasIssued/IsCheckState";
@@ -72,6 +76,10 @@ public class UrlConfig {
      * 获取通知信息列表
      */
     public static final String URL_GETINFORMISSUEDINFO = BaseUrl + "/API/ApiInformIssued/GetInformIssuedInfoByPersonID";
+    /**
+     * 获取通知详情
+     */
+    public static final String URL_GETINFORMISSUEDINFOBYID = BaseUrl + "/API/ApiInformIssued/GetInformIssuedInfoByID";
     /**
      * 更改通知查阅状态接口
      */

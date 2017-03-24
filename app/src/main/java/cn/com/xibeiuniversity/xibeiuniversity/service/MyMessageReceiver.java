@@ -58,7 +58,6 @@ public class MyMessageReceiver extends MessageReceiver {
     @Override
     public void onMessage(Context context, CPushMessage cPushMessage) {
         try {
-            ToastUtil.show(context, cPushMessage.getContent());
             Log.i("pullMessage", cPushMessage.getTitle() + "====" + cPushMessage.getContent());
             PullIntentUtil.intentAvtivity(context, cPushMessage);
         } catch (Exception e) {

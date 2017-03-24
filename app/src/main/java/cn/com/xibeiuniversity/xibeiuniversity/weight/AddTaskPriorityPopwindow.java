@@ -217,6 +217,7 @@ public class AddTaskPriorityPopwindow extends PopupWindow implements
         }
         if (noprovince) {
             taskTypeName = taskPriorityBean.get(0).getName();
+            code = taskPriorityBean.get(0).getValue()+"";
             return 0;
         }
         return provinceIndex;

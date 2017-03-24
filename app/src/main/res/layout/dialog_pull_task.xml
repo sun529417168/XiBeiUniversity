@@ -42,7 +42,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@+id/pull_task_title_name"
-                android:text="任务下发"
                 android:textColor="@color/black" />
 
         </RelativeLayout>
@@ -58,7 +57,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
-            android:text="这是任务名称"
             android:textColor="@color/black"
             android:textSize="20sp" />
 
@@ -70,7 +68,6 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:padding="15dp"
-            android:text="这是任务内容，比如说这里边的任荣相亲会难过很多，入囊你这个兴趣去打球健身"
             android:textColor="@color/black"
             android:textSize="16sp" />
 

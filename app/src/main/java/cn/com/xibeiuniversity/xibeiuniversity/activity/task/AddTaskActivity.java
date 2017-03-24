@@ -159,7 +159,7 @@ public class AddTaskActivity extends TakePhotoActivity implements View.OnClickLi
                 inputInfo = infoEdit.getText().toString().trim();
                 if (isEmpty()) {
                     inputPersonId = inputPersonId.substring(0, inputPersonId.length() - 1);
-                    Log.i("inputPersonId","名称:"+ inputName+",类型:"+inputType+",地点:"+inputAddress+",优先级:"+inputPriority+",开始时间:"+inputStartTime+",结束时间:"+inputEndTime+",下发人员:"+inputPersonId+",内容:"+inputInfo);
+//                    Log.i("inputPersonId", "名称:" + inputName + ",类型:" + inputType + ",地点:" + inputAddress + ",优先级:" + inputPriority + ",开始时间:" + inputStartTime + ",结束时间:" + inputEndTime + ",下发人员:" + inputPersonId + ",内容:" + inputInfo + ",图片:" + fileMap.get("AddImage1").getPath());
                     MyRequest.addTaskRequests(this, fileMap, inputName, inputType, inputAddress, inputPriority, inputStartTime, inputEndTime, inputPersonId, inputInfo);//不管有没有图片
                 }
                 break;
@@ -212,13 +212,17 @@ public class AddTaskActivity extends TakePhotoActivity implements View.OnClickLi
         super.takeFail(msg);
     }
 
+    int imageIndex = 0;
+
     @Override
     public void takeSuccess(String imagePath) {
         super.takeSuccess(imagePath);
-        Log.i("imagePaths", imagePath);
+        imageIndex++;
+        Log.i("imagePaths", imagePath + "======" + imageIndex);
         listPath.add(imagePath);
         mCameraFile = new File(imagePath);
-        fileMap.put("AddImage"+imagePath, mCameraFile);
+//        fileMap.put("AddImage" + imageIndex, mCameraFile);
+        fileMap.put(imagePath, mCameraFile);
         listFile.add(mCameraFile);
         showImg(imagePath);
     }
