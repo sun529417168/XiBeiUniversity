@@ -92,5 +92,14 @@ public class TaskStatisticalBean implements Serializable{
         public void setCode(String code) {
             this.code = code;
         }
+
+        @Override
+        public String toString() {
+            return "ListBean{" +
+                    "name='" + name + '\'' +
+                    ", value=" + value +
+                    ", code='" + code + '\'' +
+                    '}';
+        }
     }
 }

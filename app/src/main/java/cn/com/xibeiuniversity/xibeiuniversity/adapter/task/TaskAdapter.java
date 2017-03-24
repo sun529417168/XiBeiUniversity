@@ -2,13 +2,11 @@ package cn.com.xibeiuniversity.xibeiuniversity.adapter.task;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -100,8 +98,8 @@ public class TaskAdapter extends MyBaseAdapter {
                 if (false == rowsBean.isIsCheck()) {
                     setTextColor(views);
                     notifyDataSetChanged();
-                    isCheckRequest(rowsBean.getTaskAssignedID());
                 }
+                isCheckRequest(rowsBean.getTaskAssignedID());
                 Intent intent = new Intent(context, TaskDetailActivity.class);
                 intent.putExtra("taskId", rowsBean.getID());
                 context.startActivity(intent);

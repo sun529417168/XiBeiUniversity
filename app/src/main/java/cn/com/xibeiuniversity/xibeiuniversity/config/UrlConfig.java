@@ -53,6 +53,10 @@ public class UrlConfig {
      */
     public static final String URL_GETPROBLEMREPORTINFO = BaseUrl + "/API/ApiProblemReport/GetProblemReportInfo";
     /**
+     * 问题详情
+     */
+    public static final String URL_GETPROBLEMDETAIL = BaseUrl + "/API/ApiProblemReport/GetProblemReportInfoAndAcceptInformInfo";
+    /**
      * 新增问题返回信息+图片
      */
     public static final String URL_IMGUPLOAD = BaseUrl + "/API/ApiProblemReport/ImgUpload";

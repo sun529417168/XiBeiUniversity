@@ -2,7 +2,6 @@ package cn.com.xibeiuniversity.xibeiuniversity.adapter.problem;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,6 +27,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
 
 public class ProblemAdapter extends MyBaseAdapter {
     private ArrayList<ProblemBean.RowsBean> list = new ArrayList<>();
+
     public ProblemAdapter(Context context, List list) {
         super(context, list);
         this.list = (ArrayList<ProblemBean.RowsBean>) list;
@@ -48,12 +48,12 @@ public class ProblemAdapter extends MyBaseAdapter {
         TextView sender = get(view, R.id.item_problem_sender);  // 发送人
         TextView info = get(view, R.id.item_problem_info);  // 具体内容
         TextView executor = get(view, R.id.item_problem_executor);  // 处理人
-        TextView[] views = {number, date, name, sender, info,executor};
-        ProblemBean.RowsBean rowsBean = list.get(position);
+        TextView[] views = {number, date, name, sender, info, executor};
+        final ProblemBean.RowsBean rowsBean = list.get(position);
         /**
          * 赋值
          */
-        number.setText("P"+rowsBean.getProblemSno().substring(9));
+        number.setText("P" + rowsBean.getProblemSno().substring(9));
         if ("已上报".equals(rowsBean.getStateName())) {
             state.setText("已上报");
             state.setTextColor(ContextCompat.getColor(context, R.color.white));
@@ -69,26 +69,25 @@ public class ProblemAdapter extends MyBaseAdapter {
                 ImageLoader.getInstance().displayImage(imageBean.getFileUrl(), imageView);
             }
         }
-        if (rowsBean.getReportAttachmentList().size()==0){
+        if (rowsBean.getReportAttachmentList().size() == 0) {
             imageView.setImageResource(R.mipmap.login_logo);
         }
         date.setText(rowsBean.getFindDateApi());
-        name.setText("名称："+rowsBean.getProblemTitle());
-        sender.setText("上报人："+rowsBean.getReportPersonName());
-        info.setText("问题描述："+rowsBean.getProblemDes());
+        name.setText("名称：" + rowsBean.getProblemTitle());
+        sender.setText("上报人：" + rowsBean.getReportPersonName());
+        info.setText("问题描述：" + rowsBean.getProblemDes());
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ProblemDetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("problemBean", list.get(position));
-                intent.putExtras(bundle);
+                intent.putExtra("problemId", rowsBean.getID() + "");
                 context.startActivity(intent);
             }
         });
 
 
     }
+
     private void setTextColor(TextView[] views) {
         for (TextView view : views) {
             view.setTextColor(ContextCompat.getColor(context, R.color.gray));

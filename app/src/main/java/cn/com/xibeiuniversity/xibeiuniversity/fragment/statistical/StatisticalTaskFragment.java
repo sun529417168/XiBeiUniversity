@@ -32,15 +32,12 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Random;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.base.BaseFragment;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.statistical.TaskStatisticalBean;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.StatisticalInfoInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
-import cn.com.xibeiuniversity.xibeiuniversity.weight.BarChartView;
 import cn.com.xibeiuniversity.xibeiuniversity.weight.DoubleDatePickerDialog;
 
 /**
@@ -264,9 +261,11 @@ public class StatisticalTaskFragment extends BaseFragment implements Statistical
     @Override
     public void getStatisticalInfo(Object bean, int type) {
         if (type == 2) {
+            Log.i("任务统计2", bean.toString());
             initBarChart((ArrayList<TaskStatisticalBean.ListBean>) bean);
         }
         if (type == 1) {
+            Log.i("任务统计1", bean.toString());
             ArrayList<TaskStatisticalBean.ListBean> beanList = (ArrayList<TaskStatisticalBean.ListBean>) bean;
             ArrayList<PieEntry> entries = new ArrayList<>();
             for (TaskStatisticalBean.ListBean taskBean : beanList) {

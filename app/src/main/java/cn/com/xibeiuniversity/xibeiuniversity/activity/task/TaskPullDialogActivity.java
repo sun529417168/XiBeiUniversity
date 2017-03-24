@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.notice.NoticeDetailActivity;
+import cn.com.xibeiuniversity.xibeiuniversity.activity.problem.ProblemDetailActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.base.BaseActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskInfoBean;
 
@@ -70,6 +71,11 @@ public class TaskPullDialogActivity extends BaseActivity implements View.OnClick
                     in = new Intent(this, NoticeDetailActivity.class);
                     in.putExtra("noticeId", taskInfoBean.getId());
                 }
+                if ("problem".equals(taskInfoBean.getType())) {
+                    in = new Intent(this, ProblemDetailActivity.class);
+                    in.putExtra("problemId", taskInfoBean.getId());
+                }
+
                 startActivity(in);
                 finish();
                 break;

@@ -17,9 +17,11 @@ import java.util.ArrayList;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.problem.ProblemDetalPhotoAdapter;
-import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemDetailBean;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.app.TakePhotoActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.compress.CompressConfig;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemDetailInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
 
 /**
  * 文件名：ProblemDetailActivity
@@ -29,7 +31,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.compress.Compre
  * 版    本：V1.0.0
  */
 
-public class ProblemDetailActivity extends TakePhotoActivity implements View.OnClickListener {
+public class ProblemDetailActivity extends TakePhotoActivity implements View.OnClickListener, ProblemDetailInterface {
     private Context context;
     private TextView titleName;
     private LinearLayout back;
@@ -39,7 +41,7 @@ public class ProblemDetailActivity extends TakePhotoActivity implements View.OnC
     private ArrayList<Bitmap> list = new ArrayList<Bitmap>();
     private GridView gridView;
     private ProblemDetalPhotoAdapter problemDetalPhotoAdapter;
-    private ProblemBean.RowsBean problemBean;
+    private ProblemDetailBean problemBean;
 
     /**
      * 编号，问题名称，状态，上报人，上报时间，处理人，处理时间
@@ -55,7 +57,8 @@ public class ProblemDetailActivity extends TakePhotoActivity implements View.OnC
 
     @Override
     protected void setDate(Bundle savedInstanceState) {
-        problemBean = (ProblemBean.RowsBean) getIntent().getSerializableExtra("problemBean");
+        String id = getIntent().getStringExtra("problemId");
+        MyRequest.problemDetailRequest(this, id);
         if (savedInstanceState != null) {
             list = savedInstanceState.getParcelableArrayList("listBitmap");
         }
@@ -84,33 +87,6 @@ public class ProblemDetailActivity extends TakePhotoActivity implements View.OnC
         infoEdit = (TextView) findViewById(R.id.problem_detail_infoEdit);
         describeText = (TextView) findViewById(R.id.problem_detail_describe);
         replyTimeText = (TextView) findViewById(R.id.problem_detail_replyTime);
-
-        numberText.setText(problemBean.getProblemSno());
-        nameText.setText(problemBean.getProblemTitle());
-        if (problemBean.getState() == 1) {
-            stateText.setText("已上报");
-        }
-        if (problemBean.getState() == 2) {
-            stateText.setText("已回复");
-        }
-        problemTypeText.setText(problemBean.getProblemTypeName());
-        addressText.setText(problemBean.getPosition());
-        senderText.setText(problemBean.getReportPersonName());
-        sendTimeText.setText(problemBean.getFindDateApi());
-        infoEdit.setText(problemBean.getDescribe());
-        describeText.setText(problemBean.getProblemDes());
-        replyTimeText.setText(problemBean.getProcessDateApi());
-        takePhoto = (ImageView) findViewById(R.id.problem_detail_takePhoto);
-        takePhoto.setOnClickListener(this);
-        takePhoto.setVisibility(View.INVISIBLE);
-        gridView = (GridView) findViewById(R.id.problem_detail_gridView);
-        for (ProblemBean.RowsBean.ReportAttachmentListBean imageBean : problemBean.getReportAttachmentList()) {
-            if (imageBean.getAttachmentType() == 1) {
-                describeList.add(imageBean.getFileUrl());
-            }
-        }
-        problemDetalPhotoAdapter = new ProblemDetalPhotoAdapter(this, describeList);
-        gridView.setAdapter(problemDetalPhotoAdapter);
     }
 
     @Override
@@ -157,4 +133,34 @@ public class ProblemDetailActivity extends TakePhotoActivity implements View.OnC
         }
     }
 
+    @Override
+    public void getProblemDetail(ProblemDetailBean problemDetailBean) {
+        problemBean = problemDetailBean;
+        numberText.setText(problemBean.getProblemSno());
+        nameText.setText(problemBean.getProblemTitle());
+        if (problemBean.getState() == 1) {
+            stateText.setText("已上报");
+        }
+        if (problemBean.getState() == 2) {
+            stateText.setText("已回复");
+        }
+        problemTypeText.setText(problemBean.getProblemTypeName());
+        addressText.setText(problemBean.getPosition());
+        senderText.setText(problemBean.getReportPersonName());
+        sendTimeText.setText(problemBean.getFindDateApi());
+        infoEdit.setText(problemBean.getDescribe());
+        describeText.setText(problemBean.getProblemDes());
+        replyTimeText.setText(problemBean.getProcessDateApi());
+        takePhoto = (ImageView) findViewById(R.id.problem_detail_takePhoto);
+        takePhoto.setOnClickListener(this);
+        takePhoto.setVisibility(View.INVISIBLE);
+        gridView = (GridView) findViewById(R.id.problem_detail_gridView);
+        for (ProblemDetailBean.ReportAttachmentListBean imageBean : problemBean.getReportAttachmentList()) {
+            if (imageBean.getAttachmentType() == 1) {
+                describeList.add(imageBean.getFileUrl());
+            }
+        }
+        problemDetalPhotoAdapter = new ProblemDetalPhotoAdapter(this, describeList);
+        gridView.setAdapter(problemDetalPhotoAdapter);
+    }
 }

@@ -4,39 +4,29 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.sdk.android.push.CloudPushService;
-import com.alibaba.sdk.android.push.CommonCallback;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
-
-import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import cn.com.xibeiuniversity.xibeiuniversity.activity.MainActivity;
-import cn.com.xibeiuniversity.xibeiuniversity.activity.task.TaskSearchActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.problem.PopProblemTypeRightAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.PersonBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.UserBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.notice.NoticeBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.notice.NoticeDetailBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
+import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemDetailBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemTypeLeft;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemTypeRight;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.statistical.TaskStatisticalBean;
@@ -47,12 +37,12 @@ import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskDetailBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskPriorityBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskTypeBean;
 import cn.com.xibeiuniversity.xibeiuniversity.config.UrlConfig;
-import cn.com.xibeiuniversity.xibeiuniversity.fragment.statistical.StatisticalTaskFragment;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ChoosePersonInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.LoginInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.NoticeDetailInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.NoticeListInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.PersonInfoInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemDetailInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemListInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeLeftInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeRightInterface;
@@ -67,8 +57,6 @@ import cn.com.xibeiuniversity.xibeiuniversity.okhttps.utils.JsonGenericsSerializ
 import cn.com.xibeiuniversity.xibeiuniversity.weight.AddTaskPriorityPopwindow;
 import cn.com.xibeiuniversity.xibeiuniversity.weight.AddTaskTypePopwindow;
 import okhttp3.Call;
-
-import static cn.com.xibeiuniversity.xibeiuniversity.okhttps.log.LoggerInterceptor.TAG;
 
 
 /**
@@ -338,6 +326,7 @@ public class MyRequest {
         OkHttpUtils.post().url(UrlConfig.URL_GETTASKINFOBYID).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
             @Override
             public void onResponse(String response, int id) {
+                Log.i("taskDetailRequest", response);
                 TaskDetailBean taskBean = JSON.parseObject(response, TaskDetailBean.class);
                 taskAssignedInterface.getTaskDetail(taskBean);
                 if (progDialog.isShowing()) {
@@ -491,6 +480,42 @@ public class MyRequest {
                 Log.i("liebiao", response);
                 ProblemBean problemBean = JSON.parseObject(response, ProblemBean.class);
                 problemListInterface.showTaskList(problemBean);
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                ToastUtil.show(activity, "连接超时，请稍后再试");
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+        });
+    }
+
+    /**
+     * 方法名：problemDetailRequest
+     * 功    能：问题详情
+     * 参    数：Context activity, TaskListInterface myTaskListInterface, Object... strings
+     * 返回值：无
+     */
+    public static void problemDetailRequest(final Activity activity, String id) {
+        final ProblemDetailInterface problemDetail = (ProblemDetailInterface) activity;
+        final Dialog progDialog = DialogUtils.showWaitDialog(activity);
+        Map<String, Object> params = new HashMap<>();
+        try {
+            params.put("ProblemReportID", id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        OkHttpUtils.post().url(UrlConfig.URL_GETPROBLEMDETAIL).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
+            @Override
+            public void onResponse(String response, int id) {
+                Log.i("liebiao", response);
+                ProblemDetailBean problemBean = JSON.parseObject(response, ProblemDetailBean.class);
+                problemDetail.getProblemDetail(problemBean);
                 if (progDialog.isShowing()) {
                     progDialog.dismiss();
                 }

@@ -1,7 +1,6 @@
 package cn.com.xibeiuniversity.xibeiuniversity.service;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 import com.alibaba.sdk.android.push.CloudPushService;
@@ -9,13 +8,9 @@ import com.alibaba.sdk.android.push.MessageReceiver;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.alibaba.sdk.android.push.notification.CPushMessage;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 
-import cn.com.xibeiuniversity.xibeiuniversity.activity.UpdatePasswordActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.PullIntentUtil;
-import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
 
 /**
  * @author: 正纬
@@ -59,7 +54,6 @@ public class MyMessageReceiver extends MessageReceiver {
     public void onMessage(Context context, CPushMessage cPushMessage) {
         try {
             Log.i("pullMessage", cPushMessage.getTitle() + "====" + cPushMessage.getContent());
-            ToastUtil.show(context, cPushMessage.getContent());
             PullIntentUtil.intentAvtivity(context, cPushMessage);
         } catch (Exception e) {
             Log.i(REC_TAG, e.toString());

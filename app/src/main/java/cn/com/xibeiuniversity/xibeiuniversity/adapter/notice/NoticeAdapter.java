@@ -2,7 +2,6 @@ package cn.com.xibeiuniversity.xibeiuniversity.adapter.notice;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
@@ -20,7 +19,6 @@ import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.notice.NoticeDetailActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.base.MyBaseAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.notice.NoticeBean;
-import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskBean;
 import cn.com.xibeiuniversity.xibeiuniversity.config.UrlConfig;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.OkHttpUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.callback.GenericsCallback;
@@ -86,8 +84,8 @@ public class NoticeAdapter extends MyBaseAdapter {
                 if (false == bean.isIsCheck()) {
                     setTextColor(views);
                     notifyDataSetChanged();
-                    isCheckRequest(bean.getAcceptID());
                 }
+                isCheckRequest(bean.getAcceptID());
                 Intent intent = new Intent(context, NoticeDetailActivity.class);
                 intent.putExtra("noticeId", bean.getID());
                 context.startActivity(intent);
@@ -111,7 +109,7 @@ public class NoticeAdapter extends MyBaseAdapter {
     public static void isCheckRequest(int id) {
         Map<String, Object> params = new HashMap<>();
         try {
-            params.put("AcceptID", id);
+            params.put("ID", id);
         } catch (Exception e) {
             e.printStackTrace();
         }
