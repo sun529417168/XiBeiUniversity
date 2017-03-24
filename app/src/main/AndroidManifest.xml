@@ -102,6 +102,12 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/translucent" />
+        <!--推送退出的界面-->
+        <activity
+            android:name=".activity.task.QuitPullDialogActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/translucent" />
         <!--通告详情界面-->
         <activity
             android:name=".activity.notice.NoticeDetailActivity"

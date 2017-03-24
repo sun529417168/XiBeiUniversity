@@ -1,11 +1,13 @@
 package cn.com.xibeiuniversity.xibeiuniversity.activity.task;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
+import cn.com.xibeiuniversity.xibeiuniversity.activity.LoginActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.base.BaseActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskInfoBean;
 
@@ -13,7 +15,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskInfoBean;
  * Created by zhangyunlong on 2017/3/24.
  */
 
-public class quitPullDialogActivity extends BaseActivity implements View.OnClickListener {
+public class QuitPullDialogActivity extends BaseActivity implements View.OnClickListener {
     TaskInfoBean taskInfoList;
     private TextView titleNameText, taskNameText, taskInfoText, close, sure;
     private ImageView imageView;
@@ -44,13 +46,11 @@ public class quitPullDialogActivity extends BaseActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.dialog_pull_quit_close:
-                if(taskInfoList.getType().equals("ForceQuit"))
-                {
-                    XiBeiApp.exit();
+                if (taskInfoList.getType().equals("ForceQuit")) {
+                    XiBeiApp.changeOne();
+                    startActivity(new Intent(this, LoginActivity.class));
                     break;
-                }
-                else
-                {
+                } else {
                     break;
                 }
 

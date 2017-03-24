@@ -8,7 +8,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.sdk.android.push.notification.CPushMessage;
 
 import cn.com.xibeiuniversity.xibeiuniversity.activity.task.TaskPullDialogActivity;
-import cn.com.xibeiuniversity.xibeiuniversity.activity.task.quitPullDialogActivity;
+import cn.com.xibeiuniversity.xibeiuniversity.activity.task.QuitPullDialogActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskInfoBean;
 
 /**
@@ -41,8 +41,8 @@ public class PullIntentUtil {
            e.printStackTrace();
         }*/
         TaskInfoBean taskInfoList = JSON.parseObject(cPushMessage.getContent(), TaskInfoBean.class);
-        if (taskInfoList.getType().equals("ForceQuit")) {
-            intent = new Intent(context, quitPullDialogActivity.class);
+        if ("ForceQuit".equals(taskInfoList.getType())) {
+            intent = new Intent(context, QuitPullDialogActivity.class);
         } else {
             intent = new Intent(context, TaskPullDialogActivity.class);
         }
