@@ -287,7 +287,6 @@ public class MyRequest {
         OkHttpUtils.post().url(UrlConfig.URL_GETTASISSUEDLIST).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
             @Override
             public void onResponse(String response, int id) {
-                response = response.replace(":null,", ":\"\",");
                 Log.i("taskList", response);
                 TaskBean taskList = JSON.parseObject(response, TaskBean.class);
                 taskListInterface.showTaskList(taskList);
@@ -324,6 +323,44 @@ public class MyRequest {
             e.printStackTrace();
         }
         OkHttpUtils.post().url(UrlConfig.URL_GETTASKINFOBYID).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
+            @Override
+            public void onResponse(String response, int id) {
+                Log.i("taskDetailRequest", response);
+                TaskDetailBean taskBean = JSON.parseObject(response, TaskDetailBean.class);
+                taskAssignedInterface.getTaskDetail(taskBean);
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                if ("timeout".equals(e.getMessage().toString())) {
+                    ToastUtil.show(activity, "连接超时，请稍后再试");
+                }
+                if (progDialog.isShowing()) {
+                    progDialog.dismiss();
+                }
+            }
+        });
+    }
+
+    /**
+     * 方法名：taskDetailRequest
+     * 功    能：任务详情+反馈
+     * 参    数：final Context activity, TaskListInterface myTaskListInterface, String id
+     * 返回值：无
+     */
+    public static void taskDetailTaskAssignedRequest(final Activity activity, String id) {
+        final Dialog progDialog = DialogUtils.showWaitDialog(activity);
+        final TaskAssignedInterface taskAssignedInterface = (TaskAssignedInterface) activity;
+        Map<String, Object> params = new HashMap<>();
+        try {
+            params.put("TaskAssignedID", id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        OkHttpUtils.post().url(UrlConfig.URL_GETTASKINFOANDTASKASSIGNEDINFOBYTASKASSIGNEDID).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
             @Override
             public void onResponse(String response, int id) {
                 Log.i("taskDetailRequest", response);
@@ -385,13 +422,13 @@ public class MyRequest {
      * 参    数：Context activity, Map<String, File> params
      * 返回值：无
      */
-    public static void filesRequest(final Activity activity, File file, Object... strings) {
+    public static void filesRequest(final Activity activity, Map<String, File> fileMap, Object... strings) {
         final Dialog progDialog = DialogUtils.showWaitDialog(activity);
         Map<String, Object> params = new HashMap<>();
         params.put("FeedBackContent", strings[0]);
         params.put("TaskAssignedID", strings[1]);
         params.put("FeedbackState", strings[2]);
-        OkHttpUtils.post().addFile("mFile", file.getName(), file).url(UrlConfig.URL_TASKASSIGNEDINFO).params(params).build().execute(new StringCallback() {
+        OkHttpUtils.post().files("mFile", fileMap).url(UrlConfig.URL_TASKASSIGNEDINFO).params(params).build().execute(new StringCallback() {
             @Override
             public void onResponse(String response, int id) {
                 if ("true".equals(response)) {
@@ -434,10 +471,9 @@ public class MyRequest {
         OkHttpUtils.post().url(UrlConfig.URL_GETTASKASSIGNEDINFO).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
             @Override
             public void onResponse(String response, int id) {
-                response = response.replace(":null,", ":\"\",");
                 Log.i("taskAssignedInfo", response);
                 TaskAssignedBean taskAssignedBean = JSON.parseObject(response, TaskAssignedBean.class);
-                taskAssignedInterface.getTaskAssignedInfo(taskAssignedBean);
+//                taskAssignedInterface.getTaskAssignedInfo(taskAssignedBean);
                 if (progDialog.isShowing()) {
                     progDialog.dismiss();
                 }

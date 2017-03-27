@@ -28,7 +28,9 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.DetailImageActivity;
@@ -56,7 +58,8 @@ import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
  * 版    本：V1.0.0
  */
 
-public class TaskDetailActivity extends TakePhotoActivity implements View.OnClickListener, AdapterView.OnItemClickListener, SearchTypePopInterface, TaskAssignedInterface {
+public class TaskDetailActivity extends TakePhotoActivity implements View.OnClickListener,
+        AdapterView.OnItemClickListener, SearchTypePopInterface, TaskAssignedInterface {
     private Context context;
     private TextView titleName;
     private LinearLayout back;
@@ -81,6 +84,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
     private PopupWindow showReplyPop;
     private int feedbackState = -1;
     private List<File> listFile = new ArrayList<>();
+    private Map<String, File> fileMap = new HashMap<>();
     private File mCameraFile;
     private String path;
     private TextView taskInfo;
@@ -95,7 +99,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
     protected void setDate(Bundle savedInstanceState) {
         context = this;
         String taskId = getIntent().getStringExtra("taskId");
-        MyRequest.taskDetailRequest(this, taskId);
+        MyRequest.taskDetailTaskAssignedRequest(this, taskId);
         if (savedInstanceState != null) {
             list = savedInstanceState.getParcelableArrayList("listBitmap");
         }
@@ -196,15 +200,12 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
                     ToastUtil.show(context, "请您拍照");
                     return;
                 }
-                for (File files : listFile) {
-                    MyRequest.filesRequest(this, files, info, taskBean.getTaskAssignedID(), feedbackState);
-                }
-
+                MyRequest.filesRequest(this, fileMap, info, taskBean.getTask().getTaskAssignedID(), feedbackState);
                 break;
             case R.id.task_detail_state_file://点击下载
                 if (isEmpty()) {
                     if (isAttachment()) {
-                        for (TaskDetailBean.ImageListBean imageBean : taskBean.getImageList()) {
+                        for (TaskDetailBean.TaskBean.ImageListBean imageBean : taskBean.getTask().getImageList()) {
                             if (imageBean.getAttachmentType() == 2) {
                                 if (MyUtils.getVideoFileName(path).size() > 0) {
                                     for (String fileUrl : MyUtils.getVideoFileName(path)) {
@@ -227,7 +228,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
                             }
                         }
                     } else {
-                        for (TaskDetailBean.ImageListBean imageBean : taskBean.getImageList()) {
+                        for (TaskDetailBean.TaskBean.ImageListBean imageBean : taskBean.getTask().getImageList()) {
                             if (imageBean.getAttachmentType() == 2) {
                                 DownloadUtil down = new DownloadUtil(TaskDetailActivity.this, imageBean.getFileName(), imageBean.getFileUrl(), filePath);
                                 down.showDownloadDialog();
@@ -242,7 +243,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
     private boolean isAttachment() {
         boolean isFlag = false;
         path = Environment.getExternalStorageDirectory() + "/XiBeiDownload";
-        for (TaskDetailBean.ImageListBean imageBean : taskBean.getImageList()) {
+        for (TaskDetailBean.TaskBean.ImageListBean imageBean : taskBean.getTask().getImageList()) {
             if (imageBean.getAttachmentType() == 2) {
                 if (MyUtils.getVideoFileName(path).size() > 0) {
                     for (String fileUrl : MyUtils.getVideoFileName(path)) {
@@ -257,7 +258,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
     }
 
     private boolean isEmpty() {
-        if (taskBean.getImageList().size() == 0) {
+        if (taskBean.getTask().getImageList().size() == 0) {
             ToastUtil.show(context, "没有可下载的文件");
             return false;
         }
@@ -287,6 +288,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
         listPath.add(imagePath);
         mCameraFile = new File(imagePath);
         listFile.add(mCameraFile);
+        fileMap.put(imagePath, mCameraFile);
         showImg(imagePath);
     }
 
@@ -317,8 +319,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
         }
     }
 
-    @Override
-    public void getTaskAssignedInfo(TaskAssignedBean taskAssignedBean) {
+    public void getTaskAssignedInfo(TaskDetailBean.TaskAssignedBean taskAssignedBean) {
         if (taskAssignedBean.getFeedbackState() == 3) {
             stateReplyText.setVisibility(View.VISIBLE);
             over.setVisibility(View.GONE);
@@ -339,7 +340,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
             infoEdit.setFocusable(false);
         }
         infoEdit.setText(taskAssignedBean.getFeedBackContent());
-        for (TaskAssignedBean.ImageListBean imageBean : taskAssignedBean.getImageList()) {
+        for (TaskDetailBean.TaskAssignedBean.ImageListBeanX imageBean : taskAssignedBean.getImageList()) {
             if (imageBean.getAttachmentType() == 1) {
                 describeListFanKui.add(imageBean.getFileUrl());
             }
@@ -351,10 +352,10 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
     @Override
     public void getTaskDetail(TaskDetailBean taskDetailBean) {
         taskBean = taskDetailBean;
-        if (taskBean.getTaskAssignedState() == 3 || taskBean.getTaskAssignedState() == 4) {
-            MyRequest.taskAssignedInfoRequest(this, taskBean.getTaskAssignedID());
-        }
-        for (TaskDetailBean.ImageListBean imageBean : taskBean.getImageList()) {
+//        if (taskBean.getTask().getTaskAssignedState() == 3 || taskBean.getTask().getTaskAssignedState() == 4) {
+//            MyRequest.taskAssignedInfoRequest(this, taskBean.getTask().getTaskAssignedID());
+//        }
+        for (TaskDetailBean.TaskBean.ImageListBean imageBean : taskBean.getTask().getImageList()) {
             if (imageBean.getAttachmentType() == 1) {
                 describeList.add(imageBean.getFileUrl());
             }
@@ -364,16 +365,16 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
         submitBtn = (Button) findViewById(R.id.task_detail_button);
         submitBtn.setOnClickListener(this);
 
-        numberText.setText(taskBean.getTaskSno());
-        nameText.setText(taskBean.getTaskName());
-        typeText.setText(taskBean.getTaskTypeName());
-        addressText.setText(taskBean.getTaskAddr());
-        founderText.setText(taskBean.getPersonName());
-        priorityText.setText(taskBean.getTaskPriorityName());
-        sendTimeText.setText(taskBean.getStartDateApi());
+        numberText.setText(taskBean.getTask().getTaskSno());
+        nameText.setText(taskBean.getTask().getTaskName());
+        typeText.setText(taskBean.getTask().getTaskTypeName());
+        addressText.setText(taskBean.getTask().getTaskAddr());
+        founderText.setText(taskBean.getTask().getPersonName());
+        priorityText.setText(taskBean.getTask().getTaskPriorityName());
+        sendTimeText.setText(taskBean.getTask().getStartDateApi());
 
         filePath.setText(isAttachment() ? "打开" : "下载");
-        for (TaskDetailBean.ImageListBean imageBean : taskBean.getImageList()) {
+        for (TaskDetailBean.TaskBean.ImageListBean imageBean : taskBean.getTask().getImageList()) {
             if (imageBean.getAttachmentType() == 2) {
                 fileName.setText("文件(" + imageBean.getFileName() + ")");
             }
@@ -384,18 +385,19 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");//设置日期格式
         feedbackTimeText.setText(df.format(new Date()));
-        if (taskBean.getTaskState() == 1) {
+        if (taskBean.getTask().getTaskState() == 1) {
             stateTaskText.setText("未查阅");
         }
-        if (taskBean.getTaskState() == 2) {
+        if (taskBean.getTask().getTaskState() == 2) {
             stateTaskText.setText("处理中");
         }
-        if (taskBean.getTaskState() == 3) {
+        if (taskBean.getTask().getTaskState() == 3) {
             stateTaskText.setText("已完成");
         }
-        if (taskBean.getTaskState() == 4) {
+        if (taskBean.getTask().getTaskState() == 4) {
             stateTaskText.setText("未完成");
         }
-        taskInfo.setText(taskBean.getTaskDes());
+        taskInfo.setText(taskBean.getTask().getTaskDes());
+        getTaskAssignedInfo(taskBean.getTaskAssigned());
     }
 }

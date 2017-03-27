@@ -20,7 +20,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -112,6 +114,9 @@ public class AddTaskActivity extends TakePhotoActivity implements View.OnClickLi
         priorityText = (TextView) findViewById(R.id.add_task_priority);
         startTimeText = (TextView) findViewById(R.id.add_task_startTime);
         endTimeText = (TextView) findViewById(R.id.add_task_endTime);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");//设置日期格式
+        startTimeText.setText(df.format(new Date()));
+        endTimeText.setText(df.format(new Date()));
 
         gridView = (GridView) findViewById(R.id.add_task_gridView);
         gridView.setOnItemClickListener(this);
@@ -221,7 +226,6 @@ public class AddTaskActivity extends TakePhotoActivity implements View.OnClickLi
         Log.i("imagePaths", imagePath + "======" + imageIndex);
         listPath.add(imagePath);
         mCameraFile = new File(imagePath);
-//        fileMap.put("AddImage" + imageIndex, mCameraFile);
         fileMap.put(imagePath, mCameraFile);
         listFile.add(mCameraFile);
         showImg(imagePath);

@@ -12,7 +12,5 @@ import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskDetailBean;
  */
 
 public interface TaskAssignedInterface {
-    void getTaskAssignedInfo(TaskAssignedBean taskAssignedBean);
-
     void getTaskDetail(TaskDetailBean taskDetailBean);
 }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -40,6 +41,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
     private TextView userNameText, workNoText;
     private RelativeLayout clearCacheLayout;
     private TextView cacheSize;
+    private Button exitBtn;
 
     @Override
     protected View setView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,6 +76,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
         } catch (Exception e) {
             e.printStackTrace();
         }
+        exitBtn = (Button) rootView.findViewById(R.id.exit_button);
+        exitBtn.setOnClickListener(this);
     }
 
     @Override
@@ -85,6 +89,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
                 break;
             case R.id.mine_cache_Layout:
                 DialogUtils.clearData(context, cacheSize);
+                break;
+            case R.id.exit_button:
+                DialogUtils.exit(getActivity());
                 break;
         }
     }

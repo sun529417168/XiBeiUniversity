@@ -101,8 +101,7 @@
 
         <TextView
             android:id="@+id/notice_detail_fileName"
-            style="@style/notice_detail_textView"
-            android:text="@string/notice_detail_attachment" />
+            style="@style/notice_detail_textView" />
 
 
         <TextView

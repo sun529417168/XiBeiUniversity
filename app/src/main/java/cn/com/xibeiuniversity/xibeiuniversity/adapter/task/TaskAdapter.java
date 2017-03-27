@@ -101,7 +101,7 @@ public class TaskAdapter extends MyBaseAdapter {
                 }
                 isCheckRequest(rowsBean.getTaskAssignedID());
                 Intent intent = new Intent(context, TaskDetailActivity.class);
-                intent.putExtra("taskId", rowsBean.getID());
+                intent.putExtra("taskId", rowsBean.getTaskAssignedID()+"");
                 context.startActivity(intent);
             }
         });

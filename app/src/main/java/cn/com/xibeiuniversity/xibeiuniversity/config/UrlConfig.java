@@ -37,6 +37,10 @@ public class UrlConfig {
      */
     public static final String URL_GETTASKINFOBYID = BaseUrl + "/API/ApiTasIssued/GetTaskInfoByID";
     /**
+     * 任务详情+反馈详情
+     */
+    public static final String URL_GETTASKINFOANDTASKASSIGNEDINFOBYTASKASSIGNEDID = BaseUrl + "/API/ApiTasIssued/GetTaskInfoAndTaskAssignedInfoByTaskAssignedID";
+    /**
      * 新增任务下发功能
      */
     public static final String URL_UPLOADTASK = BaseUrl + "/API/ApiTasIssued/UploadTask";
