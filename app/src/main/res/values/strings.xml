@@ -8,6 +8,7 @@
     <string name="photo_camera">"从相机获取图片"</string>
     <string name="photo_file">"从文件获取图片"</string>
     <string name="pull_quit_close">"确定"</string>
+    <string name="close">"关闭"</string>
 
     <!--登陆界面start-->
     <string name="username">"请输入帐号"</string>
@@ -72,9 +73,9 @@
     <string name="problem_title_left">"部件问题"</string>
     <string name="problem_title_right">"事件问题"</string>
     <string name="problem_title_add">"添加"</string>
-    <string name="problem_title_type">"类型(全部)"</string>
-    <string name="problem_title_time">"时间(全部)"</string>
-    <string name="problem_title_state">"状态(全部)"</string>
+    <string name="problem_title_type">"类型"</string>
+    <string name="problem_title_time">"时间"</string>
+    <string name="problem_title_state">"状态"</string>
     <!--问题界面end-->
 
     <!--任务详情start-->
@@ -97,6 +98,7 @@
     <string name="task_detail_inputFeedbackInfo">"请输入反馈内容"</string>
     <string name="task_detail_over">"完成"</string>
     <string name="task_detail_noOver">"未完成"</string>
+    <string name="task_detail_dialog_name">"任务名称"</string>
     <!--任务详情end-->
 
     <!--个人信息start-->

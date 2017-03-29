@@ -90,6 +90,7 @@ public class MyRequest {
         OkHttpUtils.post().url(UrlConfig.URL_LOGIN).params(params).build().execute(new GenericsCallback<String>(new JsonGenericsSerializator()) {
             @Override
             public void onResponse(String response, int id) {
+                Log.i("loginInfo", response);
                 if ("0".equals(response.replace("\"", ""))) {
                     ToastUtil.show(activity, "您输入的密码有误");
                 } else if ("-1".equals(response.replace("\"", ""))) {

@@ -61,9 +61,9 @@ public class TaskAdapter extends MyBaseAdapter {
         /**
          *删除日期中的小时
          **/
-        String firstDate=rowsBean.getCreateDateApi().split(" ")[0];
+        String firstDate = rowsBean.getCreateDateApi().split(" ")[0];
         //获得星期
-        String week= GetWeek.getWeek(firstDate);
+        String week = GetWeek.getWeek(firstDate);
         /**
          * 赋值
          */
@@ -95,7 +95,7 @@ public class TaskAdapter extends MyBaseAdapter {
             state.setText("未完成");
             state.setBackgroundResource(R.color.fenSe);
         }
-        date.setText(firstDate+" "+week);
+        date.setText(firstDate + " " + week);
         name.setText("类型：" + rowsBean.getTaskName());
         sender.setText("发送人：" + rowsBean.getPersonName());
         info.setText("任务内容：" + rowsBean.getTaskDes());
@@ -108,7 +108,7 @@ public class TaskAdapter extends MyBaseAdapter {
                 }
                 isCheckRequest(rowsBean.getTaskAssignedID());
                 Intent intent = new Intent(context, TaskDetailActivity.class);
-                intent.putExtra("taskId", rowsBean.getTaskAssignedID()+"");
+                intent.putExtra("taskId", rowsBean.getTaskAssignedID() + "");
                 context.startActivity(intent);
             }
         });

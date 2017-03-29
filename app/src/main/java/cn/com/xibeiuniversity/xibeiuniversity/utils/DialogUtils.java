@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -124,8 +125,7 @@ public class DialogUtils {
      */
     public static Dialog showWaitDialog(final Context context) {
         Dialog dialog = new Dialog(context, R.style.DialogStyle);
-        View view = LayoutInflater.from(context).inflate(
-                R.layout.loading_dialog, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.loading_dialog, null);
         Window window = dialog.getWindow();
         WindowManager.LayoutParams params = window.getAttributes();
         params.dimAmount = 1.0f; // 透明显示效果
@@ -245,8 +245,7 @@ public class DialogUtils {
     public static Dialog showPhotoDialog(final Activity context) {
         final GetPhotoTypeInterface photoType = (GetPhotoTypeInterface) context;
         Dialog mCameraDialog = new Dialog(context, R.style.sex_dialog);
-        LinearLayout root = (LinearLayout) LayoutInflater.from(context).inflate(
-                R.layout.dialog_photo, null);
+        LinearLayout root = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.dialog_photo, null);
         TextView album = (TextView) root.findViewById(R.id.dialog_photo_album);
         TextView camera = (TextView) root.findViewById(R.id.dialog_photo_camera);
         TextView file = (TextView) root.findViewById(R.id.dialog_photo_file);
@@ -293,4 +292,33 @@ public class DialogUtils {
 
         return mCameraDialog;
     }
+
+    /**
+     * 方法名：showTaskNameDialog
+     * 功    能：弹出任务名称的dialog
+     * 参    数：Activity activity, String taskName
+     * 返回值：
+     */
+    public static void showTaskNameDialog(Activity activity, String taskName) {
+        final Dialog mDialog = new Dialog(activity, R.style.DialogStyle);
+        View root = LayoutInflater.from(activity).inflate(R.layout.dialog_detail_task_name, null);
+        TextView name = (TextView) root.findViewById(R.id.dialog_detail_taskName);
+        Button close = (Button) root.findViewById(R.id.dialog_detail_task_close);
+        name.setText(taskName);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+        Window window = mDialog.getWindow();
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.dimAmount = 1.0f; // 透明显示效果
+        window.setAttributes(params);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        mDialog.show();
+        mDialog.setContentView(root);
+        mDialog.setCancelable(true);
+    }
+
 }

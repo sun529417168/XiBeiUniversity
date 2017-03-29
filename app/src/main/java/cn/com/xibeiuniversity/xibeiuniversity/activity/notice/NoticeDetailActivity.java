@@ -79,7 +79,7 @@ public class NoticeDetailActivity extends BaseActivity implements View.OnClickLi
 
     private boolean isAttachment() {
         boolean isFlag = false;
-        path = Environment.getExternalStorageDirectory() + "/XiBeiDownload";
+        path = Environment.getExternalStorageDirectory() + "/XiBeiDownload/";
         for (NoticeDetailBean.FileListBean fileBean : rowsBean.getFileList()) {
             if (fileBean.getAttachmentType() == 2) {
                 if (MyUtils.getVideoFileName(path).size() > 0) {
@@ -108,7 +108,7 @@ public class NoticeDetailActivity extends BaseActivity implements View.OnClickLi
                                 if (MyUtils.getVideoFileName(path).size() > 0) {
                                     for (String fileUrl : MyUtils.getVideoFileName(path)) {
                                         if (fileUrl.equals(fileBean.getFileName())) {
-                                            File files = new File(path + "/"+fileUrl);// 这里更改为你的名称
+                                            File files = new File(path +fileUrl);// 这里更改为你的名称
                                             Log.i("fileName", fileUrl + "=======" + files.getPath());
                                             Uri path = Uri.fromFile(files);
                                             Log.i("fileName", path.toString());

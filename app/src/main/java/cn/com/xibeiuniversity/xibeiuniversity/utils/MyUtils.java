@@ -15,6 +15,10 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Vector;
 
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.GetGPSInterface;
@@ -119,6 +123,14 @@ public class MyUtils {
         }
     }
 
+    /**
+     * 方法名：getLoc
+     * 功    能：返回GPS的参数，经纬度
+     * 参    数：Context context
+     * 返回值：
+     * 作    者：stt
+     * 时    间：2017.2.21
+     */
     public static void getLoc(Context context) {
         final GetGPSInterface getGPSInterface = (GetGPSInterface) context;
         // 位置
@@ -161,5 +173,30 @@ public class MyUtils {
         // 监听位置变化，2秒一次，距离10米以上
         locationManager.requestLocationUpdates(provider, 2000, 10,
                 locationListener);
+    }
+
+    /**
+     * 方法名：getWeekOfString
+     * 功    能：根据日期时间返回星期几
+     * 参    数：String s
+     * 返回值：String
+     * 作    者：stt
+     * 时    间：2017.3.28
+     */
+    public static String getWeekOfString(String s) {
+        final String dayNames[] = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
+        SimpleDateFormat sdfInput = new SimpleDateFormat("yyyy/MM/dd");
+        Calendar calendar = Calendar.getInstance();
+        Date date = new Date();
+        try {
+            date = sdfInput.parse(s);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        calendar.setTime(date);
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        if (dayOfWeek < 0)
+            dayOfWeek = 0;
+        return dayNames[dayOfWeek];
     }
 }
