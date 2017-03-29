@@ -169,8 +169,8 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
 //                list.add("部件问题");
 //                list.add("事件问题");
 //                popupWindow = PopWindowUtils.showProblemPop(getActivity(), this, v, list, 0,ViewHight);
-                MyRequest.getProblemTypeLeft(getActivity(), this);
-                setTextViewColor(typeText);
+                  MyRequest.getProblemTypeLeft(getActivity(), this);
+                  setTextViewColor(typeText);
                 break;
             case R.id.problem_layout_time:
                 list = new ArrayList();
@@ -221,12 +221,12 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
                 break;
             case 1:
                 searchDate = "全部".equals(typeName) ? 0 : "三天".equals(typeName) ? 1 : "一周".equals(typeName) ? 2 : "一个月".equals(typeName) ? 3 : 0;
-                timeText.setText(typeName);
+                timeText.setText("时间("+typeName+")");
                 setTextViewColor(null);
                 break;
             case 2:
                 searchState = "全部".equals(typeName) ? 0 : "已上报".equals(typeName) ? 1 : "已回复".equals(typeName) ? 2 : 0;
-                stateText.setText(typeName);
+                stateText.setText("状态("+typeName+")");
                 setTextViewColor(null);
                 break;
         }
@@ -275,7 +275,7 @@ public class ProblemFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void getTypeRight(ProblemTypeRight problemTypeRight) {
         searchProblemType = problemTypeRight.getCode();
-        typeText.setText(problemTypeRight.getName());
+        typeText.setText("类型("+problemTypeRight.getName()+")");
         setTextViewColor(null);
         pageindex = 1;
         requestData(pageindex, searchState, searchProblemType, searchDate);

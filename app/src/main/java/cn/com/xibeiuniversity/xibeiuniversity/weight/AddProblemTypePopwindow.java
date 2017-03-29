@@ -8,18 +8,10 @@ import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-
 import com.alibaba.fastjson.JSON;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
@@ -29,11 +21,9 @@ import cn.com.xibeiuniversity.xibeiuniversity.config.UrlConfig;
 import cn.com.xibeiuniversity.xibeiuniversity.function.wheelview.OnWheelChangedListener;
 import cn.com.xibeiuniversity.xibeiuniversity.function.wheelview.OnWheelScrollListener;
 import cn.com.xibeiuniversity.xibeiuniversity.function.wheelview.adapter.AbstractWheelTextAdapter1;
-import cn.com.xibeiuniversity.xibeiuniversity.interfaces.ProblemTypeRightInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.OkHttpUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.callback.GenericsCallback;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.utils.JsonGenericsSerializator;
-import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
 import okhttp3.Call;
 /**

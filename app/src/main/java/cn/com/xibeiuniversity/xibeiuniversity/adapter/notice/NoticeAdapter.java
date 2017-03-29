@@ -23,6 +23,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.config.UrlConfig;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.OkHttpUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.callback.GenericsCallback;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.utils.JsonGenericsSerializator;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.GetWeek;
 import okhttp3.Call;
 
 /**
@@ -60,10 +61,16 @@ public class NoticeAdapter extends MyBaseAdapter {
         final TextView[] views = {number, date, name, info};
         final NoticeBean.RowsBean bean = list.get(position);
         /**
+        *删除日期中的小时
+        **/
+         String firstDate=bean.getApiCreateTime().split(" ")[0];
+        //获得星期
+         String week= GetWeek.getWeek(firstDate);
+        /**
          * 赋值
          */
         number.setText(bean.getInformSno());
-        date.setText(bean.getApiCreateTime());
+        date.setText(firstDate+" "+week);
         name.setText(bean.getName());
         info.setText(bean.getContentInfo());
         for (NoticeBean.RowsBean.FileListBean fileBean : bean.getFileList()) {

@@ -23,6 +23,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.config.UrlConfig;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.OkHttpUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.callback.GenericsCallback;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.utils.JsonGenericsSerializator;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.GetWeek;
 import okhttp3.Call;
 
 /**
@@ -58,6 +59,12 @@ public class TaskAdapter extends MyBaseAdapter {
         final TextView info = get(view, R.id.item_task_info);  // 具体内容
         final TextView[] views = {number, date, name, sender, info};
         /**
+         *删除日期中的小时
+         **/
+        String firstDate=rowsBean.getCreateDateApi().split(" ")[0];
+        //获得星期
+        String week= GetWeek.getWeek(firstDate);
+        /**
          * 赋值
          */
         number.setText("T" + rowsBean.getTaskSno().substring(9));
@@ -88,8 +95,8 @@ public class TaskAdapter extends MyBaseAdapter {
             state.setText("未完成");
             state.setBackgroundResource(R.color.fenSe);
         }
-        date.setText(rowsBean.getCreateDateApi());
-        name.setText("名称：" + rowsBean.getTaskName());
+        date.setText(firstDate+" "+week);
+        name.setText("类型：" + rowsBean.getTaskName());
         sender.setText("发送人：" + rowsBean.getPersonName());
         info.setText("任务内容：" + rowsBean.getTaskDes());
         view.setOnClickListener(new View.OnClickListener() {

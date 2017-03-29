@@ -16,6 +16,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.problem.ProblemDetailActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.base.MyBaseAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.GetWeek;
 
 /**
  * 文件名：ProblemAdapter
@@ -51,6 +52,12 @@ public class ProblemAdapter extends MyBaseAdapter {
         TextView[] views = {number, date, name, sender, info, executor};
         final ProblemBean.RowsBean rowsBean = list.get(position);
         /**
+         *删除日期中的小时
+         **/
+        String firstDate=rowsBean.getFindDateApi().split(" ")[0];
+        //获得星期
+        String week= GetWeek.getWeek(firstDate);
+        /**
          * 赋值
          */
         number.setText("P" + rowsBean.getProblemSno().substring(9));
@@ -72,8 +79,8 @@ public class ProblemAdapter extends MyBaseAdapter {
         if (rowsBean.getReportAttachmentList().size() == 0) {
             imageView.setImageResource(R.mipmap.login_logo);
         }
-        date.setText(rowsBean.getFindDateApi());
-        name.setText("名称：" + rowsBean.getProblemTitle());
+        date.setText(firstDate+" "+week);
+        name.setText("类型：" + rowsBean.getProblemTypeName());
         sender.setText("上报人：" + rowsBean.getReportPersonName());
         info.setText("问题描述：" + rowsBean.getProblemDes());
         view.setOnClickListener(new View.OnClickListener() {

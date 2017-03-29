@@ -3,18 +3,14 @@ package cn.com.xibeiuniversity.xibeiuniversity.utils;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -232,7 +228,7 @@ public class PopWindowUtils {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    problemTypeInterface.getProblemType(0, "全部");
+                    problemTypeInterface.getProblemType(0, "类型(全部)");
                 } else {
                     popProblemTypeLeftAdapter.setPosition(position - 1);
                     popProblemTypeLeftAdapter.notifyDataSetChanged();

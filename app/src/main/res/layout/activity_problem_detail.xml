@@ -43,7 +43,7 @@
 
 
             <!--问题名称start-->
-            <RelativeLayout style="@style/problem_layout">
+           <!-- <RelativeLayout style="@style/problem_layout">
 
                 <TextView
                     style="@style/problem_detail_textView"
@@ -53,7 +53,7 @@
                     android:id="@+id/problem_detail_name"
                     style="@style/problem_detail_textView"
                     android:layout_alignParentRight="true" />
-            </RelativeLayout>
+            </RelativeLayout>-->
             <!--问题名称end-->
 
 

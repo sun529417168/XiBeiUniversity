@@ -78,7 +78,7 @@ public class ProblemDetailActivity extends TakePhotoActivity implements View.OnC
         back.setVisibility(View.VISIBLE);
         back.setOnClickListener(this);
         numberText = (TextView) findViewById(R.id.problem_detail_number);
-        nameText = (TextView) findViewById(R.id.problem_detail_name);
+      //  nameText = (TextView) findViewById(R.id.problem_detail_name);
         stateText = (TextView) findViewById(R.id.problem_detail_state);
         problemTypeText = (TextView) findViewById(R.id.problem_detail_type);
         addressText = (TextView) findViewById(R.id.problem_detail_area);
@@ -137,7 +137,7 @@ public class ProblemDetailActivity extends TakePhotoActivity implements View.OnC
     public void getProblemDetail(ProblemDetailBean problemDetailBean) {
         problemBean = problemDetailBean;
         numberText.setText(problemBean.getProblemSno());
-        nameText.setText(problemBean.getProblemTitle());
+        //nameText.setText(problemBean.getProblemTitle());
         if (problemBean.getState() == 1) {
             stateText.setText("已上报");
         }

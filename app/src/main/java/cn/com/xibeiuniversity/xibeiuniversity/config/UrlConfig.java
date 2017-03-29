@@ -9,8 +9,8 @@ package cn.com.xibeiuniversity.xibeiuniversity.config;
  */
 
 public class UrlConfig {
-    public static final String BaseUrl = "http://123.56.96.237:8001";// 正式
-//    public static final String BaseUrl = "http://192.168.0.90:8001";// 测试
+      public static final String BaseUrl = "http://123.56.96.237:8001";// 正式
+    // public static final String BaseUrl = "http://192.168.0.90:8001";// 测试
 
     /**
      * 登陆接口返回token的

@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <!--问题名称start-->
-            <RelativeLayout style="@style/add_problem_layout">
+            <!--<RelativeLayout style="@style/add_problem_layout">
 
                 <TextView
                     style="@style/add_problem_textView"
@@ -33,7 +33,7 @@
                     android:gravity="right|center_vertical"
                     android:hint="@string/add_problem_inputPlease" />
 
-            </RelativeLayout>
+            </RelativeLayout>-->
             <!--问题名称end-->
 
 

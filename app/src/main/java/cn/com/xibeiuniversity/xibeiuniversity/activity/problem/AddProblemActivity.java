@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -19,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -101,7 +99,7 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
         back = (LinearLayout) findViewById(R.id.title_back);
         back.setVisibility(View.VISIBLE);
         back.setOnClickListener(this);
-        nameEdit = (EditText) findViewById(R.id.add_problem_detail_name);
+       // nameEdit = (EditText) findViewById(R.id.add_problem_detail_name);
         typeLayout = (RelativeLayout) findViewById(R.id.add_problem_typeLayout);
         typeLayout.setOnClickListener(this);
         typeText = (TextView) findViewById(R.id.add_problem_type);
@@ -154,12 +152,12 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
                     return;
                 }
                 MyUtils.getLoc(this);
-                problemTitle = nameEdit.getText().toString().trim();
+                //problemTitle = nameEdit.getText().toString().trim();
                 address = addressEdit.getText().toString().trim();
                 findDate = findTimeText.getText().toString().trim();
                 problemDes = inputInfoEdit.getText().toString().trim();
                 if (isEmpty()) {
-                    MyRequest.addProblemRequestsb(this, fileMap, problemTitle, problemType, address, gps, findDate, problemDes);//不管有没有图片
+                    MyRequest.addProblemRequestsb(this, fileMap, problemType, address, gps, findDate, problemDes);//不管有没有图片
                 }
 
                 break;
@@ -167,10 +165,11 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
     }
 
     private boolean isEmpty() {
-        if (TextUtils.isEmpty(problemTitle)) {
+       /* if (TextUtils.isEmpty(problemTitle)) {
             ToastUtil.show(this, "请输入问题名称");
             return false;
-        } else if (TextUtils.isEmpty(problemType)) {
+        } else */
+        if (TextUtils.isEmpty(problemType)) {
             ToastUtil.show(this, "请选择问题类型");
             return false;
         } else if (TextUtils.isEmpty(address)) {
@@ -235,7 +234,7 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
     @Override
     public void getTypeLeft(List<ProblemTypeLeft> problemTypeLeftList) {
         AddProblemTypePopwindow mAddProblemTypePopwindow = new AddProblemTypePopwindow(AddProblemActivity.this, (ArrayList<ProblemTypeLeft>) problemTypeLeftList);
-        mAddProblemTypePopwindow.showAtLocation(typeLayout, Gravity.BOTTOM, 0, 0);
+        mAddProblemTypePopwindow.showAsDropDown(typeLayout,0,5);
         mAddProblemTypePopwindow.setAddresskListener(new AddProblemTypePopwindow.OnAddressCListener() {
             @Override
             public void onClick(String left, String right, String code) {

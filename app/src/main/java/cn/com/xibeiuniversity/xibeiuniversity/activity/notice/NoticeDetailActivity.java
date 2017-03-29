@@ -17,14 +17,9 @@ import java.io.File;
 import java.util.ArrayList;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
-import cn.com.xibeiuniversity.xibeiuniversity.activity.task.TaskDetailActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.notice.NoticeDetalPhotoAdapter;
-import cn.com.xibeiuniversity.xibeiuniversity.adapter.problem.ProblemDetalPhotoAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.base.BaseActivity;
-import cn.com.xibeiuniversity.xibeiuniversity.bean.notice.NoticeBean;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.notice.NoticeDetailBean;
-import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemBean;
-import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskBean;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.NoticeDetailInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.DownloadUtil;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
@@ -113,11 +108,12 @@ public class NoticeDetailActivity extends BaseActivity implements View.OnClickLi
                                 if (MyUtils.getVideoFileName(path).size() > 0) {
                                     for (String fileUrl : MyUtils.getVideoFileName(path)) {
                                         if (fileUrl.equals(fileBean.getFileName())) {
-                                            File files = new File(path + fileUrl);// 这里更改为你的名称
+                                            File files = new File(path + "/"+fileUrl);// 这里更改为你的名称
                                             Log.i("fileName", fileUrl + "=======" + files.getPath());
                                             Uri path = Uri.fromFile(files);
+                                            Log.i("fileName", path.toString());
                                             Intent intent = new Intent(Intent.ACTION_VIEW);
-                                            intent.setDataAndType(path, "application/msword");
+                                            intent.setDataAndType(path, "application/*");
                                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                             try {
                                                 startActivity(intent);

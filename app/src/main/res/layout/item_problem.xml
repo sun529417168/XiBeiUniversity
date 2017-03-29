@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
@@ -17,6 +17,9 @@
         <TextView
             android:id="@+id/item_problem_number"
             style="@style/problem_item"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/item_task_date"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="4dp" />
 
         <TextView
@@ -24,13 +27,16 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
-            android:layout_toRightOf="@+id/item_problem_number"
+            android:layout_toRightOf="@+id/item_problem_date"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white"
             android:gravity="center" />
 
         <TextView
             android:id="@+id/item_problem_date"
             style="@style/problem_item"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentLeft="true"
+            android:textSize="20sp"/>
 
     </RelativeLayout>
 
@@ -41,7 +47,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="115dp"
         android:orientation="horizontal"
         android:padding="10dp">
 
@@ -64,7 +70,7 @@
             android:orientation="vertical">
 
 
-            <TextView
+         <TextView
                 android:id="@+id/item_problem_name"
                 style="@style/problem_item"
                 android:ellipsize="end"
@@ -74,7 +80,7 @@
             <TextView
                 android:id="@+id/item_problem_sender"
                 style="@style/problem_item"
-                android:layout_marginTop="5dp" />
+                android:layout_marginTop="8dp" />
 
 
             <TextView
