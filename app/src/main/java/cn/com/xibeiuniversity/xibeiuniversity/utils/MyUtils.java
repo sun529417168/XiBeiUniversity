@@ -9,22 +9,22 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.Vector;
 
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.GetGPSInterface;
 
-import static android.R.attr.path;
 import static android.content.Context.LOCATION_SERVICE;
+
 
 /**
  * 文件名：MyUtils
@@ -198,5 +198,16 @@ public class MyUtils {
         if (dayOfWeek < 0)
             dayOfWeek = 0;
         return dayNames[dayOfWeek];
+    }
+//阴历日期转换为阳历日期
+    public static String getLunar(String time) {
+        SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd");
+        ParsePosition pos=new ParsePosition(0);
+        Date date=format.parse(time,pos);
+        Calendar cal=Calendar.getInstance();
+        cal.setTime(date);
+        cal.setTimeZone(TimeZone.getDefault());
+        Lunar lunar=new Lunar(cal);
+        return lunar.toString();
     }
 }

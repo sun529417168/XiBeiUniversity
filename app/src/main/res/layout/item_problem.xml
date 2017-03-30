@@ -49,24 +49,76 @@
         android:layout_width="match_parent"
         android:layout_height="115dp"
         android:orientation="horizontal"
-        android:padding="10dp">
-
+        android:padding="5dp">
+        <!--左边图片start-->
         <LinearLayout
+            android:id="@+id/item_problem_picture"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3">
+            android:layout_weight="4"
+            android:orientation="vertical"
+            android:visibility="visible">
 
             <ImageView
                 android:id="@+id/item_problem_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
+        <!--左边图片end-->
+        <!--左边日历start-->
+        <!--说明：默认是没有日历的，在没有图片的情况下才会显示日历-->
+        <RelativeLayout
+            android:id="@+id/item_problem_calendar"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_weight="4"
+            android:background="@mipmap/calendar_background"
+            android:visibility="gone">
 
+            <TextView
+                android:id="@+id/problem_year_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="2017年3月"
+                android:textColor="#EA1E13" />
+
+            <TextView
+                android:id="@+id/problem_week"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:text="星期二"
+                android:textColor="#EA1E13" />
+
+            <TextView
+                android:id="@+id/problem_lunar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:text="农历四月初一"
+                android:paddingBottom="14dp"
+                android:textColor="#EA1E13" />
+
+            <TextView
+                android:id="@+id/problem_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="28"
+                android:textColor="#EA1E13"
+                android:textSize="60sp"
+                android:typeface="serif" />
+        </RelativeLayout>
+        <!--左边日历end-->
+        <!--右边的数据start-->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
-            android:layout_weight="7"
+            android:layout_weight="6"
             android:orientation="vertical">
 
 
@@ -98,6 +150,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true" />
         </LinearLayout>
+        <!--右边的数据end-->
     </LinearLayout>
 
     <View

@@ -6,6 +6,8 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -24,6 +26,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.okhttps.OkHttpUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.callback.GenericsCallback;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.utils.JsonGenericsSerializator;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.GetWeek;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.MyUtils;
 import okhttp3.Call;
 
 /**
@@ -57,6 +60,12 @@ public class NoticeAdapter extends MyBaseAdapter {
         TextView date = get(view, R.id.item_notice_date);  // 日期
         TextView name = get(view, R.id.item_notice_name);  // 名称
         ImageView imageView = get(view, R.id.item_notice_imageView);//图片
+        RelativeLayout noticeCalendarLayout=get(view,R.id.item_notice_calendar);//日历布局
+        LinearLayout noticePictureLayout=get(view,R.id.item_notice_picture);//图片布局
+        TextView notice_calendar_year_month=get(view,R.id.notice_year_month);//获取年月
+        TextView notice_calendar_week=get(view,R.id.notice_week);//获取星期
+        TextView notice_calendar_date=get(view,R.id.notice_day);//获取日期
+        TextView notice_calendar_lunar=get(view,R.id.notice_lunar);//获取农历日期
         final TextView info = get(view, R.id.item_notice_info);  // 具体内容
         final TextView[] views = {number, date, name, info};
         final NoticeBean.RowsBean bean = list.get(position);
@@ -64,22 +73,40 @@ public class NoticeAdapter extends MyBaseAdapter {
         *删除日期中的小时
         **/
          String firstDate=bean.getApiCreateTime().split(" ")[0];
+        //获取年和月
+        String notice_text_year_month=firstDate.split("/")[0]+"年"+firstDate.split("/")[1]+"月";
+        //获取日期
+        String notice_text_date=firstDate.split("/")[2];
         //获得星期
-         String week= GetWeek.getWeek(firstDate);
+        String notice_week = GetWeek.getWeek(firstDate);
+        //获得农历日期
+        String notice_lunar= MyUtils.getLunar(firstDate);
         /**
          * 赋值
          */
         number.setText(bean.getInformSno());
-        date.setText(firstDate+" "+week);
+        date.setText(firstDate+" "+notice_week);
+        notice_calendar_year_month.setText(notice_text_year_month);
+        notice_calendar_week.setText(notice_week);
+        notice_calendar_date.setText(notice_text_date);
+        notice_calendar_lunar.setText(notice_lunar);
         name.setText(bean.getName());
         info.setText(bean.getContentInfo());
         for (NoticeBean.RowsBean.FileListBean fileBean : bean.getFileList()) {
             if (fileBean.getAttachmentType() == 1) {
-                ImageLoader.getInstance().displayImage(fileBean.getFileUrl(), imageView);
+                if (fileBean.getFileUrl() != null) {
+                    noticeCalendarLayout.setVisibility(View.GONE);
+                    noticePictureLayout.setVisibility(View.VISIBLE);
+                    ImageLoader.getInstance().displayImage(fileBean.getFileUrl(), imageView);
+                } else {
+                    noticePictureLayout.setVisibility(View.GONE);
+                    noticeCalendarLayout.setVisibility(View.VISIBLE);
+                }
             }
         }
         if (bean.getFileList().size() == 0) {
-            imageView.setImageResource(R.mipmap.login_logo);
+            noticePictureLayout.setVisibility(View.GONE);
+            noticeCalendarLayout.setVisibility(View.VISIBLE);
         }
         if (bean.isIsCheck()) {
             setTextColor(views);

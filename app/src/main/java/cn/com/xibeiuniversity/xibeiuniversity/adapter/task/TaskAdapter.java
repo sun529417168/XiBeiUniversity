@@ -6,6 +6,8 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -24,6 +26,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.okhttps.OkHttpUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.callback.GenericsCallback;
 import cn.com.xibeiuniversity.xibeiuniversity.okhttps.utils.JsonGenericsSerializator;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.GetWeek;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.MyUtils;
 import okhttp3.Call;
 
 /**
@@ -56,25 +59,45 @@ public class TaskAdapter extends MyBaseAdapter {
         ImageView imageView = get(view, R.id.item_task_image);  // 图片
         TextView name = get(view, R.id.item_task_name);  // 名称
         TextView sender = get(view, R.id.item_task_sender);  // 发送人
+        RelativeLayout taskCalendarLayout=get(view,R.id.item_task_calendar);//日历布局
+        LinearLayout  taskPictureLayout=get(view,R.id.item_task_picture);//图片布局
+        TextView task_calendar_year_month=get(view,R.id.task_year_month);//获取年月
+        TextView task_calendar_week=get(view,R.id.task_week);//获取星期
+        TextView task_calendar_date=get(view,R.id.task_day);//获取日期
+        TextView task_calendar_lunar=get(view,R.id.task_lunar);//获取农历日期
         final TextView info = get(view, R.id.item_task_info);  // 具体内容
         final TextView[] views = {number, date, name, sender, info};
         /**
          *删除日期中的小时
          **/
         String firstDate = rowsBean.getCreateDateApi().split(" ")[0];
+        //获取年和月
+        String task_text_year_month=firstDate.split("/")[0]+"年"+firstDate.split("/")[1]+"月";
+        //获取日期
+        String task_text_date=firstDate.split("/")[2];
         //获得星期
-        String week = GetWeek.getWeek(firstDate);
+        String task_week = GetWeek.getWeek(firstDate);
+        //获得农历日期
+        String task_lunar= MyUtils.getLunar(firstDate);
         /**
          * 赋值
          */
         number.setText("T" + rowsBean.getTaskSno().substring(9));
         for (TaskBean.RowsBean.ImageListBean imageBean : rowsBean.getImageList()) {
             if (imageBean.getAttachmentType() == 1) {
-                ImageLoader.getInstance().displayImage(imageBean.getFileUrl(), imageView);
+                if (imageBean.getFileUrl() != null) {
+                    taskCalendarLayout.setVisibility(View.GONE);
+                    taskPictureLayout.setVisibility(View.VISIBLE);
+                    ImageLoader.getInstance().displayImage(imageBean.getFileUrl(), imageView);
+                } else {
+                    taskPictureLayout.setVisibility(View.GONE);
+                    taskCalendarLayout.setVisibility(View.VISIBLE);
+                }
             }
         }
         if (rowsBean.getImageList().size() == 0) {
-            imageView.setImageResource(R.mipmap.login_logo);
+            taskPictureLayout.setVisibility(View.GONE);
+            taskCalendarLayout.setVisibility(View.VISIBLE);
         }
         if (rowsBean.isIsCheck()) {
             setTextColor(views);
@@ -95,7 +118,11 @@ public class TaskAdapter extends MyBaseAdapter {
             state.setText("未完成");
             state.setBackgroundResource(R.color.fenSe);
         }
-        date.setText(firstDate + " " + week);
+        date.setText(firstDate + " " + task_week);
+        task_calendar_year_month.setText(task_text_year_month);
+        task_calendar_week.setText(task_week);
+        task_calendar_date.setText(task_text_date);
+        task_calendar_lunar.setText(task_lunar);
         name.setText("类型：" + rowsBean.getTaskName());
         sender.setText("发送人：" + rowsBean.getPersonName());
         info.setText("任务内容：" + rowsBean.getTaskDes());
@@ -114,7 +141,7 @@ public class TaskAdapter extends MyBaseAdapter {
         });
 
     }
-
+    //填充日历图片
     private void setTextColor(TextView[] views) {
         for (TextView view : views) {
             view.setTextColor(ContextCompat.getColor(context, R.color.gray));

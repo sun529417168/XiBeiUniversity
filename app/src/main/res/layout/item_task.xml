@@ -57,7 +57,8 @@
         <!--左边图片start-->
         <LinearLayout
             android:layout_width="0dp"
-            android:visibility="gone"
+            android:id="@+id/item_task_picture"
+            android:visibility="visible"
             android:layout_height="match_parent"
             android:layout_weight="4">
 
@@ -71,7 +72,8 @@
         <!--左边日历start-->
         <!--说明：默认是没有日历的，在没有图片的情况下才会显示日历-->
         <RelativeLayout
-            android:id="@+id/item_calendar"
+            android:id="@+id/item_task_calendar"
+            android:visibility="gone"
             android:layout_width="0dp"
             android:layout_height="120dp"
             android:layout_weight="4"
@@ -79,6 +81,7 @@
             >
 
             <TextView
+                android:id="@+id/task_year_month"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -86,6 +89,7 @@
                 android:textColor="#EA1E13" />
 
             <TextView
+                android:id="@+id/task_week"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -94,6 +98,7 @@
                 android:textColor="#EA1E13" />
 
             <TextView
+                android:id="@+id/task_lunar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -101,6 +106,7 @@
                 android:textColor="#EA1E13" />
 
             <TextView
+                android:id="@+id/task_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
