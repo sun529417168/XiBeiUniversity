@@ -82,6 +82,23 @@
                 android:background="@mipmap/add_problem" />
         </LinearLayout>
         <!--添加事件end-->
+        <!--保存start-->
+        <LinearLayout
+            android:id="@+id/title_save"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/editor_sure"
+                android:textColor="@color/white" />
+        </LinearLayout>
+        <!--保存end-->
     </RelativeLayout>
 </LinearLayout>

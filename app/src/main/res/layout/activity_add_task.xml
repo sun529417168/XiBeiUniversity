@@ -20,21 +20,32 @@
 
 
             <!--任务名称start-->
-            <RelativeLayout style="@style/add_task_layout">
+            <RelativeLayout
+                android:id="@+id/task_name_layout"
+                style="@style/add_task_layout">
 
                 <TextView
                     android:id="@+id/name"
                     style="@style/add_task_textView"
                     android:text="@string/add_task_name" />
-
-                <EditText
+                <TextView
                     android:id="@+id/add_task_name"
-                    style="@style/add_task_editView"
-                    android:layout_marginRight="13dp"
-                    android:layout_toRightOf="@+id/name"
-                    android:background="@null"
+                    style="@style/add_problem_textView"
+                    android:layout_marginRight="5dp"
+                    android:layout_width="200sp"
+                    android:ellipsize="marquee"
+                    android:maxLines="1"
                     android:gravity="right|center_vertical"
+                    android:layout_toLeftOf="@+id/add_task_name_right"
                     android:hint="@string/add_task_inputPlease" />
+
+                <ImageView
+                    android:id="@+id/add_task_name_right"
+                    android:layout_width="8dp"
+                    android:layout_height="10dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@mipmap/right" />
 
             </RelativeLayout>
             <!--任务名称end-->

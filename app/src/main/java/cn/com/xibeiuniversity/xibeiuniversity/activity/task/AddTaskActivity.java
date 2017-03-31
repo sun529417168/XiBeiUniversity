@@ -29,6 +29,7 @@ import java.util.Map;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.DetailImageActivity;
+import cn.com.xibeiuniversity.xibeiuniversity.activity.InputTextActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.task.TaskDetalPhotoAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.task.TaskChoosePersonBean;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.app.TakePhotoActivity;
@@ -49,10 +50,10 @@ import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
  */
 
 public class AddTaskActivity extends TakePhotoActivity implements View.OnClickListener, TaskTypeValuesInterface, GetPhotoTypeInterface, AdapterView.OnItemClickListener {
-    private TextView titleName;
+    private TextView titleName, textName;
     private LinearLayout back;
-    private EditText nameEdit, addressEdit, infoEdit;
-    private RelativeLayout typeLayout, priorityLayout, startTimeLayout, endTimeLayout, personLayout;
+    private EditText addressEdit, infoEdit;
+    private RelativeLayout typeLayout, priorityLayout, startTimeLayout, endTimeLayout, personLayout, taskNameLayout;
     private ImageView takePhoto;
     private TextView typeText, priorityText, startTimeText, endTimeText, personText;
     private Dialog showPhotoDialog;
@@ -92,9 +93,11 @@ public class AddTaskActivity extends TakePhotoActivity implements View.OnClickLi
         back = (LinearLayout) findViewById(R.id.title_back);
         back.setVisibility(View.VISIBLE);
         back.setOnClickListener(this);
-        nameEdit = (EditText) findViewById(R.id.add_task_name);
+        textName = (TextView) findViewById(R.id.add_task_name);
         addressEdit = (EditText) findViewById(R.id.add_task_address);
         infoEdit = (EditText) findViewById(R.id.add_task_inputInfo);
+        taskNameLayout = (RelativeLayout) findViewById(R.id.task_name_layout);
+        taskNameLayout.setOnClickListener(this);
         typeLayout = (RelativeLayout) findViewById(R.id.add_task_typeLayout);
         priorityLayout = (RelativeLayout) findViewById(R.id.add_task_priorityLayout);
         startTimeLayout = (RelativeLayout) findViewById(R.id.add_task_startTimeLayout);
@@ -153,8 +156,15 @@ public class AddTaskActivity extends TakePhotoActivity implements View.OnClickLi
             case R.id.add_task_personLayout://人员下发
                 startActivityForResult(new Intent(this, TaskChoosePersonActivity.class), 11);
                 break;
+            case R.id.task_name_layout: //任务名称
+                Intent intent = new Intent(AddTaskActivity.this, InputTextActivity.class);
+                inputName = textName.getText().toString().trim();
+                if (!TextUtils.isEmpty(inputName)) {
+                    intent.putExtra("value", inputName);
+                }
+                startActivityForResult(intent, 1);
+                break;
             case R.id.add_task_button:
-                inputName = nameEdit.getText().toString().trim();
                 inputTypeName = typeText.getText().toString().trim();
                 inputAddress = addressEdit.getText().toString().trim();
                 inputPriorityName = priorityText.getText().toString().trim();
@@ -300,6 +310,16 @@ public class AddTaskActivity extends TakePhotoActivity implements View.OnClickLi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    inputName = data.getStringExtra("return_value");
+                    textName.setText(inputName);
+                }
+                if (resultCode == RESULT_CANCELED) {
+                    inputName = data.getStringExtra("return_value");
+                    textName.setText(inputName);
+                }
+                break;
             case 11:
                 if (resultCode == RESULT_OK) {
                     List<TaskChoosePersonBean> list = (List<TaskChoosePersonBean>) data.getSerializableExtra("data");
@@ -313,6 +333,7 @@ public class AddTaskActivity extends TakePhotoActivity implements View.OnClickLi
                     }
                     personText.setText(TextUtils.isEmpty(personName) ? "" : personName.substring(0, personName.length() - 1));
                 }
+                break;
         }
     }
 }

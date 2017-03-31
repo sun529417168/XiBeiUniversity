@@ -64,21 +64,32 @@
             <!--问题类型end-->
 
             <!--所在区域start-->
-            <RelativeLayout style="@style/add_problem_layout">
+            <RelativeLayout
+                android:id="@+id/add_problem_positionLayout"
+                style="@style/add_problem_layout">
 
                 <TextView
                     style="@style/add_problem_textView"
                     android:text="@string/add_problem_address" />
 
-                <EditText
+                <TextView
                     android:id="@+id/add_problem_address"
-                    style="@style/add_problem_editView"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="13dp"
-                    android:background="@null"
+                    style="@style/add_problem_textView"
+                    android:layout_marginRight="5dp"
+                    android:layout_width="200sp"
+                    android:maxLines="1"
+                    android:ellipsize="marquee"
                     android:gravity="right|center_vertical"
+                    android:layout_toLeftOf="@+id/add_problem_position_right"
                     android:hint="@string/add_problem_inputPlease" />
 
+                <ImageView
+                    android:id="@+id/add_problem_position_right"
+                    android:layout_width="8dp"
+                    android:layout_height="10dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@mipmap/right" />
             </RelativeLayout>
             <!--所在区域end-->
 

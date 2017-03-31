@@ -29,6 +29,7 @@ import java.util.Map;
 
 import cn.com.xibeiuniversity.xibeiuniversity.R;
 import cn.com.xibeiuniversity.xibeiuniversity.activity.DetailImageActivity;
+import cn.com.xibeiuniversity.xibeiuniversity.activity.InputTextActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.adapter.task.TaskDetalPhotoAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.problem.ProblemTypeLeft;
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.app.TakePhotoActivity;
@@ -64,8 +65,8 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
     private GridView gridView;
     private TaskDetalPhotoAdapter taskDetalPhotoAdapter;
     private EditText nameEdit, addressEdit, inputInfoEdit;
-    private RelativeLayout typeLayout, findTimeLayout;
-    private TextView typeText, senderText, findTimeText, sendTimeText;
+    private RelativeLayout typeLayout, findTimeLayout, positionLayout;
+    private TextView typeText, senderText, findTimeText, sendTimeText, positionText;
     private Button sendInfoBtn;
     private String problemType = "";
     private String gps;
@@ -99,11 +100,14 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
         back = (LinearLayout) findViewById(R.id.title_back);
         back.setVisibility(View.VISIBLE);
         back.setOnClickListener(this);
-       // nameEdit = (EditText) findViewById(R.id.add_problem_detail_name);
+        // nameEdit = (EditText) findViewById(R.id.add_problem_detail_name);
         typeLayout = (RelativeLayout) findViewById(R.id.add_problem_typeLayout);
+        positionLayout = (RelativeLayout) findViewById(R.id.add_problem_positionLayout);
+        positionText = (TextView) findViewById(R.id.add_problem_address);
         typeLayout.setOnClickListener(this);
+        positionLayout.setOnClickListener(this);
         typeText = (TextView) findViewById(R.id.add_problem_type);
-        addressEdit = (EditText) findViewById(R.id.add_problem_address);
+        //addressEdit = (EditText) findViewById(R.id.add_problem_address);
         senderText = (TextView) findViewById(R.id.add_problem_sender);
         senderText.setText(SharedUtil.getString(this, "personName"));
         findTimeLayout = (RelativeLayout) findViewById(R.id.add_problem_findTimeLayout);
@@ -142,6 +146,14 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
             case R.id.add_problem_typeLayout://问题类型
                 MyRequest.getProblemTypeLeft(this, AddProblemActivity.this);
                 break;
+            case R.id.add_problem_positionLayout:
+                Intent intent = new Intent(AddProblemActivity.this, InputTextActivity.class);
+                address = positionText.getText().toString().trim();
+                if (!TextUtils.isEmpty(address)) {
+                    intent.putExtra("value", address);
+                }
+                startActivityForResult(intent, 1);
+                break;
             case R.id.add_problem_findTimeLayout://发现时间
                 DateTimePickDialogUtil dateTimePicKDialog = new DateTimePickDialogUtil(AddProblemActivity.this, "");
                 dateTimePicKDialog.dateTimePicKDialog(findTimeText);
@@ -153,7 +165,6 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
                 }
                 MyUtils.getLoc(this);
                 //problemTitle = nameEdit.getText().toString().trim();
-                address = addressEdit.getText().toString().trim();
                 findDate = findTimeText.getText().toString().trim();
                 problemDes = inputInfoEdit.getText().toString().trim();
                 if (isEmpty()) {
@@ -219,6 +230,26 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    address = data.getStringExtra("return_value");
+                    positionText.setText(address);
+                }
+                if(resultCode==RESULT_CANCELED)
+                {
+                    address = data.getStringExtra("return_value");
+                    positionText.setText(address);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent in = new Intent(this, DetailImageActivity.class);
         in.putStringArrayListExtra("listPath", listPath);
@@ -234,7 +265,7 @@ public class AddProblemActivity extends TakePhotoActivity implements View.OnClic
     @Override
     public void getTypeLeft(List<ProblemTypeLeft> problemTypeLeftList) {
         AddProblemTypePopwindow mAddProblemTypePopwindow = new AddProblemTypePopwindow(AddProblemActivity.this, (ArrayList<ProblemTypeLeft>) problemTypeLeftList);
-        mAddProblemTypePopwindow.showAsDropDown(typeLayout,0,5);
+        mAddProblemTypePopwindow.showAsDropDown(typeLayout, 0, 5);
         mAddProblemTypePopwindow.setAddresskListener(new AddProblemTypePopwindow.OnAddressCListener() {
             @Override
             public void onClick(String left, String right, String code) {
