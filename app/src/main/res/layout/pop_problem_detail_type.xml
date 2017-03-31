@@ -36,6 +36,7 @@
                 android:layout_weight="1" />
 
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -54,6 +55,7 @@
                 android:text="取消"
                 android:textColor="#079EFE"
                 android:textSize="15sp" />
+
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"

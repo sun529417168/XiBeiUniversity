@@ -44,11 +44,13 @@ import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.app.TakePhotoAc
 import cn.com.xibeiuniversity.xibeiuniversity.function.takephoto.compress.CompressConfig;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.SearchTypePopInterface;
 import cn.com.xibeiuniversity.xibeiuniversity.interfaces.TaskAssignedInterface;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.CalendarUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.DialogUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.DownloadUtil;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyRequest;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.PopWindowUtils;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.SharedUtil;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
 
 /**
@@ -91,6 +93,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
     private String path;
     private TextView taskInfo;
     private CheckBox over, noOver;
+    private String taskId = "";
 
     @Override
     protected void setView() {
@@ -100,11 +103,12 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
     @Override
     protected void setDate(Bundle savedInstanceState) {
         context = this;
-        String taskId = getIntent().getStringExtra("taskId");
+        taskId = getIntent().getStringExtra("taskId");
         MyRequest.taskDetailTaskAssignedRequest(this, taskId);
         if (savedInstanceState != null) {
             list = savedInstanceState.getParcelableArrayList("listBitmap");
         }
+
     }
 
     @Override
@@ -348,6 +352,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
             takePhoto.setVisibility(View.INVISIBLE);
             infoEdit.setFocusable(false);
         }
+
         infoEdit.setText(taskAssignedBean.getFeedBackContent());
         for (TaskDetailBean.TaskAssignedBean.ImageListBeanX imageBean : taskAssignedBean.getImageList()) {
             if (imageBean.getAttachmentType() == 1) {
@@ -361,6 +366,14 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
     @Override
     public void getTaskDetail(TaskDetailBean taskDetailBean) {
         taskBean = taskDetailBean;
+        if (taskBean.getTaskAssigned().getFeedbackState() == 3 || taskBean.getTaskAssigned().getFeedbackState() == 4) {
+            CalendarUtils.deleteCalendarInfo(context, taskId);
+        } else {
+            if (TextUtils.isEmpty(SharedUtil.getString(context, taskId)))
+                CalendarUtils.addCalendarsAccount(context, taskId);
+            if (TextUtils.isEmpty(SharedUtil.getString(context, taskDetailBean.getTask().getTaskSno())))
+                CalendarUtils.insertCalendarInfo(context, taskDetailBean, taskId);
+        }
         for (TaskDetailBean.TaskBean.ImageListBean imageBean : taskBean.getTask().getImageList()) {
             if (imageBean.getAttachmentType() == 1) {
                 describeList.add(imageBean.getFileUrl());

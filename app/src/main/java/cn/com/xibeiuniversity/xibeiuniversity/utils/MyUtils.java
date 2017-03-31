@@ -199,15 +199,58 @@ public class MyUtils {
             dayOfWeek = 0;
         return dayNames[dayOfWeek];
     }
-//阴历日期转换为阳历日期
+
+    //阴历日期转换为阳历日期
     public static String getLunar(String time) {
-        SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd");
-        ParsePosition pos=new ParsePosition(0);
-        Date date=format.parse(time,pos);
-        Calendar cal=Calendar.getInstance();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        ParsePosition pos = new ParsePosition(0);
+        Date date = format.parse(time, pos);
+        Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.setTimeZone(TimeZone.getDefault());
-        Lunar lunar=new Lunar(cal);
+        Lunar lunar = new Lunar(cal);
         return lunar.toString();
+    }
+
+    /**
+     * 方法名：dateToStamp
+     * 功 能：将时间戳转换为时间
+     * 参 数：String s
+     * 返回值：String
+     * 作 者：stt
+     * 时间：2017.3.28
+     */
+    public static String stampToDate(String s) {
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss");
+        long lt = new Long(s);
+        Date date = new Date(lt);
+        res = simpleDateFormat.format(date);
+        return res;
+    }
+
+    /**
+     * 方法名：dateToStamp
+     * 功 能：将时间转换为时间戳
+     * 参 数：String s
+     * 返回值：String
+     * 作 者：stt
+     * 时间：2017.3.28
+     */
+    public static String dateToStamp(String s) {
+        String res = null;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+                "yyyy/MM/dd HH:mm:ss");
+        Date date;
+        try {
+            date = simpleDateFormat.parse(s);
+            long ts = date.getTime();
+            res = String.valueOf(ts);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return res;
     }
 }

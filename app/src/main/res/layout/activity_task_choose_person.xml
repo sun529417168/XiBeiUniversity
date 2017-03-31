@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#F0F0F0"
-        android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0F0F0"
+    android:orientation="vertical">
+
     <include
         android:id="@+id/add_choose_title"
         layout="@layout/title" />
@@ -22,6 +23,7 @@
         android:groupIndicator="@null"
         android:scrollbars="vertical"
         android:scrollingCache="true" />
+
     <Button
         android:id="@+id/choose_person_submit"
         android:layout_width="match_parent"

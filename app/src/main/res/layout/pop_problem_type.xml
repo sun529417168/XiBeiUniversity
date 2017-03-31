@@ -28,6 +28,5 @@
         android:visibility="gone"
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:scrollbarStyle="insideInset"
-        android:scrollbars="none"
-         />
+        android:scrollbars="none" />
 </LinearLayout>
