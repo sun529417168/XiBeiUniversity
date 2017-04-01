@@ -231,7 +231,8 @@
                 android:background="@color/white"
                 android:gravity="left|top"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp" />
+                android:paddingRight="20dp"
+                android:textColor="@color/black" />
 
             <View
                 android:layout_width="match_parent"
