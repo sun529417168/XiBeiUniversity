@@ -94,6 +94,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
     private TextView taskInfo;
     private CheckBox over, noOver;
     private String taskId = "";
+    private ImageView reverse;
 
     @Override
     protected void setView() {
@@ -142,6 +143,9 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
         taskInfo = (TextView) findViewById(R.id.task_detail_describe);
         stateReplyText = (TextView) findViewById(R.id.task_detail_state_reply);//反馈状态
         feedbackTimeText = (TextView) findViewById(R.id.task_detail_feedbackTime);//反馈时间
+        submitBtn = (Button) findViewById(R.id.task_detail_button);//提交按钮
+        submitBtn.setOnClickListener(this);
+        reverse = (ImageView) findViewById(R.id.task_detail_button_reverse);
         infoEdit = (EditText) findViewById(R.id.task_detail_info);//任务描述
         gridView = (GridView) findViewById(R.id.task_detail_gridView);
         gridView.setOnItemClickListener(this);
@@ -208,7 +212,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
                     ToastUtil.show(context, "请输入反馈内容");
                     return;
                 }
-                MyRequest.filesRequest(this, fileMap, info, taskBean.getTask().getTaskAssignedID(), feedbackState);
+                MyRequest.filesRequest(this, reverse, fileMap, info, taskBean.getTask().getTaskAssignedID(), feedbackState);
                 break;
             case R.id.task_detail_state_file://点击下载
                 if (isEmpty()) {
@@ -381,8 +385,7 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
         }
         taskDetalDescribePhotoAdapter = new TaskDetalDescribePhotoAdapter(this, describeList);
         gridViewDescribe.setAdapter(taskDetalDescribePhotoAdapter);
-        submitBtn = (Button) findViewById(R.id.task_detail_button);
-        submitBtn.setOnClickListener(this);
+
 
         numberText.setText(taskBean.getTask().getTaskSno());
         nameText.setText(taskBean.getTask().getTaskName());

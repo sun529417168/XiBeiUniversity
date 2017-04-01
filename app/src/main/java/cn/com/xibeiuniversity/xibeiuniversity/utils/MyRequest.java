@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -423,7 +424,7 @@ public class MyRequest {
      * 参    数：Context activity, Map<String, File> params
      * 返回值：无
      */
-    public static void filesRequest(final Activity activity, Map<String, File> fileMap, Object... strings) {
+    public static void filesRequest(final Activity activity, final ImageView reverse, Map<String, File> fileMap, Object... strings) {
         final Dialog progDialog = DialogUtils.showWaitDialog(activity);
         Map<String, Object> params = new HashMap<>();
         params.put("FeedBackContent", strings[0]);
@@ -434,9 +435,11 @@ public class MyRequest {
             public void onResponse(String response, int id) {
                 if ("true".equals(response)) {
                     ToastUtil.show(activity, "反馈成功");
+                    reverse.setVisibility(View.GONE);
                     activity.finish();
                 } else {
                     ToastUtil.show(activity, "反馈失败，请稍候再试");
+                    reverse.setVisibility(View.VISIBLE);
                 }
                 if (progDialog.isShowing()) {
                     progDialog.dismiss();
@@ -445,7 +448,8 @@ public class MyRequest {
 
             @Override
             public void onError(Call call, Exception e, int id) {
-                ToastUtil.show(activity, "服务器异常，请稍后再试");
+                ToastUtil.show(activity, "错误代码" + e.getMessage().toString());
+                reverse.setVisibility(View.VISIBLE);
                 if (progDialog.isShowing()) {
                     progDialog.dismiss();
                 }
