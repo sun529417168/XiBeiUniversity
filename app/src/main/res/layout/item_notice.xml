@@ -7,10 +7,10 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="20dp"
         android:orientation="horizontal"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <TextView
             android:id="@+id/item_notice_number"
@@ -23,26 +23,21 @@
             style="@style/notice_item"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
     </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/gray" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="5dp"
-        android:paddingRight="20dp">
+        android:padding="5dp">
         <!--左边图片start-->
         <LinearLayout
             android:id="@+id/item_notice_picture"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
+            android:layout_height="75dp"
+            android:layout_weight="3"
             android:orientation="vertical"
             android:visibility="visible">
 
@@ -57,8 +52,8 @@
         <RelativeLayout
             android:id="@+id/item_notice_calendar"
             android:layout_width="0dp"
-            android:layout_height="120dp"
-            android:layout_weight="4"
+            android:layout_height="75dp"
+            android:layout_weight="3"
             android:background="@mipmap/calendar_background"
             android:visibility="gone">
 
@@ -66,7 +61,8 @@
                 android:id="@+id/notice_year_month"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="13sp"
                 android:text="2017年3月"
                 android:textColor="#EA1E13" />
 
@@ -75,7 +71,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="13sp"
                 android:text="星期二"
                 android:textColor="#EA1E13" />
 
@@ -85,7 +82,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:text="农历四月初一"
-                android:paddingBottom="12dp"
+                android:textSize="11sp"
+                android:paddingBottom="2dp"
                 android:textColor="#EA1E13" />
 
             <TextView
@@ -94,9 +92,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="28"
+                android:text="20"
                 android:textColor="#EA1E13"
-                android:textSize="60sp"
+                android:textSize="13sp"
                 android:typeface="serif" />
         </RelativeLayout>
         <!--左边日历end-->
@@ -105,7 +103,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
-            android:layout_weight="6"
+            android:layout_weight="7"
             android:orientation="vertical">
 
             <TextView
