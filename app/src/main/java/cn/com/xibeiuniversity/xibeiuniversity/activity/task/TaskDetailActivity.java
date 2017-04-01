@@ -402,20 +402,8 @@ public class TaskDetailActivity extends TakePhotoActivity implements View.OnClic
             findViewById(R.id.task_detail_state_fileLayout).setVisibility(View.GONE);
         }
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");//设置日期格式
-        feedbackTimeText.setText(df.format(new Date()));
-        if (taskBean.getTask().getTaskState() == 1) {
-            stateTaskText.setText("未查阅");
-        }
-        if (taskBean.getTask().getTaskState() == 2) {
-            stateTaskText.setText("处理中");
-        }
-        if (taskBean.getTask().getTaskState() == 3) {
-            stateTaskText.setText("已完成");
-        }
-        if (taskBean.getTask().getTaskState() == 4) {
-            stateTaskText.setText("未完成");
-        }
+        feedbackTimeText.setText(taskBean.getTaskAssigned().getFeedBackDateApi());
+        stateTaskText.setText(taskBean.getTask().getTaskStateName());
         taskInfo.setText(taskBean.getTask().getTaskDes());
         getTaskAssignedInfo(taskBean.getTaskAssigned());
     }

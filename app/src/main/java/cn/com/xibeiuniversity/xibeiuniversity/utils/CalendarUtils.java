@@ -69,7 +69,6 @@ public class CalendarUtils {
         String str = CalendarContract.CALLER_IS_SYNCADAPTER;
         activity.getContentResolver().insert(calendarUri, value);
         Log.i("calendarUtilsAddAccount", "添加账户成功!");
-        Toast.makeText(activity, "添加日历账户成功", Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -121,7 +120,6 @@ public class CalendarUtils {
         values.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);// 提醒方式
         activity.getContentResolver().insert(Uri.parse(calanderRemiderURL), values);
         Log.i("insertCalendarAddAccount", "插入提醒成功!!!!");
-        Toast.makeText(activity, "插入提醒成功!!!", Toast.LENGTH_LONG).show();
     }
 
     /**
