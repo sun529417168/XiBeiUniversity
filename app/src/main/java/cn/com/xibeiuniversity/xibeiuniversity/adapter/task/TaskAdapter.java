@@ -64,7 +64,6 @@ public class TaskAdapter extends MyBaseAdapter {
         TextView task_calendar_year_month=get(view,R.id.task_year_month);//获取年月
         TextView task_calendar_week=get(view,R.id.task_week);//获取星期
         TextView task_calendar_date=get(view,R.id.task_day);//获取日期
-        TextView task_calendar_lunar=get(view,R.id.task_lunar);//获取农历日期
         final TextView info = get(view, R.id.item_task_info);  // 具体内容
         final TextView[] views = {number, date, name, sender, info};
         /**
@@ -122,7 +121,6 @@ public class TaskAdapter extends MyBaseAdapter {
         task_calendar_year_month.setText(task_text_year_month);
         task_calendar_week.setText(task_week);
         task_calendar_date.setText(task_text_date);
-        task_calendar_lunar.setText(task_lunar);
         name.setText("类型：" + rowsBean.getTaskName());
         sender.setText("发送人：" + rowsBean.getPersonName());
         info.setText("任务内容：" + rowsBean.getTaskDes());

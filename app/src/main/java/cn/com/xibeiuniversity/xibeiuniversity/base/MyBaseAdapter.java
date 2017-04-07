@@ -110,7 +110,6 @@ public abstract class MyBaseAdapter extends BaseAdapter {
         if (null == childView) {
             childView = view.findViewById(id);
             viewHolder.put(id, childView);
-
         }
         return (T) childView;
     }

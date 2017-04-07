@@ -47,8 +47,8 @@ public class MainActivity extends BaseFragmentActivity {
     private TextView taskText, noticeText, problemText, statisticalText, mineText;
     private LinearLayout layout_task, layout_notice, layout_problem, layout_statistical, layout_mine;
 
-    private long exitTime;//上一次按退出键时间
-    private static final long TIME = 2000;//双击回退键间隔时间
+
+    private int fragmentIndex = 0;
 
     @Override
     public void setView() {
@@ -57,7 +57,7 @@ public class MainActivity extends BaseFragmentActivity {
 
     @Override
     public void setData(Bundle savedInstanceState) {
-
+        fragmentIndex = getIntent().getIntExtra("index", 0);
     }
 
     @Override
@@ -84,53 +84,17 @@ public class MainActivity extends BaseFragmentActivity {
 
 
         //初始化第一个
-        taskImage.setImageResource(R.mipmap.main_task_s);
-        taskText.setTextColor(ContextCompat.getColor(context, R.color.blue));
-        viewPager.setCurrentItem(0);
+//        taskImage.setImageResource(R.mipmap.main_task_s);
+//        taskText.setTextColor(ContextCompat.getColor(context, R.color.blue));
+        changeBottom(fragmentIndex);
+        viewPager.setCurrentItem(fragmentIndex);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
             public void onPageSelected(int position) {
                 // TODO Auto-generated method stub
-                /**
-                 * 图片
-                 */
-                taskImage.setImageResource(R.mipmap.main_task);
-                noticeImage.setImageResource(R.mipmap.main_notice);
-                problemImage.setImageResource(R.mipmap.main_problem);
-                statisticalImage.setImageResource(R.mipmap.main_statistical);
-                mineImage.setImageResource(R.mipmap.main_mine);
-                /**
-                 * 文字
-                 */
-                taskText.setTextColor(ContextCompat.getColor(context, R.color.gray));
-                noticeText.setTextColor(ContextCompat.getColor(context, R.color.gray));
-                problemText.setTextColor(ContextCompat.getColor(context, R.color.gray));
-                statisticalText.setTextColor(ContextCompat.getColor(context, R.color.gray));
-                mineText.setTextColor(ContextCompat.getColor(context, R.color.gray));
+                changeBottom(position);
 
-                switch (position) {
-                    case 0:
-                        taskImage.setImageResource(R.mipmap.main_task_s);
-                        taskText.setTextColor(ContextCompat.getColor(context, R.color.blue));
-                        break;
-                    case 1:
-                        noticeImage.setImageResource(R.mipmap.main_notice_s);
-                        noticeText.setTextColor(ContextCompat.getColor(context, R.color.blue));
-                        break;
-                    case 2:
-                        problemImage.setImageResource(R.mipmap.main_problem_s);
-                        problemText.setTextColor(ContextCompat.getColor(context, R.color.blue));
-                        break;
-                    case 3:
-                        statisticalImage.setImageResource(R.mipmap.main_statistical_s);
-                        statisticalText.setTextColor(ContextCompat.getColor(context, R.color.blue));
-                        break;
-                    case 4:
-                        mineImage.setImageResource(R.mipmap.main_mine_s);
-                        mineText.setTextColor(ContextCompat.getColor(context, R.color.blue));
-                        break;
-                }
             }
 
             @Override
@@ -145,6 +109,48 @@ public class MainActivity extends BaseFragmentActivity {
 
             }
         });
+    }
+
+    private void changeBottom(int position) {
+        /**
+         * 图片
+         */
+        taskImage.setImageResource(R.mipmap.main_task);
+        noticeImage.setImageResource(R.mipmap.main_notice);
+        problemImage.setImageResource(R.mipmap.main_problem);
+        statisticalImage.setImageResource(R.mipmap.main_statistical);
+        mineImage.setImageResource(R.mipmap.main_mine);
+        /**
+         * 文字
+         */
+        taskText.setTextColor(ContextCompat.getColor(context, R.color.gray));
+        noticeText.setTextColor(ContextCompat.getColor(context, R.color.gray));
+        problemText.setTextColor(ContextCompat.getColor(context, R.color.gray));
+        statisticalText.setTextColor(ContextCompat.getColor(context, R.color.gray));
+        mineText.setTextColor(ContextCompat.getColor(context, R.color.gray));
+
+        switch (position) {
+            case 0:
+                taskImage.setImageResource(R.mipmap.main_task_s);
+                taskText.setTextColor(ContextCompat.getColor(context, R.color.blue));
+                break;
+            case 1:
+                noticeImage.setImageResource(R.mipmap.main_notice_s);
+                noticeText.setTextColor(ContextCompat.getColor(context, R.color.blue));
+                break;
+            case 2:
+                problemImage.setImageResource(R.mipmap.main_problem_s);
+                problemText.setTextColor(ContextCompat.getColor(context, R.color.blue));
+                break;
+            case 3:
+                statisticalImage.setImageResource(R.mipmap.main_statistical_s);
+                statisticalText.setTextColor(ContextCompat.getColor(context, R.color.blue));
+                break;
+            case 4:
+                mineImage.setImageResource(R.mipmap.main_mine_s);
+                mineText.setTextColor(ContextCompat.getColor(context, R.color.blue));
+                break;
+        }
     }
 
     private void initView() {
@@ -226,18 +232,5 @@ public class MainActivity extends BaseFragmentActivity {
         });
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if ((System.currentTimeMillis() - exitTime) > TIME) {
-                ToastUtil.show(this, "再按一次返回键退出");
-                exitTime = System.currentTimeMillis();
-                return true;
-            } else {
-                XibeiApp.exit();
-            }
-            return false;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+
 }

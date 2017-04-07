@@ -65,13 +65,18 @@
         <meta-data
             android:name="com.alibaba.app.appsecret"
             android:value="43d570224c4e55b7c688f676ab2688bb" /> <!-- 请填写你自己的appSecret -->
-        <activity android:name=".activity.LoginActivity">
+        <activity android:name=".activity.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--登陆界面-->
+        <activity
+            android:name=".activity.LoginActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
         <!--完善自己资料的界面-->
         <activity
             android:name=".activity.EditorUserActivity"

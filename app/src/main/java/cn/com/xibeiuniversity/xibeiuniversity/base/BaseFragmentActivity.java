@@ -20,7 +20,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.application.XibeiActivityUtil;
  * 版    本：V1.0.0
  */
 public abstract class BaseFragmentActivity extends FragmentActivity {
-    public XibeiActivityUtil XibeiApp;
+    public XibeiActivityUtil XiBeiApp;
     private static final String TAG = "BaseActivity";
 
     @Override
@@ -32,8 +32,8 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
         // 透明导航栏
         // getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         // 没有标题栏
-        XibeiApp = XibeiActivityUtil.getInstance();
-        XibeiApp.addActivity(this);
+        XiBeiApp = XibeiActivityUtil.getInstance();
+        XiBeiApp.addActivity(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setView();
         setData(savedInstanceState);
@@ -62,7 +62,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            XibeiApp.finishTop();
+            XiBeiApp.finishTop();
             return true;
         }
         return false;

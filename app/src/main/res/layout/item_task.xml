@@ -56,11 +56,11 @@
         android:padding="5dp">
         <!--左边图片start-->
         <LinearLayout
-            android:layout_width="0dp"
             android:id="@+id/item_task_picture"
-            android:visibility="visible"
+            android:layout_width="0dp"
             android:layout_height="80dp"
-            android:layout_weight="3">
+            android:layout_weight="3"
+            android:visibility="visible">
 
             <ImageView
                 android:id="@+id/item_task_image"
@@ -73,40 +73,34 @@
         <!--说明：默认是没有日历的，在没有图片的情况下才会显示日历-->
         <RelativeLayout
             android:id="@+id/item_task_calendar"
-            android:visibility="gone"
             android:layout_width="0dp"
             android:layout_height="80dp"
             android:layout_weight="3"
             android:background="@mipmap/calendar_background"
-            >
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/task_year_month"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
                 android:text="2017年3月"
-                android:textSize="13dp"
-                android:textColor="#EA1E13" />
+                android:textColor="#EA1E13"
+                android:textSize="13dp" />
 
             <TextView
                 android:id="@+id/task_week"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="10dp"
-                android:textSize="13dp"
-                android:text="星期二"
-                android:textColor="#EA1E13" />
-
-            <TextView
-                android:id="@+id/task_lunar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:textSize="11dp"
-                android:text="农历四月初一"
-                android:textColor="#EA1E13" />
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:text="星期二"
+                android:textColor="#EA1E13"
+                android:textSize="13dp" />
+
 
             <TextView
                 android:id="@+id/task_day"
@@ -114,9 +108,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
                 android:text="10"
                 android:textColor="#EA1E13"
-                android:textSize="20sp"
+                android:textSize="30sp"
                 android:typeface="serif" />
         </RelativeLayout>
         <!--左边日历end-->
