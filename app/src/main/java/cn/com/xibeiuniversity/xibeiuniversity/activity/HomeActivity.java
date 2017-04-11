@@ -7,17 +7,23 @@ import cn.com.xibeiuniversity.xibeiuniversity.bean.HomeBean;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyUtils;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.baidu.mapapi.SDKInitializer;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -32,17 +38,41 @@ import java.util.ArrayList;
 
 public class HomeActivity extends BaseActivity implements AdapterView.OnItemClickListener {
     private GridView gridView;
-    private int image[] = {R.mipmap.home_task, R.mipmap.home_notice, R.mipmap.home_problem, R.mipmap.home_statistical, R.mipmap.home_xungeng, R.mipmap.home_anwen};
+    private int image[] = {R.mipmap.home_task, R.mipmap.home_notice, R.mipmap.home_problem, R.mipmap.home_statistical, R.mipmap.home_xungeng, R.mipmap.home_anwen, R.mipmap.ic_map};
     private ArrayList<HomeBean> homeArrayList = new ArrayList<>();
     private HomeAdapter homeAdapter;
     private long exitTime;//上一次按退出键时间
     private static final long TIME = 2000;//双击回退键间隔时间
 
+    /**
+     * 构造广播监听类，监听 SDK key 验证以及网络异常广播
+     */
+    public class SDKReceiver extends BroadcastReceiver {
+
+        public void onReceive(Context context, Intent intent) {
+            String s = intent.getAction();
+            Log.d("LoginActivity", "action: " + s);
+            TextView text = (TextView) findViewById(R.id.baiduMap);
+            text.setTextColor(Color.RED);
+            if (s.equals(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_ERROR)) {
+                text.setText("key 验证出错! 错误码 :" + intent.getIntExtra
+                        (SDKInitializer.SDK_BROADTCAST_INTENT_EXTRA_INFO_KEY_ERROR_CODE, 0)
+                        + " ; 请在 AndroidManifest.xml 文件中检查 key 设置");
+            } else if (s.equals(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_OK)) {
+                text.setText("key 验证成功! 功能可以正常使用");
+                text.setTextColor(Color.BLACK);
+            } else if (s.equals(SDKInitializer.SDK_BROADCAST_ACTION_STRING_NETWORK_ERROR)) {
+                text.setText("网络出错");
+            }
+        }
+    }
 
     @Override
     protected void setView() {
         setContentView(R.layout.activity_home);
     }
+
+    private SDKReceiver mReceiver;
 
     @Override
     protected void setDate(Bundle savedInstanceState) {
@@ -56,6 +86,14 @@ public class HomeActivity extends BaseActivity implements AdapterView.OnItemClic
                 homeArrayList.add(homeBean);
             }
         }
+
+        // 注册 SDK 广播监听者
+        IntentFilter iFilter = new IntentFilter();
+        iFilter.addAction(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_OK);
+        iFilter.addAction(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_ERROR);
+        iFilter.addAction(SDKInitializer.SDK_BROADCAST_ACTION_STRING_NETWORK_ERROR);
+        mReceiver = new SDKReceiver();
+        registerReceiver(mReceiver, iFilter);
 
     }
 
@@ -92,6 +130,10 @@ public class HomeActivity extends BaseActivity implements AdapterView.OnItemClic
                 break;
             case 106:
 
+                break;
+            case 107:
+                Intent intent = new Intent(this, LocationActivity.class);
+                startActivity(intent);
                 break;
         }
 

@@ -659,12 +659,12 @@ public class MyRequest {
     public static void addProblemRequestsb(final Activity activity, Map<String, File> fileMap, Object... strings) {
         final Dialog progDialog = DialogUtils.showWaitDialog(activity);
         Map<String, Object> params = new HashMap<>();
-        params.put("ProblemTitle", strings[0]);
-        params.put("SearchProblemType", strings[1]);
-        params.put("Position", strings[2]);
-        params.put("GPS", strings[3]);
-        params.put("FindDate", strings[4]);
-        params.put("ProblemDes", strings[5]);
+        params.put("ProblemTitle", "问题名称");
+        params.put("SearchProblemType", strings[0]);
+        params.put("Position", strings[1]);
+        params.put("GPS", strings[2]);
+        params.put("FindDate", strings[3]);
+        params.put("ProblemDes", strings[4]);
         params.put("ReportPerson", SharedUtil.getString(activity, "PersonID"));
         OkHttpUtils.post().files("mFile", fileMap).url(UrlConfig.URL_IMGUPLOAD).params(params).build().execute(new StringCallback() {
             @Override

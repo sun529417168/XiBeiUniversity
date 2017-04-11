@@ -52,6 +52,20 @@
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="false"
+        android:resizeable="true"
+        android:smallScreens="true" />
+
+    <!-- OpenGLES 2.0 -->
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+
     <application
         android:name=".application.MyApplication"
         android:allowBackup="true"
@@ -59,13 +73,24 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <!--百度地图的key测试版本-->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="KZe1UWO5HkSprv2GVfARZPgKrj53Bie7" />
+        <!--百度地图的key打包正式版本-->
+        <!--<meta-data-->
+            <!--android:name="com.baidu.lbsapi.API_KEY"-->
+            <!--android:value="0AHj3Hgda9C3FifouwpLYRv3HDzUYjzX" />-->
+        <!-- 阿里推送请填写你自己的- appKey -->
         <meta-data
             android:name="com.alibaba.app.appkey"
-            android:value="23660312" /> <!-- 请填写你自己的- appKey -->
+            android:value="23660312" />
+        <!-- 阿里推送请填写你自己的appSecret -->
         <meta-data
             android:name="com.alibaba.app.appsecret"
-            android:value="43d570224c4e55b7c688f676ab2688bb" /> <!-- 请填写你自己的appSecret -->
-        <activity android:name=".activity.HomeActivity">
+            android:value="43d570224c4e55b7c688f676ab2688bb" />
+        <!--启动页-->
+        <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -74,7 +99,7 @@
         </activity>
         <!--登陆界面-->
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".activity.HomeActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
         <!--完善自己资料的界面-->
@@ -158,6 +183,11 @@
             android:name=".activity.InputTextActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
+        <!--地图定位界面-->
+        <activity
+            android:name=".activity.LocationActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
         <!-- 通道保持服务 -->
         <service
             android:name="com.alibaba.sdk.android.push.ChannelService"
@@ -190,6 +220,10 @@
                 <action android:name="org.android.agoo.client.MessageReceiverService" />
             </intent-filter>
         </service>
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" />
 
         <!--消息接收监听器-->
         <receiver android:name="cn.com.xibeiuniversity.xibeiuniversity.service.MyMessageReceiver">
