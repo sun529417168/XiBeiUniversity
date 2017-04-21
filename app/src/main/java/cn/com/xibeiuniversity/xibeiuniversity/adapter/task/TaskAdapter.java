@@ -121,7 +121,7 @@ public class TaskAdapter extends MyBaseAdapter {
         task_calendar_year_month.setText(task_text_year_month);
         task_calendar_week.setText(task_week);
         task_calendar_date.setText(task_text_date);
-        name.setText("类型：" + rowsBean.getTaskName());
+        name.setText("名称：" + rowsBean.getTaskName());
         sender.setText("发送人：" + rowsBean.getPersonName());
         info.setText("任务内容：" + rowsBean.getTaskDes());
         view.setOnClickListener(new View.OnClickListener() {

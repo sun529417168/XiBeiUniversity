@@ -5,6 +5,7 @@ import cn.com.xibeiuniversity.xibeiuniversity.adapter.HomeAdapter;
 import cn.com.xibeiuniversity.xibeiuniversity.base.BaseActivity;
 import cn.com.xibeiuniversity.xibeiuniversity.bean.HomeBean;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.MyUtils;
+import cn.com.xibeiuniversity.xibeiuniversity.utils.SharedUtil;
 import cn.com.xibeiuniversity.xibeiuniversity.utils.ToastUtil;
 
 import android.content.BroadcastReceiver;
@@ -108,33 +109,41 @@ public class HomeActivity extends BaseActivity implements AdapterView.OnItemClic
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent in = new Intent(this, MainActivity.class);
-        switch (homeArrayList.get(position).getId()) {
-            case 101:
-                in.putExtra("index", 0);
-                startActivity(in);
-                break;
-            case 102:
-                in.putExtra("index", 1);
-                startActivity(in);
-                break;
-            case 103:
-                in.putExtra("index", 2);
-                startActivity(in);
-                break;
-            case 104:
-                in.putExtra("index", 3);
-                startActivity(in);
-                break;
-            case 105:
+        if (homeArrayList.get(position).getId() == 107) {
+            Intent intent = new Intent(this, LocationActivity.class);
+            startActivity(intent);
+        } else if (SharedUtil.getBoolean(this, "isLogin", false)) {
+            switch (homeArrayList.get(position).getId()) {
+                case 101:
+                    in.putExtra("index", 0);
+                    startActivity(in);
+                    break;
+                case 102:
+                    in.putExtra("index", 1);
+                    startActivity(in);
+                    break;
+                case 103:
+                    in.putExtra("index", 2);
+                    startActivity(in);
+                    break;
+                case 104:
+                    in.putExtra("index", 3);
+                    startActivity(in);
+                    break;
+                case 105:
 
-                break;
-            case 106:
+                    break;
+                case 106:
 
-                break;
-            case 107:
-                Intent intent = new Intent(this, LocationActivity.class);
-                startActivity(intent);
-                break;
+                    break;
+                case 107:
+                    Intent intent = new Intent(this, LocationActivity.class);
+                    startActivity(intent);
+                    break;
+            }
+        } else {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
         }
 
     }

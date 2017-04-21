@@ -122,12 +122,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             return;
         }
         if (0 == userBean.getUserType()) {
+            SharedUtil.setBoolean(this, "isLogin", true);
             Intent intent = new Intent(this, EditorUserActivity.class);
             intent.putExtra("username", username);
             startActivity(intent);
             this.finish();
         }
         if (1 == userBean.getUserType()) {
+            SharedUtil.setBoolean(this, "isLogin", true);
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             this.finish();
